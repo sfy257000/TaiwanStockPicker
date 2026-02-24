@@ -222,14 +222,15 @@ def build_category_map():
     category_map = {}
     
     for code, name in get_all_stocks():
+        # 順序很重要！要先檢查更specific的條件
         if code.startswith('00'):
             category = 'ETF'
+        elif code.startswith('28'):
+            category = '金融'
         elif code.startswith('1'):
             category = '水泥'
         elif code.startswith('2'):
             category = '鋼鐵/營建'
-        elif code.startswith('28'):
-            category = '金融'
         elif code in ['2330', '2303', '2454'] or code.startswith('3'):
             category = '半導體'
         elif code.startswith('6'):
