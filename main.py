@@ -122,6 +122,81 @@ class StockAnalyzer:
         
         return result
     
+    def _analyze_stock_silent(self, code, name):
+        """安靜分析股票（不回傳，內部使用）"""
+        price_data = self.fetcher.get_stock_price(code)
+        
+        if not price_data or price_data['price'] == 0:
+            return None
+        
+        institutional_data = self.fetcher.get_institutional_investors(code)
+        historical_data = self.fetcher.get_historical_price(code, days=60)
+        
+        tech_indicators = None
+        tech_score = 0
+        tech_reasons = []
+        
+        if historical_data:
+            tech_indicators = self.tech_indicators.calculate_all(historical_data)
+            if tech_indicators:
+                tech_score, tech_reasons = self.tech_indicators.get_technical_score(tech_indicators)
+        
+        inst_result = self.inst_tracker.analyze_institutional(institutional_data)
+        inst_score = inst_result['score']
+        inst_reasons = inst_result['reasons']
+        
+        pv_result = self.pv_alert.check_alerts(price_data, historical_data)
+        pv_score = pv_result['score']
+        pv_reasons = pv_result['reasons']
+        
+        sr_data = None
+        sr_score = 0
+        sr_reasons = []
+        
+        if historical_data:
+            sr_data = self.sr_calculator.calculate(historical_data)
+            if sr_data:
+                sr_score, sr_reasons = self.sr_calculator.get_support_resistance_score(sr_data)
+        
+        total_score = (
+            tech_score * 0.3 +
+            inst_score * 0.3 +
+            pv_score * 0.25 +
+            sr_score * 0.15
+        )
+        total_score = round(total_score)
+        
+        all_reasons = tech_reasons + inst_reasons + pv_reasons + sr_reasons
+        
+        if price_data['prev_close'] > 0:
+            change_pct = ((price_data['price'] - price_data['prev_close']) / price_data['prev_close']) * 100
+        else:
+            change_pct = 0
+        
+        is_premarket = price_data.get('is_premarket', False)
+        
+        result = {
+            'code': code,
+            'name': name,
+            'price': price_data['price'],
+            'change_pct': change_pct,
+            'volume': price_data['volume'],
+            'high': price_data['high'],
+            'low': price_data['low'],
+            'tech_score': tech_score,
+            'inst_score': inst_score,
+            'pv_score': pv_score,
+            'sr_score': sr_score,
+            'total_score': total_score,
+            'reasons': all_reasons,
+            'institutional': institutional_data,
+            'indicators': tech_indicators,
+            'support_resistance': sr_data,
+            'is_premarket': is_premarket,
+        }
+        
+        return result
+    
     def run(self, stock_count=None, mode='all', categories='', extra_stocks='', random_count=50):
         """執行完整分析"""
         print_header("台股選股分析系統 - 完整版")
@@ -145,7 +220,6 @@ class StockAnalyzer:
         
         total_stocks = len(stocks)
         print(f"\n分析股票數: {total_stocks} 檔")
-        print()
         
         # 進度顯示
         import time
@@ -153,10 +227,11 @@ class StockAnalyzer:
         processed = 0
         success_count = 0
         
-        print("正在分析股票...\n")
+        print("\n正在分析股票，請稍候...")
+        print("-" * 50)
         
         for code, name in stocks:
-            result = self.analyze_stock(code, name)
+            result = self._analyze_stock_silent(code, name)
             if result:
                 self.results.append(result)
                 success_count += 1
@@ -181,9 +256,10 @@ class StockAnalyzer:
                 eta = f"{int(remaining/3600)}時{int((remaining%3600)/60)}分"
             
             # 顯示進度條
-            print(f"\r[{bar}] {percent}% ({processed}/{total_stocks}) | 預估剩餘: {eta} | 成功: {success_count} 檔", end='', flush=True)
+            print(f"\r[{bar}] {percent}% ({processed}/{total_stocks}) | 預估剩餘: {eta}", end='', flush=True)
         
         print()  # 換行
+        print("-" * 50)
         
         # 總耗時格式化
         total_elapsed = time.time() - start_time
@@ -194,7 +270,7 @@ class StockAnalyzer:
         else:
             total_str = f"{int(total_elapsed/3600)}時{int((total_elapsed%3600)/60)}分"
         
-        print(f"\n✓ 分析完成！總耗时: {total_str}")
+        print(f"✓ 分析完成！共分析 {success_count} 檔，總耗时: {total_str}")
         print()
         
         self._print_summary()
