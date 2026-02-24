@@ -28,6 +28,9 @@ CONFIG = {
         'd_smooth': 3,          # D值平滑
         
         'ma_periods': [5, 10, 20, 60],  # 均線週期
+        
+        'bollinger_period': 20, # 布林通道週期
+        'bollinger_std': 2,     # 布林通道標準差倍數
     },
     
     # 價量異常條件
@@ -85,5 +88,19 @@ CONFIG = {
     'random': {
         'default_count': 50,    # 隨機模式預設數量
         'enabled': True,        # 啟用隨機模式
+    },
+    
+    # 黑名單/白名單篩選
+    'list_filter': {
+        'whitelist': [],        # 白名單：只分析這些股票（空=全部）
+        'blacklist': [],        # 黑名單：排除這些股票
+        'enable_whitelist': False,  # 啟用白名單
+        'enable_blacklist': False,  # 啟用黑名單
+    },
+    
+    # 平行處理設定
+    'parallel': {
+        'enabled': True,        # 啟用多執行緒
+        'max_workers': 5,       # 最大執行緒數
     },
 }

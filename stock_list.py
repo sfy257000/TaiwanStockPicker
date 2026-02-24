@@ -24,6 +24,7 @@ STOCK_LIST = [
     ('00951', '凱基台灣ESG'), ('00952', '中信台灣高股息'),
     ('00953', '中信半導體'),
 
+
     # ==================== 半導體 ====================
     ('2330', '台積電'), ('2303', '聯電'), ('2454', '聯發科'),
     ('3034', '聯詠'), ('2379', '瑞昱'), ('3037', '欣興'),
@@ -294,4 +295,37 @@ def interactive_stock_selection(mode='all', categories='', extra_stocks='', rand
     else:
         selected = category_map['全部']
     
+    selected = apply_list_filter(selected)
+    
     return selected
+
+
+def apply_list_filter(stocks):
+    """套用黑名單/白名單篩選"""
+    from config import CONFIG
+    
+    filter_config = CONFIG.get('list_filter', {})
+    
+    whitelist = filter_config.get('whitelist', [])
+    blacklist = filter_config.get('blacklist', [])
+    enable_whitelist = filter_config.get('enable_whitelist', False)
+    enable_blacklist = filter_config.get('enable_blacklist', False)
+    
+    if not whitelist and not blacklist:
+        return stocks
+    
+    filtered = []
+    for code, name in stocks:
+        if enable_whitelist and whitelist:
+            if code in whitelist:
+                filtered.append((code, name))
+            continue
+        
+        if enable_blacklist and blacklist:
+            if code not in blacklist:
+                filtered.append((code, name))
+            continue
+        
+        filtered.append((code, name))
+    
+    return filtered

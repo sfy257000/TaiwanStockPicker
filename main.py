@@ -6,6 +6,8 @@
 
 import sys
 import os
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -197,6 +199,71 @@ class StockAnalyzer:
         
         return result
     
+    def _run_sequential(self, stocks):
+        """順序執行分析"""
+        results = []
+        total_stocks = len(stocks)
+        processed = 0
+        
+        for code, name in stocks:
+            result = self._analyze_stock_silent(code, name)
+            if result:
+                results.append(result)
+            
+            processed += 1
+            self._print_progress(processed, total_stocks)
+        
+        print()
+        return results
+    
+    def _run_parallel(self, stocks, max_workers=5):
+        """平行執行分析"""
+        results = []
+        total_stocks = len(stocks)
+        processed = 0
+        lock = __import__('threading').Lock()
+        
+        def analyze_with_progress(code, name):
+            nonlocal processed
+            result = self._analyze_stock_silent(code, name)
+            with lock:
+                processed += 1
+                if result:
+                    results.append(result)
+                self._print_progress(processed, total_stocks)
+            return result
+        
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            futures = [executor.submit(analyze_with_progress, code, name) 
+                      for code, name in stocks]
+            for future in as_completed(futures):
+                try:
+                    future.result()
+                except:
+                    pass
+        
+        print()
+        return results
+    
+    def _print_progress(self, processed, total):
+        """顯示進度"""
+        elapsed = 0
+        avg_time = 0
+        remaining = 0
+        percent = int(processed * 100 / total)
+        bar_len = 20
+        filled = int(bar_len * processed / total)
+        bar = '█' * filled + '░' * (bar_len - filled)
+        
+        if remaining < 60:
+            eta = f"{int(remaining)}秒"
+        elif remaining < 3600:
+            eta = f"{int(remaining/60)}分"
+        else:
+            eta = f"{int(remaining/3600)}時{int((remaining%3600)/60)}分"
+        
+        print(f"\r[{bar}] {percent}% ({processed}/{total}) | 預估剩餘: {eta}", end='', flush=True)
+    
     def run(self, stock_count=None, mode='all', categories='', extra_stocks='', random_count=50):
         """執行完整分析"""
         print_header("台股選股分析系統 - 完整版")
@@ -221,47 +288,23 @@ class StockAnalyzer:
         total_stocks = len(stocks)
         print(f"\n分析股票數: {total_stocks} 檔")
         
-        # 進度顯示
-        import time
+        parallel_config = CONFIG.get('parallel', {})
+        use_parallel = parallel_config.get('enabled', True)
+        max_workers = parallel_config.get('max_workers', 5)
+        
         start_time = time.time()
-        processed = 0
-        success_count = 0
         
         print("\n正在分析股票，請稍候...")
         print("-" * 50)
         
-        for code, name in stocks:
-            result = self._analyze_stock_silent(code, name)
-            if result:
-                self.results.append(result)
-                success_count += 1
-            
-            processed += 1
-            elapsed = time.time() - start_time
-            avg_time = elapsed / processed if processed > 0 else 0
-            remaining = (total_stocks - processed) * avg_time
-            
-            # 計算進度百分比
-            percent = int(processed * 100 / total_stocks)
-            bar_len = 20
-            filled = int(bar_len * processed / total_stocks)
-            bar = '█' * filled + '░' * (bar_len - filled)
-            
-            # 格式化時間
-            if remaining < 60:
-                eta = f"{int(remaining)}秒"
-            elif remaining < 3600:
-                eta = f"{int(remaining/60)}分"
-            else:
-                eta = f"{int(remaining/3600)}時{int((remaining%3600)/60)}分"
-            
-            # 顯示進度條
-            print(f"\r[{bar}] {percent}% ({processed}/{total_stocks}) | 預估剩餘: {eta}", end='', flush=True)
+        if use_parallel and total_stocks > 1:
+            self.results = self._run_parallel(stocks, max_workers)
+        else:
+            self.results = self._run_sequential(stocks)
         
-        print()  # 換行
+        success_count = len(self.results)
         print("-" * 50)
         
-        # 總耗時格式化
         total_elapsed = time.time() - start_time
         if total_elapsed < 60:
             total_str = f"{int(total_elapsed)}秒"
@@ -500,6 +543,139 @@ class StockAnalyzer:
         print_separator()
 
 
+def interactive_parameter_menu():
+    """互動式參數調整選單"""
+    from config import CONFIG
+    import json
+    
+    while True:
+        print("\n" + "="*50)
+        print("參數設定")
+        print("="*50)
+        print("1) 評分門檻 (現為: 強買>={}, 買進>={}, 觀望>={})".format(
+            CONFIG['score_threshold']['strong_buy'],
+            CONFIG['score_threshold']['buy'],
+            CONFIG['score_threshold']['hold']
+        ))
+        print("2) RSI 參數 (超賣: {}, 超買: {}, 週期: {})".format(
+            CONFIG['technical']['rsi_oversold'],
+            CONFIG['technical']['rsi_overbought'],
+            CONFIG['technical']['rsi_period']
+        ))
+        print("3) 篩選條件 (最低價: {}, 最低量: {})".format(
+            CONFIG['filters']['min_price'],
+            CONFIG['filters']['min_volume']
+        ))
+        print("4) 黑名單管理")
+        print("5) 白名單管理")
+        print("6) 平行處理 (啟用: {}, 最大執行緒: {})".format(
+            CONFIG['parallel']['enabled'],
+            CONFIG['parallel']['max_workers']
+        ))
+        print("0) 返回主選單")
+        
+        try:
+            choice = input("\n請選擇: ").strip()
+        except EOFError:
+            break
+        
+        if choice == '0':
+            break
+        elif choice == '1':
+            print("\n--- 評分門檻設定 ---")
+            try:
+                sb = int(input(f"強烈買進分數 [預設{ CONFIG['score_threshold']['strong_buy']}]: ").strip() or CONFIG['score_threshold']['strong_buy'])
+                b = int(input(f"買進分數 [預設{ CONFIG['score_threshold']['buy']}]: ").strip() or CONFIG['score_threshold']['buy'])
+                h = int(input(f"觀望分數 [預設{ CONFIG['score_threshold']['hold']}]: ").strip() or CONFIG['score_threshold']['hold'])
+                CONFIG['score_threshold']['strong_buy'] = sb
+                CONFIG['score_threshold']['buy'] = b
+                CONFIG['score_threshold']['hold'] = h
+                print("✓ 評分門檻已更新")
+            except ValueError:
+                print("× 輸入無效")
+        elif choice == '2':
+            print("\n--- RSI 參數設定 ---")
+            try:
+                ro = int(input(f"RSI超賣 [預設{ CONFIG['technical']['rsi_oversold']}]: ").strip() or CONFIG['technical']['rsi_oversold'])
+                rb = int(input(f"RSI超買 [預設{ CONFIG['technical']['rsi_overbought']}]: ").strip() or CONFIG['technical']['rsi_overbought'])
+                rp = int(input(f"RSI週期 [預設{ CONFIG['technical']['rsi_period']}]: ").strip() or CONFIG['technical']['rsi_period'])
+                CONFIG['technical']['rsi_oversold'] = ro
+                CONFIG['technical']['rsi_overbought'] = rb
+                CONFIG['technical']['rsi_period'] = rp
+                print("✓ RSI 參數已更新")
+            except ValueError:
+                print("× 輸入無效")
+        elif choice == '3':
+            print("\n--- 篩選條件設定 ---")
+            try:
+                mp = float(input(f"最低股價 [預設{ CONFIG['filters']['min_price']}]: ").strip() or CONFIG['filters']['min_price'])
+                mv = int(input(f"最低成交量 [預設{ CONFIG['filters']['min_volume']}]: ").strip() or CONFIG['filters']['min_volume'])
+                CONFIG['filters']['min_price'] = mp
+                CONFIG['filters']['min_volume'] = mv
+                print("✓ 篩選條件已更新")
+            except ValueError:
+                print("× 輸入無效")
+        elif choice == '4':
+            print("\n--- 黑名單管理 ---")
+            print("目前黑名單: {}".format(', '.join(CONFIG['list_filter']['blacklist']) or '無'))
+            print("選項: 1)加入  2)清除  0)返回")
+            try:
+                sub = input("請選擇: ").strip()
+                if sub == '1':
+                    codes = input("輸入股票代碼（逗號分隔）: ").strip()
+                    if codes:
+                        for c in codes.split(','):
+                            c = c.strip()
+                            if c and c not in CONFIG['list_filter']['blacklist']:
+                                CONFIG['list_filter']['blacklist'].append(c)
+                        CONFIG['list_filter']['enable_blacklist'] = True
+                        print("✓ 已加入黑名單")
+                elif sub == '2':
+                    CONFIG['list_filter']['blacklist'] = []
+                    CONFIG['list_filter']['enable_blacklist'] = False
+                    print("✓ 黑名單已清除")
+            except EOFError:
+                pass
+        elif choice == '5':
+            print("\n--- 白名單管理 ---")
+            print("目前白名單: {}".format(', '.join(CONFIG['list_filter']['whitelist']) or '無'))
+            print("選項: 1)加入  2)清除  0)返回")
+            try:
+                sub = input("請選擇: ").strip()
+                if sub == '1':
+                    codes = input("輸入股票代碼（逗號分隔）: ").strip()
+                    if codes:
+                        CONFIG['list_filter']['whitelist'] = []
+                        for c in codes.split(','):
+                            c = c.strip()
+                            if c and c not in CONFIG['list_filter']['whitelist']:
+                                CONFIG['list_filter']['whitelist'].append(c)
+                        CONFIG['list_filter']['enable_whitelist'] = True
+                        print("✓ 已設定白名單")
+                elif sub == '2':
+                    CONFIG['list_filter']['whitelist'] = []
+                    CONFIG['list_filter']['enable_whitelist'] = False
+                    print("✓ 白名單已清除")
+            except EOFError:
+                pass
+        elif choice == '6':
+            print("\n--- 平行處理設定 ---")
+            try:
+                enabled = input(f"啟用多執行緒？ (y/N) [預設{'y' if CONFIG['parallel']['enabled'] else 'N'}]: ").strip().lower()
+                if enabled == 'y':
+                    CONFIG['parallel']['enabled'] = True
+                elif enabled == 'n' or not enabled:
+                    CONFIG['parallel']['enabled'] = False
+                
+                mw = int(input(f"最大執行緒數 [預設{ CONFIG['parallel']['max_workers']}]: ").strip() or CONFIG['parallel']['max_workers'])
+                CONFIG['parallel']['max_workers'] = mw
+                print("✓ 平行處理設定已更新")
+            except ValueError:
+                print("× 輸入無效")
+    
+    print("\n返回主選單")
+
+
 def main():
     """主程式進入點"""
     import argparse
@@ -521,45 +697,53 @@ def main():
     
     # 如果沒有提供任何參數，顯示互動式選單
     if args.mode is None:
-        print("\n" + "="*50)
-        print("台股選股分析系統")
-        print("="*50)
-        print("1) 分析全部股票")
-        print("2) 依類型選擇")
-        print("3) 隨機選取 50 檔")
-        
-        try:
-            choice = input("\n請選擇 (1/2/3): ").strip()
-        except EOFError:
-            # 非互動環境，使用預設
-            choice = '1'
-        
-        if choice == '1':
-            args.mode = 'all'
-        elif choice == '2':
-            args.mode = 'category'
-            # 顯示類型選項
-            print("\n類型代碼:")
-            print("  1=半導體  2=電子  3=金融  4=水泥/化工")
-            print("  5=ETF  6=鋼鐵/營建  7=航運  8=其他")
-            try:
-                cat_input = input("請輸入類型編號（逗號分隔，可多選）: ").strip()
-                args.categories = cat_input
-            except EOFError:
-                args.categories = '1,2'
+        while True:
+            print("\n" + "="*50)
+            print("台股選股分析系統")
+            print("="*50)
+            print("1) 分析全部股票")
+            print("2) 依類型選擇")
+            print("3) 隨機選取 50 檔")
+            print("4) 參數設定")
+            print("5) 離開")
             
-            # 額外指定
             try:
-                extra_input = input("是否要另外指定個股代碼？(y/N): ").strip().lower()
-                if extra_input == 'y':
-                    args.stocks = input("請輸入股票代碼（逗號分隔）: ").strip()
+                choice = input("\n請選擇 (1/2/3/4/5): ").strip()
             except EOFError:
-                pass
+                choice = '1'
+            
+            if choice == '1':
+                args.mode = 'all'
+                break
+            elif choice == '2':
+                args.mode = 'category'
+                print("\n類型代碼:")
+                print("  1=半導體  2=電子  3=金融  4=水泥/化工")
+                print("  5=ETF  6=鋼鐵/營建  7=航運  8=其他")
+                try:
+                    cat_input = input("請輸入類型編號（逗號分隔，可多選）: ").strip()
+                    args.categories = cat_input
+                except EOFError:
+                    args.categories = '1,2'
                 
-        elif choice == '3':
-            args.mode = 'random'
-        else:
-            args.mode = 'all'
+                try:
+                    extra_input = input("是否要另外指定個股代碼？(y/N): ").strip().lower()
+                    if extra_input == 'y':
+                        args.stocks = input("請輸入股票代碼（逗號分隔）: ").strip()
+                except EOFError:
+                    pass
+                break
+                    
+            elif choice == '3':
+                args.mode = 'random'
+                break
+            elif choice == '4':
+                interactive_parameter_menu()
+            elif choice == '5':
+                print("感謝使用！")
+                return
+            else:
+                print("請輸入 1-5 的選項")
     
     analyzer = StockAnalyzer()
     

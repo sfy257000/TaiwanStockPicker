@@ -34,6 +34,7 @@ class TechnicalIndicators:
         indicators['kd'] = self.calculate_kd(highs, lows, closes)
         indicators['ma'] = self.calculate_ma(closes)
         indicators['bias'] = self.calculate_bias(closes)
+        indicators['bollinger'] = self.calculate_bollinger_bands(closes)
         
         return indicators
     
@@ -185,6 +186,49 @@ class TechnicalIndicators:
         
         return bias_values
     
+    def calculate_bollinger_bands(self, closes, period=20, std_dev=2):
+        """
+        計算布林通道
+        period: 均線週期（預設20日）
+        std_dev: 標準差倍數（預設2倍）
+        返回: {'upper': 上軌, 'middle': 中軌, 'lower': 下軌, 'bandwidth': 頻寬, 'position': 位置%}
+        """
+        if len(closes) < period:
+            return {'upper': 0, 'middle': 0, 'lower': 0, 'bandwidth': 0, 'position': 50, 'signal': 'neutral'}
+        
+        recent_closes = closes[-period:]
+        middle = sum(recent_closes) / period
+        
+        variance = sum((x - middle) ** 2 for x in recent_closes) / period
+        std = variance ** 0.5
+        
+        upper = middle + (std_dev * std)
+        lower = middle - (std_dev * std)
+        
+        bandwidth = ((upper - lower) / middle) * 100 if middle > 0 else 0
+        
+        current_price = closes[-1]
+        if upper != lower:
+            position = ((current_price - lower) / (upper - lower)) * 100
+        else:
+            position = 50
+        
+        if position < 20:
+            signal = 'oversold'
+        elif position > 80:
+            signal = 'overbought'
+        else:
+            signal = 'neutral'
+        
+        return {
+            'upper': round(upper, 2),
+            'middle': round(middle, 2),
+            'lower': round(lower, 2),
+            'bandwidth': round(bandwidth, 2),
+            'position': round(position, 2),
+            'signal': signal
+        }
+    
     def get_technical_score(self, indicators):
         """
         根據技術指標計算評分
@@ -230,5 +274,16 @@ class TechnicalIndicators:
         elif kd_signal == 'overbought':
             score -= 5
             reasons.append(f"KD超買(K={k:.1f})")
+        
+        bb_data = indicators.get('bollinger', {})
+        bb_signal = bb_data.get('signal', 'neutral')
+        bb_position = bb_data.get('position', 50)
+        
+        if bb_signal == 'oversold':
+            score += 10
+            reasons.append(f"布林下軌支撐(位置{bb_position:.1f}%)")
+        elif bb_signal == 'overbought':
+            score -= 5
+            reasons.append(f"布林上軌壓力(位置{bb_position:.1f}%)")
         
         return score, reasons

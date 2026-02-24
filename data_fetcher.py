@@ -6,6 +6,8 @@
 
 import requests
 import time
+import os
+import json
 from datetime import datetime, timedelta
 import urllib3
 
@@ -22,6 +24,41 @@ class DataFetcher:
         self._stock_market_cache = {}  # code -> 'tse' or 'otc'
         self._institutional_cache = None  # 批次法人資料快取
         self._institutional_date = None
+        self._cache_dir = 'cache'
+        self._ensure_cache_dir()
+    
+    def _ensure_cache_dir(self):
+        """確保快取目錄存在"""
+        if not os.path.exists(self._cache_dir):
+            try:
+                os.makedirs(self._cache_dir)
+            except:
+                pass
+    
+    def _get_cache_path(self, code):
+        """取得股票快取檔案路徑"""
+        return os.path.join(self._cache_dir, f"{code}.json")
+    
+    def _load_from_cache(self, code):
+        """從快取載入歷史資料"""
+        cache_path = self._get_cache_path(code)
+        if os.path.exists(cache_path):
+            try:
+                with open(cache_path, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                return data
+            except:
+                pass
+        return None
+    
+    def _save_to_cache(self, code, data):
+        """儲存歷史資料到快取"""
+        cache_path = self._get_cache_path(code)
+        try:
+            with open(cache_path, 'w', encoding='utf-8') as f:
+                json.dump(data, f, ensure_ascii=False)
+        except:
+            pass
     
     def _throttle(self):
         """API請求節流"""
@@ -188,15 +225,36 @@ class DataFetcher:
         cache = self.fetch_institutional_batch()
         return cache.get(code, None)
     
-    def get_historical_price(self, code, days=60):
+    def get_historical_price(self, code, days=60, use_cache=True):
         """
         取得歷史股價 - 使用TWSE月成交資訊API
-        抓最近3個月的資料來湊足60天
+        支援增量更新：先檢查本地快取，只抓取新資料
         """
+        cached_data = None
+        if use_cache:
+            cached_data = self._load_from_cache(code)
+        
+        last_date = None
+        if cached_data and len(cached_data) > 0:
+            last_date = cached_data[-1].get('date', '')
+        
         all_prices = []
         
-        # 抓最近3個月（確保有足夠交易日）
-        for months_ago in range(3, -1, -1):
+        if cached_data:
+            all_prices = cached_data.copy()
+        
+        if last_date:
+            try:
+                last_dt = datetime.strptime(last_date, '%Y-%m-%d')
+                days_since = (datetime.now() - last_dt).days
+                if days_since <= 1:
+                    if len(all_prices) >= days:
+                        return all_prices[-days:]
+                    return all_prices
+            except:
+                pass
+        
+        for months_ago in range(4, -1, -1):
             try:
                 self._throttle()
                 target_date = datetime.now() - timedelta(days=months_ago * 30)
@@ -244,6 +302,12 @@ class DataFetcher:
                 if p['date'] not in seen_dates:
                     seen_dates.add(p['date'])
                     unique_prices.append(p)
+            
+            unique_prices.sort(key=lambda x: x['date'])
+            
+            if use_cache and len(unique_prices) >= days:
+                self._save_to_cache(code, unique_prices)
+            
             return unique_prices[-days:] if len(unique_prices) > days else unique_prices
         
         return None
