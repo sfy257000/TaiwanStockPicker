@@ -13,8 +13,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from config import CONFIG
 from stock_list import (
-    STOCK_LIST, get_all_stocks, get_stock_count,
-    check_and_update_stock_list, interactive_stock_selection
+    get_all_stocks, get_stock_count,
+    check_and_update_stock_list, get_stocks_by_category
 )
 from data_fetcher import DataFetcher
 from technical_indicators import TechnicalIndicators
@@ -204,6 +204,7 @@ class StockAnalyzer:
         results = []
         total_stocks = len(stocks)
         processed = 0
+        start_time = time.time()
         
         for code, name in stocks:
             result = self._analyze_stock_silent(code, name)
@@ -211,7 +212,7 @@ class StockAnalyzer:
                 results.append(result)
             
             processed += 1
-            self._print_progress(processed, total_stocks)
+            self._print_progress(processed, total_stocks, start_time)
         
         print()
         return results
@@ -221,6 +222,7 @@ class StockAnalyzer:
         results = []
         total_stocks = len(stocks)
         processed = 0
+        start_time = time.time()
         lock = __import__('threading').Lock()
         
         def analyze_with_progress(code, name):
@@ -230,7 +232,7 @@ class StockAnalyzer:
                 processed += 1
                 if result:
                     results.append(result)
-                self._print_progress(processed, total_stocks)
+                self._print_progress(processed, total_stocks, start_time)
             return result
         
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
@@ -245,11 +247,12 @@ class StockAnalyzer:
         print()
         return results
     
-    def _print_progress(self, processed, total):
+    def _print_progress(self, processed, total, start_time):
         """顯示進度"""
-        elapsed = 0
-        avg_time = 0
-        remaining = 0
+        elapsed = time.time() - start_time
+        avg_time = elapsed / processed if processed > 0 else 0
+        remaining = (total - processed) * avg_time
+        
         percent = int(processed * 100 / total)
         bar_len = 20
         filled = int(bar_len * processed / total)
@@ -270,54 +273,197 @@ class StockAnalyzer:
         
         print(f"分析時間: {get_timestamp()}")
         
-        # 檢查並更新股票清單（每天一次）
         check_and_update_stock_list()
         
-        # 根據模式選擇股票
-        stocks = interactive_stock_selection(
-            mode=mode,
-            categories=categories,
-            extra_stocks=extra_stocks,
-            random_count=random_count
-        )
+        if mode is None or mode == 'all':
+            while True:
+                print("\n" + "="*50)
+                print("台股選股分析系統")
+                print("="*50)
+                print("1) 分析全部股票")
+                print("2) 依類型選擇")
+                print("3) 隨機選取 50 檔")
+                print("4) 參數設定")
+                print("5) 查詢今日股票清單 (從TWSE API)")
+                print("6) 匯出股票清單檔案")
+                print("7) 離開")
+                
+                try:
+                    choice = input("\n請選擇 (1/2/3/4/5/6/7): ").strip()
+                except EOFError:
+                    choice = '1'
+                
+                if choice == '1':
+                    mode = 'all'
+                    break
+                elif choice == '2':
+                    mode = 'category'
+                    
+                    try:
+                        from stock_list import _INDUSTRY_TO_CATEGORY_MAP
+                        available_categories_map = _INDUSTRY_TO_CATEGORY_MAP
+                    except ImportError:
+                        available_categories_map = {
+                            '1': '半導體',
+                            '2': '電子',
+                            '3': '金融',
+                            '4': '水泥/化工',
+                            '5': 'ETF',
+                            '6': '鋼鐵/營建',
+                            '7': '航運',
+                            '8': '其他'
+                        }
+
+                    print("\n--- 可選股票類別 ---")
+                    sorted_category_items = sorted(available_categories_map.items(), key=lambda item: int(item[0]))
+                    
+                    for key, cat in sorted_category_items:
+                        print(f"  {key}) {cat}")
+                    print("  (請輸入數字編號，逗號分隔，例如：1,2,5)")
+
+                    try:
+                        cat_input = input("請輸入類型編號（逗號分隔，可多選）: ").strip()
+                        
+                        selected_categories = []
+                        for c in cat_input.split(','):
+                            c_stripped = c.strip()
+                            if c_stripped in available_categories_map:
+                                selected_categories.append(available_categories_map[c_stripped])
+                        
+                        categories = ','.join(selected_categories) if selected_categories else ''
+                        proceed_all_choice = ''
+
+                        if not categories:
+                            print("\n沒有選擇任何類別。")
+                            proceed_all_choice = ''
+                            while proceed_all_choice not in ['y', 'n', '']:
+                                proceed_all_choice = input("是否要分析全部股票？ (y/N): ").strip().lower()
+                                if proceed_all_choice == 'y':
+                                    mode = 'all'
+                                    print("將分析全部股票。")
+                                    break
+                                elif proceed_all_choice == 'n' or not proceed_all_choice:
+                                    print("請重新選擇分析模式。")
+                                    break
+                            
+                            if not (proceed_all_choice == 'y'):
+                                continue
+
+                        try:
+                            extra_input = input("是否要另外指定個股代碼？(y/N): ").strip().lower()
+                            if extra_input == 'y':
+                                extra_stocks = input("請輸入股票代碼（逗號分隔）: ").strip()
+                        except EOFError:
+                            pass
+                        
+                        if mode != 'category' or categories or proceed_all_choice == 'y':
+                            break
+                    except Exception as e:
+                        print(f"發生錯誤：{e}")
+                        continue
+
+                elif choice == '3':
+                    mode = 'random'
+                    break
+                elif choice == '4':
+                    interactive_parameter_menu()
+                elif choice == '5':
+                    from stock_list import generate_stock_list_from_api
+                    print("\n--- 查詢今日股票清單 ---")
+                    try:
+                        min_vol = input("請輸入最低成交量門檻（張，預設1000）: ").strip()
+                        min_volume = int(min_vol) if min_vol else 1000
+                    except ValueError:
+                        min_volume = 1000
+                        
+                    print(f"\n正在從TWSE API取得股票清單 (成交量>={min_volume}張)...")
+                    categorized, category_map = generate_stock_list_from_api(min_volume)
+                    
+                    if categorized:
+                        print("\n=== 股票類別統計 ===")
+                        total = 0
+                        for cat in sorted(category_map.keys()):
+                            stocks = categorized.get(cat, [])
+                            if stocks:
+                                print(f"  {cat}: {len(stocks)}檔")
+                                total += len(stocks)
+                        print(f"\n總計: {total}檔")
+                    else:
+                        print("無法取得股票清單")
+                    print("\n按 Enter 繼續...")
+                    try:
+                        input()
+                    except:
+                        pass
+                elif choice == '6':
+                    from stock_list import export_stock_list_to_file
+                    print("\n--- 匯出股票清單 ---")
+                    try:
+                        min_vol = input("請輸入最低成交量門檻（張，預設1000）: ").strip()
+                        min_volume = int(min_vol) if min_vol else 1000
+                    except ValueError:
+                        min_volume = 1000
+                    
+                    print("\n正在匯出新股票清單...")
+                    success = export_stock_list_to_file(min_volume)
+                    
+                    if success:
+                        print("\n✓ 股票清單已更新！")
+                    
+                    print("\n按 Enter 繼續...")
+                    try:
+                        input()
+                    except:
+                        pass
+                elif choice == '7':
+                    print("感謝使用！")
+                    return
+                else:
+                    print("請輸入 1-7 的選項")
         
-        # 如果有指定數量限制
-        if stock_count and stock_count < len(stocks):
-            stocks = stocks[:stock_count]
+        self.results = []
         
-        total_stocks = len(stocks)
-        print(f"\n分析股票數: {total_stocks} 檔")
+        stocks = []
         
-        parallel_config = CONFIG.get('parallel', {})
-        use_parallel = parallel_config.get('enabled', True)
-        max_workers = parallel_config.get('max_workers', 5)
+        if mode == 'category' and categories:
+            stocks = get_stocks_by_category(categories)
+            print(f"\n已選擇類別: {categories}，共 {len(stocks)} 檔")
+        elif mode == 'random':
+            all_stock_data = get_all_stocks()
+            import random
+            random.shuffle(all_stock_data)
+            stocks = all_stock_data[:random_count]
+            print(f"\n隨機選取 {len(stocks)} 檔股票")
+        else:
+            stocks = get_all_stocks()
+            print(f"\n共 {len(stocks)} 檔股票")
         
-        start_time = time.time()
+        if extra_stocks:
+            extra_stock_list = [(s.strip(), s.strip()) for s in extra_stocks.split(',')]
+            stocks.extend(extra_stock_list)
+            print(f"額外加入 {len(extra_stock_list)} 檔個股")
         
-        print("\n正在分析股票，請稍候...")
-        print("-" * 50)
+        if not stocks:
+            print("沒有股票可供分析")
+            return
         
-        if use_parallel and total_stocks > 1:
+        use_parallel = CONFIG.get('parallel', {}).get('enabled', False)
+        max_workers = CONFIG.get('parallel', {}).get('max_workers', 5)
+        
+        if use_parallel:
+            print(f"\n使用平行分析 (最多 {max_workers} 執行緒)...")
             self.results = self._run_parallel(stocks, max_workers)
         else:
+            print("\n順序分析中...")
             self.results = self._run_sequential(stocks)
         
-        success_count = len(self.results)
-        print("-" * 50)
-        
-        total_elapsed = time.time() - start_time
-        if total_elapsed < 60:
-            total_str = f"{int(total_elapsed)}秒"
-        elif total_elapsed < 3600:
-            total_str = f"{int(total_elapsed/60)}分"
-        else:
-            total_str = f"{int(total_elapsed/3600)}時{int((total_elapsed%3600)/60)}分"
-        
-        print(f"✓ 分析完成！共分析 {success_count} 檔，總耗时: {total_str}")
-        print()
+        if not self.results:
+            print("沒有分析結果")
+            return
         
         self._print_summary()
         
+        print()
         self._print_recommendations()
         
         self._print_limit_monitor()
@@ -328,23 +474,27 @@ class StockAnalyzer:
         
         self._print_support_resistance()
         
-        self._save_results()
-        
         self._print_usage()
+        
+        self._save_results()
     
     def _print_summary(self):
         """印出總覽"""
-        print_subheader("股價總覽")
+        print_subheader(f"股價總覽 (共 {len(self.results)} 檔)")
         
         self.results.sort(key=lambda x: x['change_pct'], reverse=True)
         
         print(f"{'代碼':<8} {'名稱':<10} {'現價':<10} {'漲跌%':<10} {'成交量':<15} {'評分':<8}")
         print("-" * 70)
         
-        for r in self.results[:30]:
+        display_count = min(len(self.results), 50)
+        for r in self.results[:display_count]:
             change_str = format_percentage(r['change_pct'])
             vol_str = format_number(r['volume'])
             print(f"{r['code']:<8} {r['name']:<10} {r['price']:<10.1f} {change_str:<10} {vol_str:>12}張   {r['total_score']:<8}")
+        
+        if len(self.results) > display_count:
+            print(f"... 還有 {len(self.results) - display_count} 檔 (只顯示前{display_count}檔)")
     
     def _print_recommendations(self):
         """印出推薦清單"""
@@ -695,7 +845,6 @@ def main():
     
     args = parser.parse_args()
     
-    # 如果沒有提供任何參數，顯示互動式選單
     if args.mode is None:
         while True:
             print("\n" + "="*50)
@@ -705,10 +854,12 @@ def main():
             print("2) 依類型選擇")
             print("3) 隨機選取 50 檔")
             print("4) 參數設定")
-            print("5) 離開")
+            print("5) 查詢今日股票清單 (從TWSE API)")
+            print("6) 匯出股票清單檔案")
+            print("7) 離開")
             
             try:
-                choice = input("\n請選擇 (1/2/3/4/5): ").strip()
+                choice = input("\n請選擇 (1/2/3/4/5/6/7): ").strip()
             except EOFError:
                 choice = '1'
             
@@ -717,21 +868,65 @@ def main():
                 break
             elif choice == '2':
                 args.mode = 'category'
-                print("\n類型代碼:")
-                print("  1=半導體  2=電子  3=金融  4=水泥/化工")
-                print("  5=ETF  6=鋼鐵/營建  7=航運  8=其他")
-                try:
-                    cat_input = input("請輸入類型編號（逗號分隔，可多選）: ").strip()
-                    args.categories = cat_input
-                except EOFError:
-                    args.categories = '1,2'
                 
                 try:
-                    extra_input = input("是否要另外指定個股代碼？(y/N): ").strip().lower()
-                    if extra_input == 'y':
-                        args.stocks = input("請輸入股票代碼（逗號分隔）: ").strip()
-                except EOFError:
-                    pass
+                    from stock_list import _INDUSTRY_TO_CATEGORY_MAP
+                    available_categories_map = _INDUSTRY_TO_CATEGORY_MAP
+                except ImportError:
+                    available_categories_map = {
+                        '1': '半導體',
+                        '2': '電子',
+                        '3': '金融',
+                        '4': '水泥/化工',
+                        '5': 'ETF',
+                        '6': '鋼鐵/營建',
+                        '7': '航運',
+                        '8': '其他'
+                    }
+
+                print("\n--- 可選股票類別 ---")
+                sorted_category_items = sorted(available_categories_map.items(), key=lambda item: int(item[0]))
+                
+                for key, cat in sorted_category_items:
+                    print(f"  {key}) {cat}")
+                print("  (請輸入數字編號，逗號分隔，例如：1,2,5)")
+
+                try:
+                    cat_input = input("請輸入類型編號（逗號分隔，可多選）: ").strip()
+                    
+                    selected_categories = []
+                    for c in cat_input.split(','):
+                        c_stripped = c.strip()
+                        if c_stripped in available_categories_map:
+                            selected_categories.append(available_categories_map[c_stripped])
+                    
+                    args.categories = ','.join(selected_categories) if selected_categories else ''
+
+                    if not args.categories:
+                        print("\n沒有選擇任何類別。")
+                        proceed_all_choice = ''
+                        while proceed_all_choice not in ['y', 'n', '']:
+                            proceed_all_choice = input("是否要分析全部股票？ (y/N): ").strip().lower()
+                            if proceed_all_choice == 'y':
+                                args.mode = 'all'
+                                print("將分析全部股票。")
+                                break
+                            elif proceed_all_choice == 'n' or not proceed_all_choice:
+                                print("請重新選擇分析模式。")
+                                break
+                        
+                        if not (proceed_all_choice == 'y'):
+                            continue
+
+                    try:
+                        extra_input = input("是否要另外指定個股代碼？(y/N): ").strip().lower()
+                        if extra_input == 'y':
+                            args.stocks = input("請輸入股票代碼（逗號分隔）: ").strip()
+                    except EOFError:
+                        pass
+                except Exception as e:
+                    print(f"發生錯誤：{e}")
+                    continue
                 break
                     
             elif choice == '3':
@@ -740,14 +935,61 @@ def main():
             elif choice == '4':
                 interactive_parameter_menu()
             elif choice == '5':
+                from stock_list import generate_stock_list_from_api
+                print("\n--- 查詢今日股票清單 ---")
+                try:
+                    min_vol = input("請輸入最低成交量門檻（張，預設1000）: ").strip()
+                    min_volume = int(min_vol) if min_vol else 1000
+                except:
+                    min_volume = 1000
+                    
+                print(f"\n正在從TWSE API取得股票清單 (成交量>={min_volume}張)...")
+                categorized, category_map = generate_stock_list_from_api(min_volume)
+                
+                if categorized:
+                    print("\n=== 股票類別統計 ===")
+                    total = 0
+                    for cat in ['ETF', '半導體', '電子', '電子零組件', '金融', '航運', '鋼鐵', '水泥', '營建', '食品', '其他']:
+                        stocks = categorized.get(cat, [])
+                        if stocks:
+                            print(f"  {cat}: {len(stocks)}檔")
+                            total += len(stocks)
+                    print(f"\n總計: {total}檔")
+                else:
+                    print("無法取得股票清單")
+                print("\n按 Enter 繼續...")
+                try:
+                    input()
+                except:
+                    pass
+            elif choice == '6':
+                from stock_list import export_stock_list_to_file
+                print("\n--- 匯出股票清單 ---")
+                try:
+                    min_vol = input("請輸入最低成交量門檻（張，預設1000）: ").strip()
+                    min_volume = int(min_vol) if min_vol else 1000
+                except:
+                    min_volume = 1000
+                
+                print("\n正在匯出新股票清單...")
+                success = export_stock_list_to_file(min_volume)
+                
+                if success:
+                    print("\n✓ stock_list.py 已更新！")
+                
+                print("\n按 Enter 繼續...")
+                try:
+                    input()
+                except:
+                    pass
+            elif choice == '7':
                 print("感謝使用！")
                 return
             else:
-                print("請輸入 1-5 的選項")
+                print("請輸入 1-7 的選項")
     
     analyzer = StockAnalyzer()
     
-    # 傳遞選擇參數給 run 方法
     analyzer.run(
         stock_count=args.number,
         mode=args.mode if args.mode else 'all',

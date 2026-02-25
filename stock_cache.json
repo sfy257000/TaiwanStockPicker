@@ -1,0 +1,5392 @@
+{
+  "1101": {
+    "name": "台泥",
+    "category": "水泥",
+    "industry": "01"
+  },
+  "1102": {
+    "name": "亞泥",
+    "category": "水泥",
+    "industry": "01"
+  },
+  "1103": {
+    "name": "嘉泥",
+    "category": "水泥",
+    "industry": "01"
+  },
+  "1104": {
+    "name": "環泥",
+    "category": "水泥",
+    "industry": "01"
+  },
+  "1108": {
+    "name": "幸福",
+    "category": "水泥",
+    "industry": "01"
+  },
+  "1109": {
+    "name": "信大",
+    "category": "水泥",
+    "industry": "01"
+  },
+  "1110": {
+    "name": "東泥",
+    "category": "水泥",
+    "industry": "01"
+  },
+  "1201": {
+    "name": "味全",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1203": {
+    "name": "味王",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1210": {
+    "name": "大成",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1213": {
+    "name": "大飲",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1215": {
+    "name": "卜蜂",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1216": {
+    "name": "統一",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1217": {
+    "name": "愛之味",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1218": {
+    "name": "泰山",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1219": {
+    "name": "福壽",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1220": {
+    "name": "台榮",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1225": {
+    "name": "福懋油",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1227": {
+    "name": "佳格",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1229": {
+    "name": "聯華",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1231": {
+    "name": "聯華食",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1232": {
+    "name": "大統益",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1233": {
+    "name": "天仁",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1234": {
+    "name": "黑松",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1235": {
+    "name": "興泰",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1236": {
+    "name": "宏亞",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1256": {
+    "name": "鮮活果汁-KY",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1301": {
+    "name": "台塑",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1303": {
+    "name": "南亞",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1304": {
+    "name": "台聚",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1305": {
+    "name": "華夏",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1307": {
+    "name": "三芳",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1308": {
+    "name": "亞聚",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1309": {
+    "name": "台達化",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1310": {
+    "name": "台苯",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1312": {
+    "name": "國喬",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1313": {
+    "name": "聯成",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1314": {
+    "name": "中石化",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1315": {
+    "name": "達新",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1316": {
+    "name": "上曜",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1319": {
+    "name": "東陽",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1321": {
+    "name": "大洋",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1323": {
+    "name": "永裕",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1324": {
+    "name": "地球",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1325": {
+    "name": "恆大",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1326": {
+    "name": "台化",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1337": {
+    "name": "再生-KY",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1338": {
+    "name": "廣華-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1339": {
+    "name": "昭輝",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1340": {
+    "name": "勝悅-KY",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1341": {
+    "name": "富林-KY",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "1342": {
+    "name": "八貫",
+    "category": "其他",
+    "industry": "20"
+  },
+  "1402": {
+    "name": "遠東新",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1409": {
+    "name": "新纖",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1410": {
+    "name": "南染",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1413": {
+    "name": "宏洲",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1414": {
+    "name": "東和",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1416": {
+    "name": "廣豐",
+    "category": "其他",
+    "industry": "20"
+  },
+  "1417": {
+    "name": "嘉裕",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1418": {
+    "name": "東華",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1419": {
+    "name": "新紡",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1423": {
+    "name": "利華",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1432": {
+    "name": "大魯閣",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "1434": {
+    "name": "福懋",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1435": {
+    "name": "中福",
+    "category": "其他",
+    "industry": "20"
+  },
+  "1436": {
+    "name": "華友聯",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1437": {
+    "name": "勤益控",
+    "category": "其他",
+    "industry": "20"
+  },
+  "1438": {
+    "name": "三地開發",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1439": {
+    "name": "雋揚",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1440": {
+    "name": "南紡",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1441": {
+    "name": "大東",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1442": {
+    "name": "名軒",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1443": {
+    "name": "立益物流",
+    "category": "其他",
+    "industry": "20"
+  },
+  "1444": {
+    "name": "力麗",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1445": {
+    "name": "大宇",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1446": {
+    "name": "宏和",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1447": {
+    "name": "力鵬",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1449": {
+    "name": "佳和",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1451": {
+    "name": "年興",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1452": {
+    "name": "宏益",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1453": {
+    "name": "大將",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1454": {
+    "name": "台富",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1455": {
+    "name": "集盛",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1456": {
+    "name": "怡華",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1457": {
+    "name": "宜進",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1459": {
+    "name": "聯發",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1460": {
+    "name": "宏遠",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1463": {
+    "name": "強盛新",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1464": {
+    "name": "得力",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1465": {
+    "name": "偉全",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1466": {
+    "name": "聚隆",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1467": {
+    "name": "南緯",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1468": {
+    "name": "昶和",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1470": {
+    "name": "大統新創",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1471": {
+    "name": "首利",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "1472": {
+    "name": "三洋實業",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1473": {
+    "name": "台南",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1474": {
+    "name": "弘裕",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1475": {
+    "name": "業旺",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1476": {
+    "name": "儒鴻",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1477": {
+    "name": "聚陽",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "1503": {
+    "name": "士電",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1504": {
+    "name": "東元",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1506": {
+    "name": "正道",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1512": {
+    "name": "瑞利",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1513": {
+    "name": "中興電",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1514": {
+    "name": "亞力",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1515": {
+    "name": "力山",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1516": {
+    "name": "川飛",
+    "category": "其他",
+    "industry": "20"
+  },
+  "1517": {
+    "name": "利奇",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1519": {
+    "name": "華城",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1521": {
+    "name": "大億",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1522": {
+    "name": "堤維西",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1524": {
+    "name": "耿鼎",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1525": {
+    "name": "江申",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1526": {
+    "name": "日馳",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1527": {
+    "name": "鑽全",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1528": {
+    "name": "恩德",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1529": {
+    "name": "樂事綠能",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1530": {
+    "name": "亞崴",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1531": {
+    "name": "高林股",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1532": {
+    "name": "勤美",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1533": {
+    "name": "車王電",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1535": {
+    "name": "中宇",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1536": {
+    "name": "和大",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1537": {
+    "name": "廣隆",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1538": {
+    "name": "正峰",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1539": {
+    "name": "巨庭",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1540": {
+    "name": "喬福",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1541": {
+    "name": "錩泰",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1558": {
+    "name": "伸興",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1560": {
+    "name": "中砂",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1563": {
+    "name": "巧新",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1568": {
+    "name": "倉佑",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1582": {
+    "name": "信錦",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "1583": {
+    "name": "程泰",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1587": {
+    "name": "吉茂",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "1589": {
+    "name": "永冠-KY",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1590": {
+    "name": "亞德客-KY",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1597": {
+    "name": "直得",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1598": {
+    "name": "岱宇",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "1603": {
+    "name": "華電",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1604": {
+    "name": "聲寶",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1605": {
+    "name": "華新",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1608": {
+    "name": "華榮",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1609": {
+    "name": "大亞",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1611": {
+    "name": "中電",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1612": {
+    "name": "宏泰",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1614": {
+    "name": "三洋電",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1615": {
+    "name": "大山",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1616": {
+    "name": "億泰",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1617": {
+    "name": "榮星",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1618": {
+    "name": "合機",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1623": {
+    "name": "大東電",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1626": {
+    "name": "艾美特-KY",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "1702": {
+    "name": "南僑",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1707": {
+    "name": "葡萄王",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1708": {
+    "name": "東鹼",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1709": {
+    "name": "和益",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1710": {
+    "name": "東聯",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1711": {
+    "name": "永光",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1712": {
+    "name": "興農",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1713": {
+    "name": "國化",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1714": {
+    "name": "和桐",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1717": {
+    "name": "長興",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1718": {
+    "name": "中纖",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1720": {
+    "name": "生達",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1721": {
+    "name": "三晃",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1722": {
+    "name": "台肥",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1723": {
+    "name": "中碳",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1725": {
+    "name": "元禎",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1726": {
+    "name": "永記",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1727": {
+    "name": "中華化",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1730": {
+    "name": "花仙子",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1731": {
+    "name": "美吾華",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1732": {
+    "name": "毛寶",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1733": {
+    "name": "五鼎",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1734": {
+    "name": "杏輝",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1735": {
+    "name": "日勝化",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1736": {
+    "name": "喬山",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "1737": {
+    "name": "臺鹽",
+    "category": "食品",
+    "industry": "02"
+  },
+  "1752": {
+    "name": "南光",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1760": {
+    "name": "寶齡富錦",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1762": {
+    "name": "中化生",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1773": {
+    "name": "勝一",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1776": {
+    "name": "展宇",
+    "category": "化學",
+    "industry": "21"
+  },
+  "1783": {
+    "name": "和康生",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1786": {
+    "name": "科妍",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1789": {
+    "name": "神隆",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1795": {
+    "name": "美時",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "1802": {
+    "name": "台玻",
+    "category": "化工",
+    "industry": "08"
+  },
+  "1805": {
+    "name": "寶徠",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1806": {
+    "name": "冠軍",
+    "category": "化工",
+    "industry": "08"
+  },
+  "1808": {
+    "name": "潤隆",
+    "category": "營建",
+    "industry": "14"
+  },
+  "1809": {
+    "name": "中釉",
+    "category": "化工",
+    "industry": "08"
+  },
+  "1810": {
+    "name": "和成",
+    "category": "化工",
+    "industry": "08"
+  },
+  "1817": {
+    "name": "凱撒衛",
+    "category": "化工",
+    "industry": "08"
+  },
+  "1903": {
+    "name": "士紙",
+    "category": "玻璃陶瓷",
+    "industry": "09"
+  },
+  "1904": {
+    "name": "正隆",
+    "category": "玻璃陶瓷",
+    "industry": "09"
+  },
+  "1905": {
+    "name": "華紙",
+    "category": "玻璃陶瓷",
+    "industry": "09"
+  },
+  "1906": {
+    "name": "寶隆",
+    "category": "玻璃陶瓷",
+    "industry": "09"
+  },
+  "1907": {
+    "name": "永豐餘",
+    "category": "玻璃陶瓷",
+    "industry": "09"
+  },
+  "1909": {
+    "name": "榮成",
+    "category": "玻璃陶瓷",
+    "industry": "09"
+  },
+  "2002": {
+    "name": "中鋼",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2006": {
+    "name": "東和鋼鐵",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2007": {
+    "name": "燁興",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2008": {
+    "name": "高興昌",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2009": {
+    "name": "第一銅",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2010": {
+    "name": "春源",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2012": {
+    "name": "春雨",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2013": {
+    "name": "中鋼構",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2014": {
+    "name": "中鴻",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2015": {
+    "name": "豐興",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2017": {
+    "name": "官田鋼",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2020": {
+    "name": "美亞",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2022": {
+    "name": "聚亨",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2023": {
+    "name": "燁輝",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2024": {
+    "name": "志聯",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2025": {
+    "name": "千興",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2027": {
+    "name": "大成鋼",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2028": {
+    "name": "威致",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2029": {
+    "name": "盛餘",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2030": {
+    "name": "彰源",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2031": {
+    "name": "新光鋼",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2032": {
+    "name": "新鋼",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2033": {
+    "name": "佳大",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2034": {
+    "name": "允強",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2038": {
+    "name": "海光",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2049": {
+    "name": "上銀",
+    "category": "電機",
+    "industry": "05"
+  },
+  "2059": {
+    "name": "川湖",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2062": {
+    "name": "橋椿",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "2069": {
+    "name": "運錩",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2101": {
+    "name": "南港",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2102": {
+    "name": "泰豐",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2103": {
+    "name": "台橡",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2104": {
+    "name": "國際中橡",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2105": {
+    "name": "正新",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2106": {
+    "name": "建大",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2107": {
+    "name": "厚生",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2108": {
+    "name": "南帝",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2109": {
+    "name": "華豐",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2114": {
+    "name": "鑫永銓",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "2115": {
+    "name": "六暉-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2201": {
+    "name": "裕隆",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2204": {
+    "name": "中華",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2206": {
+    "name": "三陽工業",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2207": {
+    "name": "和泰車",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2208": {
+    "name": "台船",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2211": {
+    "name": "長榮鋼",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "2227": {
+    "name": "裕日車",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2228": {
+    "name": "劍麟",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2231": {
+    "name": "為升",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2233": {
+    "name": "宇隆",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2236": {
+    "name": "百達-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2239": {
+    "name": "英利-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2241": {
+    "name": "艾姆勒",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2243": {
+    "name": "宏旭-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2247": {
+    "name": "汎德永業",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2248": {
+    "name": "華勝-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2250": {
+    "name": "IKKA-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2254": {
+    "name": "巨鎧精密-創",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2258": {
+    "name": "鴻華先進-創",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2301": {
+    "name": "光寶科",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2302": {
+    "name": "麗正",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2303": {
+    "name": "聯電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2305": {
+    "name": "全友",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2308": {
+    "name": "台達電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2312": {
+    "name": "金寶",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2313": {
+    "name": "華通",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2314": {
+    "name": "台揚",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2316": {
+    "name": "楠梓電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2317": {
+    "name": "鴻海",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2321": {
+    "name": "東訊",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2323": {
+    "name": "中環",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2324": {
+    "name": "仁寶",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2327": {
+    "name": "國巨*",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2328": {
+    "name": "廣宇",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2329": {
+    "name": "華泰",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2330": {
+    "name": "台積電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2331": {
+    "name": "精英",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2332": {
+    "name": "友訊",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2337": {
+    "name": "旺宏",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2338": {
+    "name": "光罩",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2340": {
+    "name": "台亞",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2342": {
+    "name": "茂矽",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2344": {
+    "name": "華邦電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2345": {
+    "name": "智邦",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2347": {
+    "name": "聯強",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "2348": {
+    "name": "海悅",
+    "category": "其他",
+    "industry": "20"
+  },
+  "2349": {
+    "name": "錸德",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2351": {
+    "name": "順德",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2352": {
+    "name": "佳世達",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2353": {
+    "name": "宏碁",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2354": {
+    "name": "鴻準",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2355": {
+    "name": "敬鵬",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2356": {
+    "name": "英業達",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2357": {
+    "name": "華碩",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2359": {
+    "name": "所羅門",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2360": {
+    "name": "致茂",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2362": {
+    "name": "藍天",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2363": {
+    "name": "矽統",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2364": {
+    "name": "倫飛",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2365": {
+    "name": "昆盈",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2367": {
+    "name": "燿華",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2368": {
+    "name": "金像電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2369": {
+    "name": "菱生",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2371": {
+    "name": "大同",
+    "category": "電機",
+    "industry": "05"
+  },
+  "2373": {
+    "name": "震旦行",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2374": {
+    "name": "佳能",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2375": {
+    "name": "凱美",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2376": {
+    "name": "技嘉",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2377": {
+    "name": "微星",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2379": {
+    "name": "瑞昱",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2380": {
+    "name": "虹光",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2382": {
+    "name": "廣達",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2383": {
+    "name": "台光電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2385": {
+    "name": "群光",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2387": {
+    "name": "精元",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2388": {
+    "name": "威盛",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2390": {
+    "name": "云辰",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2392": {
+    "name": "正崴",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2393": {
+    "name": "億光",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2395": {
+    "name": "研華",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2397": {
+    "name": "友通",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2399": {
+    "name": "映泰",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2401": {
+    "name": "凌陽",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2402": {
+    "name": "毅嘉",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2404": {
+    "name": "漢唐",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2405": {
+    "name": "輔信",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2406": {
+    "name": "國碩",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2408": {
+    "name": "南亞科",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2409": {
+    "name": "友達",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2412": {
+    "name": "中華電",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2413": {
+    "name": "環科",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2414": {
+    "name": "精技",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "2415": {
+    "name": "錩新",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2417": {
+    "name": "圓剛",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2419": {
+    "name": "仲琦",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2420": {
+    "name": "新巨",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2421": {
+    "name": "建準",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2423": {
+    "name": "固緯",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2424": {
+    "name": "隴華",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2425": {
+    "name": "承啟",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2426": {
+    "name": "鼎元",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2427": {
+    "name": "三商電",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "2428": {
+    "name": "興勤",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2429": {
+    "name": "銘旺科",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2430": {
+    "name": "燦坤",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "2431": {
+    "name": "聯昌",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2432": {
+    "name": "倚天酷碁-創",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2433": {
+    "name": "互盛電",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2434": {
+    "name": "統懋",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2436": {
+    "name": "偉詮電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2438": {
+    "name": "翔耀",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2439": {
+    "name": "美律",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2440": {
+    "name": "太空梭",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2441": {
+    "name": "超豐",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2442": {
+    "name": "新美齊",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2444": {
+    "name": "兆勁",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2449": {
+    "name": "京元電子",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2450": {
+    "name": "神腦",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2451": {
+    "name": "創見",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2453": {
+    "name": "凌群",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "2454": {
+    "name": "聯發科",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2455": {
+    "name": "全新",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2457": {
+    "name": "飛宏",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2458": {
+    "name": "義隆",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2459": {
+    "name": "敦吉",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2460": {
+    "name": "建通",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2461": {
+    "name": "光群雷",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2462": {
+    "name": "良得電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2464": {
+    "name": "盟立",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2465": {
+    "name": "麗臺",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2466": {
+    "name": "冠西電",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2467": {
+    "name": "志聖",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2468": {
+    "name": "華經",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "2471": {
+    "name": "資通",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "2472": {
+    "name": "立隆電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2474": {
+    "name": "可成",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2476": {
+    "name": "鉅祥",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2477": {
+    "name": "美隆電",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2478": {
+    "name": "大毅",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2480": {
+    "name": "敦陽科",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "2481": {
+    "name": "強茂",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "2482": {
+    "name": "連宇",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2483": {
+    "name": "百容",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2484": {
+    "name": "希華",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2485": {
+    "name": "兆赫",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2486": {
+    "name": "一詮",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2488": {
+    "name": "漢平",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "2489": {
+    "name": "瑞軒",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2491": {
+    "name": "吉祥全",
+    "category": "光電",
+    "industry": "26"
+  },
+  "2492": {
+    "name": "華新科",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2493": {
+    "name": "揚博",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "2495": {
+    "name": "普安",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "2496": {
+    "name": "卓越",
+    "category": "其他",
+    "industry": "20"
+  },
+  "2497": {
+    "name": "怡利電",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "2498": {
+    "name": "宏達電",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "2501": {
+    "name": "國建",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2504": {
+    "name": "國產",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2505": {
+    "name": "國揚",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2506": {
+    "name": "太設",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2509": {
+    "name": "全坤建",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2511": {
+    "name": "太子",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2514": {
+    "name": "龍邦",
+    "category": "其他",
+    "industry": "20"
+  },
+  "2515": {
+    "name": "中工",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2516": {
+    "name": "新建",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2520": {
+    "name": "冠德",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2524": {
+    "name": "京城",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2527": {
+    "name": "宏璟",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2528": {
+    "name": "皇普",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2530": {
+    "name": "華建",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2534": {
+    "name": "宏盛",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2535": {
+    "name": "達欣工",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2536": {
+    "name": "宏普",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2537": {
+    "name": "聯上發",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2538": {
+    "name": "基泰",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2539": {
+    "name": "櫻花建",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2540": {
+    "name": "愛山林",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2542": {
+    "name": "興富發",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2543": {
+    "name": "皇昌",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2545": {
+    "name": "皇翔",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2546": {
+    "name": "根基",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2547": {
+    "name": "日勝生",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2548": {
+    "name": "華固",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2597": {
+    "name": "潤弘",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2601": {
+    "name": "益航",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2603": {
+    "name": "長榮",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2605": {
+    "name": "新興",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2606": {
+    "name": "裕民",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2607": {
+    "name": "榮運",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2608": {
+    "name": "嘉里大榮",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2609": {
+    "name": "陽明",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2610": {
+    "name": "華航",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2611": {
+    "name": "志信",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2612": {
+    "name": "中航",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2613": {
+    "name": "中櫃",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2614": {
+    "name": "東森",
+    "category": "其他",
+    "industry": "20"
+  },
+  "2615": {
+    "name": "萬海",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2616": {
+    "name": "山隆",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "2617": {
+    "name": "台航",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2618": {
+    "name": "長榮航",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2630": {
+    "name": "亞航",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2633": {
+    "name": "台灣高鐵",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2634": {
+    "name": "漢翔",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2636": {
+    "name": "台驊控股",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2637": {
+    "name": "慧洋-KY",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2642": {
+    "name": "宅配通",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2645": {
+    "name": "長榮航太",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2646": {
+    "name": "星宇航空",
+    "category": "航運",
+    "industry": "15"
+  },
+  "2701": {
+    "name": "萬企",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2702": {
+    "name": "華園",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2704": {
+    "name": "國賓",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2705": {
+    "name": "六福",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2706": {
+    "name": "第一店",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2707": {
+    "name": "晶華",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2712": {
+    "name": "遠雄來",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2722": {
+    "name": "夏都",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2723": {
+    "name": "美食-KY",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2727": {
+    "name": "王品",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2731": {
+    "name": "雄獅",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2739": {
+    "name": "寒舍",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2748": {
+    "name": "雲品",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2753": {
+    "name": "八方雲集",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "2762": {
+    "name": "世界健身-KY",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "2801": {
+    "name": "彰銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2812": {
+    "name": "台中銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2816": {
+    "name": "旺旺保",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2820": {
+    "name": "華票",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2832": {
+    "name": "台產",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2834": {
+    "name": "臺企銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2836": {
+    "name": "高雄銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2838": {
+    "name": "聯邦銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2845": {
+    "name": "遠東銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2849": {
+    "name": "安泰銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2850": {
+    "name": "新產",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2851": {
+    "name": "中再保",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2852": {
+    "name": "第一保",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2855": {
+    "name": "統一證",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2867": {
+    "name": "三商壽",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2880": {
+    "name": "華南金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2881": {
+    "name": "富邦金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2882": {
+    "name": "國泰金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2883": {
+    "name": "凱基金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2884": {
+    "name": "玉山金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2885": {
+    "name": "元大金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2886": {
+    "name": "兆豐金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2887": {
+    "name": "台新新光金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2889": {
+    "name": "國票金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2890": {
+    "name": "永豐金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2891": {
+    "name": "中信金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2892": {
+    "name": "第一金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2897": {
+    "name": "王道銀行",
+    "category": "金融",
+    "industry": "17"
+  },
+  "2901": {
+    "name": "欣欣",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2903": {
+    "name": "遠百",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2904": {
+    "name": "匯僑",
+    "category": "其他",
+    "industry": "20"
+  },
+  "2905": {
+    "name": "三商",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2906": {
+    "name": "高林",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2908": {
+    "name": "特力",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2910": {
+    "name": "統領",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2911": {
+    "name": "麗嬰房",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2912": {
+    "name": "統一超",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2913": {
+    "name": "農林",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2915": {
+    "name": "潤泰全",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2923": {
+    "name": "鼎固-KY",
+    "category": "營建",
+    "industry": "14"
+  },
+  "2929": {
+    "name": "淘帝-KY",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2939": {
+    "name": "永邑-KY",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "2945": {
+    "name": "三商家購",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "3002": {
+    "name": "歐格",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3003": {
+    "name": "健和興",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3004": {
+    "name": "豐達科",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "3005": {
+    "name": "神基",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3006": {
+    "name": "晶豪科",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3008": {
+    "name": "大立光",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3010": {
+    "name": "華立",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3011": {
+    "name": "今皓",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3013": {
+    "name": "晟銘電",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3014": {
+    "name": "聯陽",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3015": {
+    "name": "全漢",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3016": {
+    "name": "嘉晶",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3017": {
+    "name": "奇鋐",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3018": {
+    "name": "隆銘綠能",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "3019": {
+    "name": "亞光",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3021": {
+    "name": "鴻名",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3022": {
+    "name": "威強電",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3023": {
+    "name": "信邦",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3024": {
+    "name": "憶聲",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3025": {
+    "name": "星通",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3026": {
+    "name": "禾伸堂",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3027": {
+    "name": "盛達",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3028": {
+    "name": "增你強",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3029": {
+    "name": "零壹",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "3030": {
+    "name": "德律",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "3031": {
+    "name": "佰鴻",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3032": {
+    "name": "偉訓",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3033": {
+    "name": "威健",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3034": {
+    "name": "聯詠",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3035": {
+    "name": "智原",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3036": {
+    "name": "文曄",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3037": {
+    "name": "欣興",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3038": {
+    "name": "全台",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3040": {
+    "name": "遠見",
+    "category": "其他",
+    "industry": "20"
+  },
+  "3041": {
+    "name": "揚智",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3042": {
+    "name": "晶技",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3043": {
+    "name": "科風",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "3044": {
+    "name": "健鼎",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3045": {
+    "name": "台灣大",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3046": {
+    "name": "建碁",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3047": {
+    "name": "訊舟",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3048": {
+    "name": "益登",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3049": {
+    "name": "精金",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3050": {
+    "name": "鈺德",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3051": {
+    "name": "力特",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3052": {
+    "name": "夆典",
+    "category": "營建",
+    "industry": "14"
+  },
+  "3054": {
+    "name": "立萬利",
+    "category": "食品",
+    "industry": "02"
+  },
+  "3055": {
+    "name": "蔚華科",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3056": {
+    "name": "富華新",
+    "category": "營建",
+    "industry": "14"
+  },
+  "3057": {
+    "name": "喬鼎",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3058": {
+    "name": "立德",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3059": {
+    "name": "華晶科",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3060": {
+    "name": "銘異",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3062": {
+    "name": "建漢",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3090": {
+    "name": "日電貿",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3092": {
+    "name": "鴻碩",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3094": {
+    "name": "聯傑",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3130": {
+    "name": "一零四",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "3135": {
+    "name": "凌航",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3138": {
+    "name": "耀登",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3149": {
+    "name": "正達",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3150": {
+    "name": "鈺寶-創",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3164": {
+    "name": "景岳",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "3167": {
+    "name": "大量",
+    "category": "電機",
+    "industry": "05"
+  },
+  "3168": {
+    "name": "眾福科",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3189": {
+    "name": "景碩",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3209": {
+    "name": "全科",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3229": {
+    "name": "晟鈦",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3231": {
+    "name": "緯創",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3257": {
+    "name": "虹冠電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3266": {
+    "name": "昇陽",
+    "category": "營建",
+    "industry": "14"
+  },
+  "3296": {
+    "name": "勝德",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3305": {
+    "name": "昇貿",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "3308": {
+    "name": "聯德",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3311": {
+    "name": "閎暉",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3312": {
+    "name": "弘憶股",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3321": {
+    "name": "同泰",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3338": {
+    "name": "泰碩",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3346": {
+    "name": "麗清",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "3356": {
+    "name": "奇偶",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3376": {
+    "name": "新日興",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3380": {
+    "name": "明泰",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3406": {
+    "name": "玉晶光",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3413": {
+    "name": "京鼎",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3416": {
+    "name": "融程電",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3419": {
+    "name": "譁裕",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3432": {
+    "name": "台端",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3437": {
+    "name": "榮創",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3443": {
+    "name": "創意",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3447": {
+    "name": "展達",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3450": {
+    "name": "聯鈞",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3454": {
+    "name": "晶睿",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3481": {
+    "name": "群創",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3494": {
+    "name": "誠研",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3501": {
+    "name": "維熹",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3504": {
+    "name": "揚明光",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3515": {
+    "name": "華擎",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3518": {
+    "name": "柏騰",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "3528": {
+    "name": "安馳",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3530": {
+    "name": "晶相光",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3532": {
+    "name": "台勝科",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3533": {
+    "name": "嘉澤",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3535": {
+    "name": "晶彩科",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3543": {
+    "name": "州巧",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3545": {
+    "name": "敦泰",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3550": {
+    "name": "聯穎",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3557": {
+    "name": "嘉威",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "3563": {
+    "name": "牧德",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3576": {
+    "name": "聯合再生",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3583": {
+    "name": "辛耘",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3588": {
+    "name": "通嘉",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3591": {
+    "name": "艾笛森",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3592": {
+    "name": "瑞鼎",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3593": {
+    "name": "力銘",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3596": {
+    "name": "智易",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3605": {
+    "name": "宏致",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3607": {
+    "name": "谷崧",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3617": {
+    "name": "碩天",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "3622": {
+    "name": "洋華",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3645": {
+    "name": "達邁",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3652": {
+    "name": "精聯",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3653": {
+    "name": "健策",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3661": {
+    "name": "世芯-KY",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3665": {
+    "name": "貿聯-KY",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "3669": {
+    "name": "圓展",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3673": {
+    "name": "TPK-KY",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3679": {
+    "name": "新至陞",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3686": {
+    "name": "達能",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3694": {
+    "name": "海華",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3701": {
+    "name": "大眾控",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3702": {
+    "name": "大聯大",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "3703": {
+    "name": "欣陸",
+    "category": "營建",
+    "industry": "14"
+  },
+  "3704": {
+    "name": "合勤控",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "3705": {
+    "name": "永信",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "3706": {
+    "name": "神達",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3708": {
+    "name": "上緯投控",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "3711": {
+    "name": "日月光投控",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "3712": {
+    "name": "永崴投控",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "3714": {
+    "name": "富采",
+    "category": "光電",
+    "industry": "26"
+  },
+  "3715": {
+    "name": "定穎投控",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "3716": {
+    "name": "中化控股",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "3717": {
+    "name": "聯嘉投控",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "4104": {
+    "name": "佳醫",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4106": {
+    "name": "雃博",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4108": {
+    "name": "懷特",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4119": {
+    "name": "旭富",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4133": {
+    "name": "亞諾法",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4137": {
+    "name": "麗豐-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4142": {
+    "name": "國光生",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4148": {
+    "name": "全宇生技-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4155": {
+    "name": "訊映",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4164": {
+    "name": "承業醫",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4190": {
+    "name": "佐登-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4306": {
+    "name": "炎洲",
+    "category": "塑膠",
+    "industry": "03"
+  },
+  "4414": {
+    "name": "如興",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "4426": {
+    "name": "利勤",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "4438": {
+    "name": "廣越",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "4439": {
+    "name": "冠星-KY",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "4440": {
+    "name": "宜新實業",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "4441": {
+    "name": "振大環球",
+    "category": "紡織",
+    "industry": "04"
+  },
+  "4526": {
+    "name": "東台",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4532": {
+    "name": "瑞智",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4536": {
+    "name": "拓凱",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "4540": {
+    "name": "全球傳動",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4545": {
+    "name": "銘鈺",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "4551": {
+    "name": "智伸科",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "4552": {
+    "name": "力達-KY",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4555": {
+    "name": "氣立",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4557": {
+    "name": "永新-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "4560": {
+    "name": "強信-KY",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4562": {
+    "name": "穎漢",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4564": {
+    "name": "元翎",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4566": {
+    "name": "時碩工業",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4569": {
+    "name": "六方科-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "4571": {
+    "name": "鈞興-KY",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4572": {
+    "name": "駐龍",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4576": {
+    "name": "大銀微系統",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4581": {
+    "name": "光隆精密-KY",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "4583": {
+    "name": "台灣精銳",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4585": {
+    "name": "達明",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "4588": {
+    "name": "玖鼎電力",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "4590": {
+    "name": "富田-創",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4720": {
+    "name": "德淵",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4722": {
+    "name": "國精化",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4736": {
+    "name": "泰博",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4737": {
+    "name": "華廣",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4739": {
+    "name": "康普",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4746": {
+    "name": "台耀",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4755": {
+    "name": "三福化",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4763": {
+    "name": "材料*-KY",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4764": {
+    "name": "雙鍵",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4766": {
+    "name": "南寶",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4770": {
+    "name": "上品",
+    "category": "化學",
+    "industry": "21"
+  },
+  "4771": {
+    "name": "望隼",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "4807": {
+    "name": "日成-KY",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "4904": {
+    "name": "遠傳",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "4906": {
+    "name": "正文",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "4912": {
+    "name": "聯德控股-KY",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "4915": {
+    "name": "致伸",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "4916": {
+    "name": "事欣科",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "4919": {
+    "name": "新唐",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "4927": {
+    "name": "泰鼎-KY",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "4930": {
+    "name": "燦星網",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "4934": {
+    "name": "太極",
+    "category": "光電",
+    "industry": "26"
+  },
+  "4935": {
+    "name": "茂林-KY",
+    "category": "光電",
+    "industry": "26"
+  },
+  "4938": {
+    "name": "和碩",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "4942": {
+    "name": "嘉彰",
+    "category": "光電",
+    "industry": "26"
+  },
+  "4943": {
+    "name": "康控-KY",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "4949": {
+    "name": "有成精密",
+    "category": "光電",
+    "industry": "26"
+  },
+  "4952": {
+    "name": "凌通",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "4956": {
+    "name": "光鋐",
+    "category": "光電",
+    "industry": "26"
+  },
+  "4958": {
+    "name": "臻鼎-KY",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "4960": {
+    "name": "誠美材",
+    "category": "光電",
+    "industry": "26"
+  },
+  "4961": {
+    "name": "天鈺",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "4967": {
+    "name": "十銓",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "4968": {
+    "name": "立積",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "4976": {
+    "name": "佳凌",
+    "category": "光電",
+    "industry": "26"
+  },
+  "4977": {
+    "name": "眾達-KY",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "4989": {
+    "name": "榮科",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "4994": {
+    "name": "傳奇",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "4999": {
+    "name": "鑫禾",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "5007": {
+    "name": "三星",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "5203": {
+    "name": "訊連",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "5215": {
+    "name": "科嘉-KY",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "5222": {
+    "name": "全訊",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "5225": {
+    "name": "東科-KY",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "5234": {
+    "name": "達興材料",
+    "category": "光電",
+    "industry": "26"
+  },
+  "5243": {
+    "name": "乙盛-KY",
+    "category": "光電",
+    "industry": "26"
+  },
+  "5244": {
+    "name": "弘凱",
+    "category": "光電",
+    "industry": "26"
+  },
+  "5258": {
+    "name": "虹堡",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "5269": {
+    "name": "祥碩",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "5283": {
+    "name": "禾聯碩",
+    "category": "電線電纜",
+    "industry": "06"
+  },
+  "5284": {
+    "name": "jpp-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "5285": {
+    "name": "界霖",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "5288": {
+    "name": "豐祥-KY",
+    "category": "電機",
+    "industry": "05"
+  },
+  "5292": {
+    "name": "華懋",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "5306": {
+    "name": "桂盟",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "5388": {
+    "name": "中磊",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "5434": {
+    "name": "崇越",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "5469": {
+    "name": "瀚宇博",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "5471": {
+    "name": "松翰",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "5484": {
+    "name": "慧友",
+    "category": "光電",
+    "industry": "26"
+  },
+  "5515": {
+    "name": "建國",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5519": {
+    "name": "隆大",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5521": {
+    "name": "工信",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5522": {
+    "name": "遠雄",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5525": {
+    "name": "順天",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5531": {
+    "name": "鄉林",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5533": {
+    "name": "皇鼎",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5534": {
+    "name": "長虹",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5538": {
+    "name": "東明-KY",
+    "category": "造紙",
+    "industry": "10"
+  },
+  "5546": {
+    "name": "永固-KY",
+    "category": "營建",
+    "industry": "14"
+  },
+  "5607": {
+    "name": "遠雄港",
+    "category": "航運",
+    "industry": "15"
+  },
+  "5608": {
+    "name": "四維航",
+    "category": "航運",
+    "industry": "15"
+  },
+  "5706": {
+    "name": "鳳凰",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "5871": {
+    "name": "中租-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "5876": {
+    "name": "上海商銀",
+    "category": "金融",
+    "industry": "17"
+  },
+  "5880": {
+    "name": "合庫金",
+    "category": "金融",
+    "industry": "17"
+  },
+  "5906": {
+    "name": "台南-KY",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "5907": {
+    "name": "大洋-KY",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "6005": {
+    "name": "群益證",
+    "category": "金融",
+    "industry": "17"
+  },
+  "6024": {
+    "name": "群益期",
+    "category": "金融",
+    "industry": "17"
+  },
+  "6108": {
+    "name": "競國",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6112": {
+    "name": "邁達特",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "6115": {
+    "name": "鎰勝",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6116": {
+    "name": "彩晶",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6117": {
+    "name": "迎廣",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6120": {
+    "name": "達運",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6128": {
+    "name": "上福",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6133": {
+    "name": "金橋",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6136": {
+    "name": "富爾特",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6139": {
+    "name": "亞翔",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6141": {
+    "name": "柏承",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6142": {
+    "name": "友勁",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6152": {
+    "name": "百一",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6153": {
+    "name": "嘉聯益",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6155": {
+    "name": "鈞寶",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6164": {
+    "name": "華興",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6165": {
+    "name": "浪凡",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "6166": {
+    "name": "凌華",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6168": {
+    "name": "宏齊",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6176": {
+    "name": "瑞儀",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6177": {
+    "name": "達麗",
+    "category": "營建",
+    "industry": "14"
+  },
+  "6183": {
+    "name": "關貿",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "6184": {
+    "name": "大豐電",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6189": {
+    "name": "豐藝",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "6191": {
+    "name": "精成科",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6192": {
+    "name": "巨路",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6196": {
+    "name": "帆宣",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6197": {
+    "name": "佳必琪",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6201": {
+    "name": "亞弘電",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6202": {
+    "name": "盛群",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6205": {
+    "name": "詮欣",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6206": {
+    "name": "飛捷",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6209": {
+    "name": "今國光",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6213": {
+    "name": "聯茂",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6214": {
+    "name": "精誠",
+    "category": "資訊服務",
+    "industry": "30"
+  },
+  "6215": {
+    "name": "和椿",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6216": {
+    "name": "居易",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6224": {
+    "name": "聚鼎",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6225": {
+    "name": "天瀚",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6226": {
+    "name": "光鼎",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6230": {
+    "name": "尼得科超眾",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6235": {
+    "name": "華孚",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6239": {
+    "name": "力成",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6243": {
+    "name": "迅杰",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6257": {
+    "name": "矽格",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6269": {
+    "name": "台郡",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6271": {
+    "name": "同欣電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6272": {
+    "name": "驊陞",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6277": {
+    "name": "宏正",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6278": {
+    "name": "台表科",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6281": {
+    "name": "全國電",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "6282": {
+    "name": "康舒",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6283": {
+    "name": "淳安",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6285": {
+    "name": "啟碁",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6405": {
+    "name": "悅城",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6409": {
+    "name": "旭隼",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6412": {
+    "name": "群電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6414": {
+    "name": "樺漢",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6415": {
+    "name": "矽力*-KY",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6416": {
+    "name": "瑞祺電通",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6426": {
+    "name": "統新",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6431": {
+    "name": "光麗-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6438": {
+    "name": "迅得",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6442": {
+    "name": "光聖",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6443": {
+    "name": "元晶",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6446": {
+    "name": "藥華藥",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6449": {
+    "name": "鈺邦",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6451": {
+    "name": "訊芯-KY",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6456": {
+    "name": "GIS-KY",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6464": {
+    "name": "台數科",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6472": {
+    "name": "保瑞",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6477": {
+    "name": "安集",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6491": {
+    "name": "晶碩",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6504": {
+    "name": "南六",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6505": {
+    "name": "台塑化",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "6515": {
+    "name": "穎崴",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6525": {
+    "name": "捷敏-KY",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6526": {
+    "name": "達發",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6531": {
+    "name": "愛普*",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6533": {
+    "name": "晶心科",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6534": {
+    "name": "正瀚-創",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6541": {
+    "name": "泰福-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6550": {
+    "name": "北極星藥業-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6552": {
+    "name": "易華電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6558": {
+    "name": "興能高",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6573": {
+    "name": "虹揚-KY",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6579": {
+    "name": "研揚",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6581": {
+    "name": "鋼聯",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6582": {
+    "name": "申豐",
+    "category": "橡膠",
+    "industry": "11"
+  },
+  "6585": {
+    "name": "鼎基",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6589": {
+    "name": "台康生技",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6591": {
+    "name": "動力-KY",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6592": {
+    "name": "和潤企業",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6598": {
+    "name": "ABC-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6605": {
+    "name": "帝寶",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "6606": {
+    "name": "建德工業",
+    "category": "電機",
+    "industry": "05"
+  },
+  "6614": {
+    "name": "資拓宏宇",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "6625": {
+    "name": "必應",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6641": {
+    "name": "基士德-KY",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6645": {
+    "name": "金萬林-創",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6655": {
+    "name": "科定",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6657": {
+    "name": "華安",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6658": {
+    "name": "聯策",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6666": {
+    "name": "羅麗芬-KY",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6668": {
+    "name": "中揚光",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6669": {
+    "name": "緯穎",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6670": {
+    "name": "復盛應用",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "6671": {
+    "name": "三能-KY",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "6672": {
+    "name": "騰輝電子-KY",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6674": {
+    "name": "鋐寶科技",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6689": {
+    "name": "伊雲谷",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "6691": {
+    "name": "洋基工程",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6695": {
+    "name": "芯鼎",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6698": {
+    "name": "旭暉應材",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6706": {
+    "name": "惠特",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6715": {
+    "name": "嘉基",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6719": {
+    "name": "力智",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6722": {
+    "name": "輝創",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6742": {
+    "name": "澤米",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6743": {
+    "name": "安普新",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6753": {
+    "name": "龍德造船",
+    "category": "航運",
+    "industry": "15"
+  },
+  "6754": {
+    "name": "匯僑設計",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "6756": {
+    "name": "威鋒電子",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6757": {
+    "name": "台灣虎航",
+    "category": "航運",
+    "industry": "15"
+  },
+  "6768": {
+    "name": "志強-KY",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "6770": {
+    "name": "力積電",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6771": {
+    "name": "平和環保-創",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6776": {
+    "name": "展碁國際",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "6781": {
+    "name": "AES-KY",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6782": {
+    "name": "視陽",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6789": {
+    "name": "采鈺",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6790": {
+    "name": "永豐實",
+    "category": "玻璃陶瓷",
+    "industry": "09"
+  },
+  "6792": {
+    "name": "詠業",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6794": {
+    "name": "向榮生技",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6796": {
+    "name": "晉弘",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6799": {
+    "name": "來頡",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6805": {
+    "name": "富世達",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6806": {
+    "name": "森崴能源",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6807": {
+    "name": "峰源-KY",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "6830": {
+    "name": "汎銓",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "6831": {
+    "name": "邁科",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6834": {
+    "name": "天二科技",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6835": {
+    "name": "圓裕",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6838": {
+    "name": "台新藥",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6854": {
+    "name": "錼創科技-KY創",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6861": {
+    "name": "睿生光電",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6862": {
+    "name": "三集瑞-KY",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6863": {
+    "name": "永道-KY",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "6869": {
+    "name": "雲豹能源",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6873": {
+    "name": "泓德能源",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6885": {
+    "name": "全福生技",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6887": {
+    "name": "寶綠特-KY",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6890": {
+    "name": "來億-KY",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "6901": {
+    "name": "鑽石投資",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6902": {
+    "name": "GOGOLOOK",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "6906": {
+    "name": "現觀科",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "6909": {
+    "name": "創控",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6914": {
+    "name": "阜爾運通",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6916": {
+    "name": "華凌",
+    "category": "光電",
+    "industry": "26"
+  },
+  "6918": {
+    "name": "愛派司",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6919": {
+    "name": "康霈*",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6921": {
+    "name": "嘉雨思-創",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6923": {
+    "name": "中台",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6924": {
+    "name": "榮惠-KY創",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "6928": {
+    "name": "攸泰科技",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6931": {
+    "name": "青松健康",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6933": {
+    "name": "AMAX-KY",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "6934": {
+    "name": "心誠鎂",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6936": {
+    "name": "永鴻生技",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6937": {
+    "name": "天虹",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6944": {
+    "name": "兆聯實業",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6949": {
+    "name": "沛爾生醫-創",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6951": {
+    "name": "青新-創",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6952": {
+    "name": "大武山",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6955": {
+    "name": "邦睿生技-創",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "6957": {
+    "name": "裕慶-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6958": {
+    "name": "日盛台駿",
+    "category": "其他",
+    "industry": "20"
+  },
+  "6962": {
+    "name": "奕力-KY",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "6965": {
+    "name": "中傑-KY",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "6969": {
+    "name": "成信實業*-創",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "6988": {
+    "name": "威力暘-創",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "6994": {
+    "name": "富威電力",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "7610": {
+    "name": "聯友金屬-創",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "7631": {
+    "name": "聚賢研發-創",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "7705": {
+    "name": "三商餐飲",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "7711": {
+    "name": "永擎",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "7721": {
+    "name": "微程式",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "7722": {
+    "name": "LINEPAY",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "7730": {
+    "name": "暉盛-創",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "7732": {
+    "name": "金興精密",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "7736": {
+    "name": "虎山",
+    "category": "汽車",
+    "industry": "12"
+  },
+  "7740": {
+    "name": "熙特爾-創",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "7749": {
+    "name": "意騰-KY",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "7750": {
+    "name": "新代",
+    "category": "電機",
+    "industry": "05"
+  },
+  "7765": {
+    "name": "中華資安",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "7769": {
+    "name": "鴻勁",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "7780": {
+    "name": "大研生醫*",
+    "category": "食品",
+    "industry": "02"
+  },
+  "7786": {
+    "name": "東方風能",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "7788": {
+    "name": "松川精密",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "7791": {
+    "name": "皇家可口",
+    "category": "食品",
+    "industry": "02"
+  },
+  "7795": {
+    "name": "長廣",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "7799": {
+    "name": "禾榮科",
+    "category": "生技醫療",
+    "industry": "22"
+  },
+  "7823": {
+    "name": "奧義賽博-KY創",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "8011": {
+    "name": "台通",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "8016": {
+    "name": "矽創",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8021": {
+    "name": "尖點",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "8028": {
+    "name": "昇陽半導體",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8033": {
+    "name": "雷虎",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8039": {
+    "name": "台虹",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "8045": {
+    "name": "達運光電",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "8046": {
+    "name": "南電",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "8070": {
+    "name": "長華*",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "8072": {
+    "name": "陞泰",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "8081": {
+    "name": "致新",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8101": {
+    "name": "華冠",
+    "category": "通信網路",
+    "industry": "27"
+  },
+  "8103": {
+    "name": "瀚荃",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "8104": {
+    "name": "錸寶",
+    "category": "光電",
+    "industry": "26"
+  },
+  "8105": {
+    "name": "凌巨",
+    "category": "光電",
+    "industry": "26"
+  },
+  "8110": {
+    "name": "華東",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8112": {
+    "name": "至上",
+    "category": "電子通路",
+    "industry": "29"
+  },
+  "8114": {
+    "name": "振樺電",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "8131": {
+    "name": "福懋科",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8150": {
+    "name": "南茂",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8162": {
+    "name": "微矽電子-創",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8163": {
+    "name": "達方",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "8201": {
+    "name": "無敵",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "8210": {
+    "name": "勤誠",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "8213": {
+    "name": "志超",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "8215": {
+    "name": "明基材",
+    "category": "光電",
+    "industry": "26"
+  },
+  "8222": {
+    "name": "寶一",
+    "category": "電機",
+    "industry": "05"
+  },
+  "8249": {
+    "name": "菱光",
+    "category": "電子零組件",
+    "industry": "28"
+  },
+  "8261": {
+    "name": "富鼎",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8271": {
+    "name": "宇瞻",
+    "category": "半導體",
+    "industry": "24"
+  },
+  "8341": {
+    "name": "日友",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "8367": {
+    "name": "建新國際",
+    "category": "航運",
+    "industry": "15"
+  },
+  "8374": {
+    "name": "羅昇",
+    "category": "電機",
+    "industry": "05"
+  },
+  "8404": {
+    "name": "百和興業-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8411": {
+    "name": "福貞-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8422": {
+    "name": "可寧衛*",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "8429": {
+    "name": "金麗-KY",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "8438": {
+    "name": "昶昕",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "8442": {
+    "name": "威宏-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8443": {
+    "name": "阿瘦",
+    "category": "貿易百貨",
+    "industry": "18"
+  },
+  "8454": {
+    "name": "富邦媒",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "8462": {
+    "name": "柏文",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "8463": {
+    "name": "潤泰材",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8464": {
+    "name": "億豐",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "8466": {
+    "name": "美吉吉-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8467": {
+    "name": "波力-KY",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "8473": {
+    "name": "山林水",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "8476": {
+    "name": "台境*",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "8478": {
+    "name": "東哥遊艇",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "8481": {
+    "name": "政伸",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8482": {
+    "name": "商億-KY",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "8487": {
+    "name": "愛爾達-創",
+    "category": "數位雲端",
+    "industry": "36"
+  },
+  "8488": {
+    "name": "吉源-KY",
+    "category": "其他",
+    "industry": "20"
+  },
+  "8499": {
+    "name": "鼎炫-KY",
+    "category": "其他電子",
+    "industry": "31"
+  },
+  "8926": {
+    "name": "台汽電",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "8940": {
+    "name": "新天地",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "8996": {
+    "name": "高力",
+    "category": "電機",
+    "industry": "05"
+  },
+  "9103": {
+    "name": "美德醫療-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "910322": {
+    "name": "康師傅-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "9105": {
+    "name": "泰金寶-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "910861": {
+    "name": "神州-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "9110": {
+    "name": "越南控-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "911608": {
+    "name": "明輝-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "911622": {
+    "name": "泰聚亨-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "911868": {
+    "name": "同方友友-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "912000": {
+    "name": "晨訊科-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "9136": {
+    "name": "巨騰-DR",
+    "category": "其他",
+    "industry": "91"
+  },
+  "9802": {
+    "name": "鈺齊-KY",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "9902": {
+    "name": "台火",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9904": {
+    "name": "寶成",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "9905": {
+    "name": "大華",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9906": {
+    "name": "欣巴巴",
+    "category": "營建",
+    "industry": "14"
+  },
+  "9907": {
+    "name": "統一實",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9908": {
+    "name": "大台北",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "9910": {
+    "name": "豐泰",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "9911": {
+    "name": "櫻花",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "9912": {
+    "name": "偉聯",
+    "category": "電腦週邊",
+    "industry": "25"
+  },
+  "9914": {
+    "name": "美利達",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "9917": {
+    "name": "中保科",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9918": {
+    "name": "欣天然",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "9919": {
+    "name": "康那香",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9921": {
+    "name": "巨大",
+    "category": "運動休閒",
+    "industry": "37"
+  },
+  "9924": {
+    "name": "福興",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "9925": {
+    "name": "新保",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9926": {
+    "name": "新海",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "9927": {
+    "name": "泰銘",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9928": {
+    "name": "中視",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9929": {
+    "name": "秋雨",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9930": {
+    "name": "中聯資源",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "9931": {
+    "name": "欣高",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "9933": {
+    "name": "中鼎",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9934": {
+    "name": "成霖",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "9935": {
+    "name": "慶豐富",
+    "category": "居家生活",
+    "industry": "38"
+  },
+  "9937": {
+    "name": "全國",
+    "category": "油電燃氣",
+    "industry": "23"
+  },
+  "9938": {
+    "name": "百和",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9939": {
+    "name": "宏全",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9940": {
+    "name": "信義",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9941": {
+    "name": "裕融",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9942": {
+    "name": "茂順",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9943": {
+    "name": "好樂迪",
+    "category": "觀光",
+    "industry": "16"
+  },
+  "9944": {
+    "name": "新麗",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9945": {
+    "name": "潤泰新",
+    "category": "其他",
+    "industry": "20"
+  },
+  "9946": {
+    "name": "三發地產",
+    "category": "營建",
+    "industry": "14"
+  },
+  "9955": {
+    "name": "佳龍",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "9958": {
+    "name": "世紀鋼",
+    "category": "造紙",
+    "industry": "10"
+  }
+}
