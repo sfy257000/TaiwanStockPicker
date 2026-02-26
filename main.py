@@ -14,7 +14,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from config import CONFIG
 from stock_list import (
     get_all_stocks, get_stock_count,
-    check_and_update_stock_list, get_stocks_by_category
+    get_stocks_by_category
 )
 from data_fetcher import DataFetcher
 from technical_indicators import TechnicalIndicators
@@ -273,7 +273,15 @@ class StockAnalyzer:
         
         print(f"分析時間: {get_timestamp()}")
         
-        check_and_update_stock_list()
+        if get_stock_count() == 0:
+            print("\n錯誤：找不到股票清單！")
+            print("請先選擇選項 5 或 6 匯入股票清單，再進行分析。")
+            print("按 Enter 回到主選單...")
+            try:
+                input()
+            except:
+                pass
+            return
         
         if mode is None or mode == 'all':
             while True:
@@ -439,7 +447,12 @@ class StockAnalyzer:
             print(f"\n共 {len(stocks)} 檔股票")
         
         if extra_stocks:
-            extra_stock_list = [(s.strip(), s.strip()) for s in extra_stocks.split(',')]
+            from stock_list import STOCK_DATA_WITH_CATEGORIES
+            extra_stock_list = []
+            for s in extra_stocks.split(','):
+                code = s.strip()
+                name = STOCK_DATA_WITH_CATEGORIES.get(code, {}).get('name', code)
+                extra_stock_list.append((code, name))
             stocks.extend(extra_stock_list)
             print(f"額外加入 {len(extra_stock_list)} 檔個股")
         
