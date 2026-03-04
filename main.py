@@ -80,10 +80,10 @@ class StockAnalyzer:
         
         weights = CONFIG['weights']
         total_score = (
-            tech_score * 0.3 +
-            inst_score * 0.3 +
-            pv_score * 0.25 +
-            sr_score * 0.15
+            tech_score * weights['technical'] +
+            inst_score * weights['institutional'] +
+            pv_score   * weights['price_volume'] +
+            sr_score   * weights['support_resistance']
         )
         
         total_score = round(total_score)
@@ -160,11 +160,12 @@ class StockAnalyzer:
             if sr_data:
                 sr_score, sr_reasons = self.sr_calculator.get_support_resistance_score(sr_data)
         
+        weights = CONFIG['weights']
         total_score = (
-            tech_score * 0.3 +
-            inst_score * 0.3 +
-            pv_score * 0.25 +
-            sr_score * 0.15
+            tech_score * weights['technical'] +
+            inst_score * weights['institutional'] +
+            pv_score   * weights['price_volume'] +
+            sr_score   * weights['support_resistance']
         )
         total_score = round(total_score)
         

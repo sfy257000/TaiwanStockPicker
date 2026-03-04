@@ -6,11 +6,12 @@
 
 # 分析設定
 CONFIG = {
-    # 評分權重
+    # 評分權重（對應 tech/inst/pv/sr 四個分項）
     'weights': {
-        'technical': 0.5,      # 技術面權重
-        'institutional': 0.3,  # 籌碼面權重
-        'volume': 0.2,         # 量能權重
+        'technical': 0.30,     # 技術面權重
+        'institutional': 0.30, # 籌碼面權重
+        'price_volume': 0.25,  # 價量權重
+        'support_resistance': 0.15, # 支撐壓力權重
     },
     
     # 技術指標參數

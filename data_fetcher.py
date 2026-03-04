@@ -26,6 +26,9 @@ class DataFetcher:
         self._institutional_date = None
         self._cache_dir = 'cache'
         self._ensure_cache_dir()
+        import threading
+        self._institutional_lock = threading.Lock()  # 防止多執行緒重複抓法人資料
+        self._throttle_lock = threading.Lock()        # 節流鎖
     
     def _ensure_cache_dir(self):
         """確保快取目錄存在"""
@@ -61,12 +64,13 @@ class DataFetcher:
             pass
     
     def _throttle(self):
-        """API請求節流"""
-        now = time.time()
-        elapsed = now - self._last_request_time
-        if elapsed < self._min_interval:
-            time.sleep(self._min_interval - elapsed)
-        self._last_request_time = time.time()
+        """API請求節流（執行緒安全）"""
+        with self._throttle_lock:
+            now = time.time()
+            elapsed = now - self._last_request_time
+            if elapsed < self._min_interval:
+                time.sleep(self._min_interval - elapsed)
+            self._last_request_time = time.time()
     
     def _safe_float(self, val):
         try:
@@ -155,13 +159,19 @@ class DataFetcher:
     def fetch_institutional_batch(self):
         """
         批次抓取所有股票的三大法人買賣超（T86 API）
-        只需呼叫一次，結果快取起來
+        只需呼叫一次，結果快取起來（執行緒安全）
         返回: dict {code: {foreign, investment_trust, dealer, total}}
         """
+        # 第一層檢查（不加鎖，快速路徑）
         if self._institutional_cache is not None:
             return self._institutional_cache
-        
-        self._institutional_cache = {}
+
+        # 第二層檢查（加鎖，防止多執行緒重複打API）
+        with self._institutional_lock:
+            if self._institutional_cache is not None:
+                return self._institutional_cache
+
+            self._institutional_cache = {}
         
         # 嘗試最近5個日曆天
         for days_ago in range(1, 6):

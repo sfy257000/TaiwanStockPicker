@@ -210,9 +210,28 @@ def check_and_update_stock_list():
         print("股票清單已載入。")
 
 
+def _apply_list_filter(stocks):
+    """套用黑名單/白名單過濾"""
+    from config import CONFIG
+    lf = CONFIG.get('list_filter', {})
+
+    # 白名單：只保留白名單內的股票
+    if lf.get('enable_whitelist') and lf.get('whitelist'):
+        whiteset = set(lf['whitelist'])
+        stocks = [(code, name) for code, name in stocks if code in whiteset]
+
+    # 黑名單：排除黑名單內的股票
+    if lf.get('enable_blacklist') and lf.get('blacklist'):
+        blackset = set(lf['blacklist'])
+        stocks = [(code, name) for code, name in stocks if code not in blackset]
+
+    return stocks
+
+
 def get_all_stocks():
-    """Return all stocks"""
-    return [(code, data['name']) for code, data in STOCK_DATA_WITH_CATEGORIES.items()]
+    """Return all stocks，套用黑白名單"""
+    stocks = [(code, data['name']) for code, data in STOCK_DATA_WITH_CATEGORIES.items()]
+    return _apply_list_filter(stocks)
 
 
 def get_stock_count():
@@ -221,18 +240,18 @@ def get_stock_count():
 
 
 def get_stocks_by_category(categories_str):
-    """Return stocks filtered by category"""
+    """Return stocks filtered by category，套用黑白名單"""
     if not categories_str:
         return get_all_stocks()
 
     target_categories = {cat.strip() for cat in categories_str.split(',')}
-    
+
     filtered_stocks = []
     for code, data in STOCK_DATA_WITH_CATEGORIES.items():
         if data.get('category') in target_categories:
             filtered_stocks.append((code, data['name']))
-            
-    return filtered_stocks
+
+    return _apply_list_filter(filtered_stocks)
 
 
 def generate_stock_list_from_api(min_volume=1000):

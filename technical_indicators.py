@@ -125,37 +125,45 @@ class TechnicalIndicators:
     
     def calculate_kd(self, highs, lows, closes, period=None):
         """
-        計算 KD 指標
+        計算 KD 指標（含正確平滑邏輯）
+        K = 前K × (k_smooth-1)/k_smooth + RSV × 1/k_smooth
+        D = 前D × (d_smooth-1)/d_smooth + K  × 1/d_smooth
         返回: {'k': K值, 'd': D值, 'signal': 訊號}
         """
         if period is None:
             period = self.params['kd_period']
-        
+
+        k_smooth = self.params['k_smooth']  # 預設3
+        d_smooth = self.params['d_smooth']  # 預設3
+
         if len(closes) < period:
             return {'k': 50, 'd': 50, 'signal': 'neutral'}
-        
-        recent_highs = highs[-period:]
-        recent_lows = lows[-period:]
-        current_close = closes[-1]
-        
-        highest = max(recent_highs)
-        lowest = min(recent_lows)
-        
-        if highest == lowest:
-            rsv = 50
-        else:
-            rsv = ((current_close - lowest) / (highest - lowest)) * 100
-        
-        k_smooth = self.params['k_smooth']
-        d_smooth = self.params['d_smooth']
-        
-        k = rsv
-        d = rsv
-        
+
+        # 初始 K、D 從 50 開始
+        k = 50.0
+        d = 50.0
+
+        # 逐日計算 RSV → K → D，讓平滑值收斂
+        for i in range(period - 1, len(closes)):
+            window_highs = highs[i - period + 1: i + 1]
+            window_lows  = lows[i  - period + 1: i + 1]
+            highest = max(window_highs)
+            lowest  = min(window_lows)
+
+            if highest == lowest:
+                rsv = 50.0
+            else:
+                rsv = ((closes[i] - lowest) / (highest - lowest)) * 100
+
+            k = k * (k_smooth - 1) / k_smooth + rsv * (1 / k_smooth)
+            d = d * (d_smooth - 1) / d_smooth + k   * (1 / d_smooth)
+
+        signal = 'oversold' if k < 20 else ('overbought' if k > 80 else 'neutral')
+
         return {
             'k': round(k, 2),
             'd': round(d, 2),
-            'signal': 'oversold' if k < 20 else ('overbought' if k > 80 else 'neutral')
+            'signal': signal
         }
     
     def calculate_ma(self, closes):
