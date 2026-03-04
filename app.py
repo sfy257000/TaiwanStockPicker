@@ -7,8 +7,6 @@ import streamlit as st
 import sys
 import os
 import time
-import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # ── 路徑設定 ──────────────────────────────────────────────
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -324,44 +322,26 @@ def analyze_one(code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc):
 
 
 def run_analysis(stocks):
-    import queue as queue_module
-
     fetcher      = get_shared_fetcher()
     tech_ind     = TechnicalIndicators()
     inst_tracker = InstitutionalTracker()
     pv_alert     = PriceVolumeAlert()
     sr_calc      = SupportResistance()
 
-    total = len(stocks)
-    q     = queue_module.Queue()
-
-    def worker(code, name):
-        r = analyze_one(code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc)
-        q.put((code, name, r))
-
-    # 背景跑分析
-    max_workers = CONFIG.get('parallel', {}).get('max_workers', 5)
-    exe = ThreadPoolExecutor(max_workers=max_workers)
-    for code, name in stocks:
-        exe.submit(worker, code, name)
-    exe.shutdown(wait=False)
-
-    # 主執行緒更新進度條
-    prog_bar = st.progress(0, text="準備中…")
+    total    = len(stocks)
     results  = []
-    done     = 0
+    prog_bar = st.progress(0, text="準備中…")
+    status   = st.empty()
 
-    while done < total:
-        try:
-            code, name, r = q.get(timeout=30)
-        except queue_module.Empty:
-            break
-        done += 1
+    for i, (code, name) in enumerate(stocks, 1):
+        status.caption(f"分析中：{code} {name}")
+        r = analyze_one(code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc)
         if r:
             results.append(r)
-        prog_bar.progress(done / total, text=f"分析中… {done}/{total}　({code} {name})")
+        prog_bar.progress(i / total, text=f"分析中… {i}/{total}")
 
     prog_bar.empty()
+    status.empty()
     return results
 
 
@@ -700,7 +680,7 @@ def render_institutional(results):
                     orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
         margin=dict(l=50, r=10, t=30, b=60),
         height=340,
-        xaxis=dict(showgrid=False, tickangle=-45, tickfont=dict(size=10)),
+        xaxis=dict(showgrid=False, tickangle=-45, tickfont=dict(size=10), type='category'),
         yaxis=dict(showgrid=True, gridcolor='#1e2d3d',
                    title=dict(text='張', font=dict(color='#637083'))),
     )
