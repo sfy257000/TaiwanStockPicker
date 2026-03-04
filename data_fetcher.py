@@ -225,27 +225,130 @@ class DataFetcher:
         cache = self.fetch_institutional_batch()
         return cache.get(code, None)
     
+    def _parse_date_to_iso(self, date_str):
+        """
+        將各種日期格式統一轉成 ISO 格式 YYYY-MM-DD
+        支援：民國年 '115/03/04'、TWSE格式 '115/03/04'、已是ISO格式 '2026-03-04'
+        """
+        date_str = str(date_str).strip()
+        # 已是 ISO 格式
+        if len(date_str) == 10 and date_str[4] == '-':
+            return date_str
+        # 民國年格式 '115/03/04' 或 '115/3/4'
+        if '/' in date_str:
+            parts = date_str.split('/')
+            if len(parts) == 3:
+                try:
+                    roc_year = int(parts[0])
+                    month = int(parts[1])
+                    day = int(parts[2])
+                    ad_year = roc_year + 1911
+                    return f"{ad_year}-{month:02d}-{day:02d}"
+                except:
+                    pass
+        return date_str
+
+    def _fetch_historical_tse(self, code, months_ago):
+        """抓取上市(TSE)歷史月資料，回傳統一格式的price list"""
+        prices = []
+        try:
+            self._throttle()
+            target_date = datetime.now() - timedelta(days=months_ago * 30)
+            date_str = target_date.strftime('%Y%m01')
+            url = f"https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date={date_str}&stockNo={code}"
+            response = requests.get(url, headers=self.headers, timeout=10, verify=False)
+            data = response.json()
+            if 'data' not in data or len(data['data']) == 0:
+                return prices
+            for row in data['data']:
+                try:
+                    def safe_float(val):
+                        try:
+                            v = str(val).replace(',', '').replace('X', '').strip()
+                            return float(v) if v and v != '--' and v != '-' else 0
+                        except:
+                            return 0
+                    # TWSE格式: [日期, 成交股數, 成交金額, 開盤價, 最高價, 最低價, 收盤價, 漲跌價差, 成交筆數]
+                    close = safe_float(row[6])
+                    if close == 0:
+                        continue
+                    prices.append({
+                        'date': self._parse_date_to_iso(row[0]),
+                        'open': safe_float(row[3]),
+                        'high': safe_float(row[4]),
+                        'low': safe_float(row[5]),
+                        'close': close,
+                        'volume': self._safe_int(row[1]) // 1000,
+                    })
+                except:
+                    continue
+        except:
+            pass
+        return prices
+
+    def _fetch_historical_otc(self, code, months_ago):
+        """抓取上櫃(OTC/TPEX)歷史月資料，回傳統一格式的price list"""
+        prices = []
+        try:
+            self._throttle()
+            target_date = datetime.now() - timedelta(days=months_ago * 30)
+            # TPEX 用民國年
+            roc_year = target_date.year - 1911
+            date_str = f"{roc_year}/{target_date.month:02d}"
+            url = f"https://www.tpex.org.tw/web/stock/aftertrading/daily_trading_info/st43_result.php?l=zh-tw&d={date_str}&stkno={code}&s=0,asc,0"
+            response = requests.get(url, headers=self.headers, timeout=10, verify=False)
+            data = response.json()
+            rows = data.get('aaData', [])
+            if not rows:
+                return prices
+            for row in rows:
+                try:
+                    def safe_float(val):
+                        try:
+                            v = str(val).replace(',', '').replace('X', '').strip()
+                            return float(v) if v and v != '--' and v != '-' else 0
+                        except:
+                            return 0
+                    # TPEX格式: [日期, 成交股數, 成交金額, 開盤價, 最高價, 最低價, 收盤價, 漲跌, 成交筆數]
+                    close = safe_float(row[6])
+                    if close == 0:
+                        continue
+                    prices.append({
+                        'date': self._parse_date_to_iso(row[0]),
+                        'open': safe_float(row[3]),
+                        'high': safe_float(row[4]),
+                        'low': safe_float(row[5]),
+                        'close': close,
+                        'volume': self._safe_int(row[1]) // 1000,
+                    })
+                except:
+                    continue
+        except:
+            pass
+        return prices
+
     def get_historical_price(self, code, days=60, use_cache=True):
         """
-        取得歷史股價 - 使用TWSE月成交資訊API
+        取得歷史股價，自動偵測上市/上櫃，統一日期格式為 YYYY-MM-DD
         支援增量更新：先檢查本地快取，只抓取新資料
         """
         cached_data = None
         if use_cache:
             cached_data = self._load_from_cache(code)
-        
+
         last_date = None
         if cached_data and len(cached_data) > 0:
             last_date = cached_data[-1].get('date', '')
-        
+
         all_prices = []
-        
         if cached_data:
             all_prices = cached_data.copy()
-        
+
+        # Bug4修正：用統一的 ISO 格式比對，避免民國年解析失敗
         if last_date:
             try:
-                last_dt = datetime.strptime(last_date, '%Y-%m-%d')
+                iso_date = self._parse_date_to_iso(last_date)
+                last_dt = datetime.strptime(iso_date, '%Y-%m-%d')
                 days_since = (datetime.now() - last_dt).days
                 if days_since <= 1:
                     if len(all_prices) >= days:
@@ -253,63 +356,47 @@ class DataFetcher:
                     return all_prices
             except:
                 pass
-        
+
+        # 判斷市場別（優先用即時價格快取；無快取則兩邊都試）
+        market = self._stock_market_cache.get(code, None)
+
         for months_ago in range(4, -1, -1):
-            try:
-                self._throttle()
-                target_date = datetime.now() - timedelta(days=months_ago * 30)
-                date_str = target_date.strftime('%Y%m01')
-                
-                url = f"https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date={date_str}&stockNo={code}"
-                response = requests.get(url, headers=self.headers, timeout=10, verify=False)
-                data = response.json()
-                
-                if 'data' not in data or len(data['data']) == 0:
-                    continue
-                
-                for row in data['data']:
-                    try:
-                        def safe_float(val):
-                            try:
-                                v = str(val).replace(',', '').replace('X', '').strip()
-                                return float(v) if v and v != '--' and v != '-' else 0
-                            except:
-                                return 0
-                        
-                        # TWSE格式: [日期, 成交股數, 成交金額, 開盤價, 最高價, 最低價, 收盤價, 漲跌價差, 成交筆數]
-                        close = safe_float(row[6])
-                        if close == 0:
-                            continue
-                        
-                        all_prices.append({
-                            'date': row[0],
-                            'open': safe_float(row[3]),
-                            'high': safe_float(row[4]),
-                            'low': safe_float(row[5]),
-                            'close': close,
-                            'volume': self._safe_int(row[1]) // 1000,  # 股數→張數
-                        })
-                    except:
-                        continue
-            except:
-                continue
-        
-        # 去重（跨月可能重複）並取最近N天
+            new_prices = []
+
+            if market == 'otc':
+                new_prices = self._fetch_historical_otc(code, months_ago)
+            elif market == 'tse':
+                new_prices = self._fetch_historical_tse(code, months_ago)
+            else:
+                # 不知道市場別，先試上市，沒資料再試上櫃
+                new_prices = self._fetch_historical_tse(code, months_ago)
+                if not new_prices:
+                    new_prices = self._fetch_historical_otc(code, months_ago)
+                    if new_prices:
+                        self._stock_market_cache[code] = 'otc'
+                else:
+                    self._stock_market_cache[code] = 'tse'
+
+            all_prices.extend(new_prices)
+
+        # 去重（跨月可能重複）、統一日期格式、排序
         if all_prices:
             seen_dates = set()
             unique_prices = []
             for p in all_prices:
-                if p['date'] not in seen_dates:
-                    seen_dates.add(p['date'])
+                iso = self._parse_date_to_iso(p['date'])
+                p['date'] = iso  # 統一存 ISO 格式
+                if iso not in seen_dates:
+                    seen_dates.add(iso)
                     unique_prices.append(p)
-            
+
             unique_prices.sort(key=lambda x: x['date'])
-            
+
             if use_cache and len(unique_prices) >= days:
                 self._save_to_cache(code, unique_prices)
-            
+
             return unique_prices[-days:] if len(unique_prices) > days else unique_prices
-        
+
         return None
     
     def get_stock_info_batch(self, stock_list):
