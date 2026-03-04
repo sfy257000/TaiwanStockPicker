@@ -1,4 +1,3 @@
-
 import requests
 import json
 import os
@@ -326,8 +325,25 @@ def generate_categorized_from_fallback(min_volume=1000):
 
 
 def export_stock_list_to_file(min_volume=1000):
-    """Export stock list - now just queries from API without writing to file"""
+    """Export stock list - queries from API and updates STOCK_DATA_WITH_CATEGORIES"""
+    global STOCK_DATA_WITH_CATEGORIES
     categorized, category_map = generate_stock_list_from_api(min_volume)
+    
+    # 將過濾後的股票清單存回 STOCK_DATA_WITH_CATEGORIES，讓選項1分析時使用同一份清單
+    new_stock_data = {}
+    for category, stocks in categorized.items():
+        for code, name in stocks:
+            # 保留原本的 industry 欄位（若有），只更新 name 和 category
+            existing = STOCK_DATA_WITH_CATEGORIES.get(code, {})
+            new_stock_data[code] = {
+                "name": name,
+                "category": category,
+                "industry": existing.get("industry", "")
+            }
+    
+    STOCK_DATA_WITH_CATEGORIES = new_stock_data
+    save_cache()
+    print(f"✓ 股票清單已更新並儲存，共 {len(new_stock_data)} 檔")
     return True
 
 
