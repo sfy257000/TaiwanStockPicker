@@ -7,6 +7,7 @@ import re
 import sys
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from urllib.parse import quote
 
 import requests
 import streamlit as st
@@ -36,6 +37,8 @@ st.set_page_config(
     layout='wide',
     initial_sidebar_state='expanded',
 )
+
+PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行', '分享卡片']
 
 
 @st.cache_resource
@@ -224,9 +227,12 @@ def run_analysis(stocks: list[tuple[str, str]], max_workers: int | None = None) 
 
 def render_sidebar():
     with st.sidebar:
+        if 'page_selector' not in st.session_state or st.session_state.page_selector not in PAGE_OPTIONS:
+            st.session_state.page_selector = PAGE_OPTIONS[0]
         page = st.selectbox(
             '功能頁面',
-            ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行', '分享卡片'],
+            PAGE_OPTIONS,
+            key='page_selector',
         )
         st.markdown('---')
         st.markdown('### 分析設定')
@@ -961,25 +967,67 @@ def render_share_card(results: list[dict]) -> None:
     summary = generate_ai_summary(r)
     reasons = (r.get('reasons') or [])[:3]
     reason_lines = ' / '.join(reasons) if reasons else '無'
+    share_text = (
+        f"【{r['code']} {r['name']}】"
+        f"價格 {r['price']:.2f}，漲跌 {r['change_pct']:+.2f}%，"
+        f"總分 {r['total_score']}。{summary}"
+    )
+    default_url = 'https://www.twse.com.tw/'
+    share_url = st.text_input('分享連結（可改成你要導流的網址）', value=default_url, key='share_target_url')
 
     def esc(s: str) -> str:
         return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
+    def wrap_text(text: str, width: int = 44, max_lines: int = 3) -> list[str]:
+        t = text.strip()
+        lines = []
+        while len(t) > width and len(lines) < max_lines - 1:
+            cut = t.rfind(' ', 0, width)
+            if cut <= 0:
+                cut = width
+            lines.append(t[:cut].strip())
+            t = t[cut:].strip()
+        if t:
+            lines.append(t[:width + 8] + ('...' if len(t) > width + 8 else ''))
+        return lines[:max_lines]
+
+    reason_wrapped = wrap_text(f'重點原因: {reason_lines}', width=48, max_lines=2)
+    summary_wrapped = wrap_text(summary, width=52, max_lines=3)
+    why_line_1 = esc(reason_wrapped[0] if reason_wrapped else '重點原因: 無')
+    why_line_2 = esc(reason_wrapped[1] if len(reason_wrapped) > 1 else '')
+    sum_line_1 = esc(summary_wrapped[0] if summary_wrapped else '')
+    sum_line_2 = esc(summary_wrapped[1] if len(summary_wrapped) > 1 else '')
+    sum_line_3 = esc(summary_wrapped[2] if len(summary_wrapped) > 2 else '')
+
     svg = f"""<svg xmlns='http://www.w3.org/2000/svg' width='920' height='420'>
 <rect width='100%' height='100%' fill='#0f172a'/>
 <rect x='24' y='24' width='872' height='372' rx='18' fill='#111827' stroke='#334155' stroke-width='2'/>
-<text x='48' y='78' fill='#f8fafc' font-size='36' font-family='Arial'>台股分析卡片</text>
-<text x='48' y='124' fill='#93c5fd' font-size='30' font-family='Arial'>{esc(r['code'])} {esc(r['name'])}</text>
-<text x='48' y='174' fill='#e2e8f0' font-size='24' font-family='Arial'>價格: {r['price']:.2f} / 漲跌: {r['change_pct']:+.2f}%</text>
-<text x='48' y='214' fill='#fde68a' font-size='24' font-family='Arial'>總分: {r['total_score']} / 建議: {esc(score_badge(r['total_score']))}</text>
-<text x='48' y='262' fill='#cbd5e1' font-size='20' font-family='Arial'>重點原因: {esc(reason_lines)}</text>
-<text x='48' y='312' fill='#a7f3d0' font-size='18' font-family='Arial'>{esc(summary[:90])}</text>
-<text x='48' y='340' fill='#a7f3d0' font-size='18' font-family='Arial'>{esc(summary[90:180])}</text>
-<text x='48' y='378' fill='#64748b' font-size='14' font-family='Arial'>Generated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</text>
+<text x='48' y='72' fill='#f8fafc' font-size='28' font-family='Arial'>台股分析分享卡</text>
+<text x='48' y='114' fill='#93c5fd' font-size='26' font-family='Arial'>{esc(r['code'])} {esc(r['name'])}</text>
+<text x='48' y='154' fill='#e2e8f0' font-size='20' font-family='Arial'>價格: {r['price']:.2f} / 漲跌: {r['change_pct']:+.2f}%</text>
+<text x='48' y='186' fill='#fde68a' font-size='20' font-family='Arial'>總分: {r['total_score']} / 建議: {esc(score_badge(r['total_score']))}</text>
+<text x='48' y='228' fill='#cbd5e1' font-size='17' font-family='Arial'>{why_line_1}</text>
+<text x='48' y='252' fill='#cbd5e1' font-size='17' font-family='Arial'>{why_line_2}</text>
+<text x='48' y='292' fill='#a7f3d0' font-size='16' font-family='Arial'>{sum_line_1}</text>
+<text x='48' y='316' fill='#a7f3d0' font-size='16' font-family='Arial'>{sum_line_2}</text>
+<text x='48' y='340' fill='#a7f3d0' font-size='16' font-family='Arial'>{sum_line_3}</text>
+<text x='48' y='374' fill='#64748b' font-size='13' font-family='Arial'>Generated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</text>
 </svg>"""
 
     st.markdown('#### 預覽')
-    st.image(svg.encode('utf-8'))
+    st.markdown(svg, unsafe_allow_html=True)
+    st.markdown('#### 一鍵分享到社群')
+    x_url = f"https://twitter.com/intent/tweet?text={quote(share_text)}&url={quote(share_url)}"
+    fb_url = f"https://www.facebook.com/sharer/sharer.php?u={quote(share_url)}"
+    line_url = f"https://social-plugins.line.me/lineit/share?url={quote(share_url)}"
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.link_button('分享到 X', x_url, use_container_width=True)
+    with c2:
+        st.link_button('分享到 Facebook', fb_url, use_container_width=True)
+    with c3:
+        st.link_button('分享到 LINE', line_url, use_container_width=True)
+    st.text_area('貼文文字（可複製）', value=share_text, height=120, key='share_text_box')
     st.download_button(
         label='下載 SVG 分享卡',
         data=svg.encode('utf-8'),
