@@ -1,833 +1,1120 @@
-# -*- coding: utf-8 -*-
-"""
-台股選股分析系統 - Streamlit 網頁版
-"""
+﻿# -*- coding: utf-8 -*-
+"""台股選股分析系統 - Streamlit 介面"""
 
-import streamlit as st
-import sys
 import os
-import time
+import random
+import re
+import sys
+from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# ── 路徑設定 ──────────────────────────────────────────────
+import requests
+import streamlit as st
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from config import CONFIG
-from stock_list import (
-    get_all_stocks, get_stock_count, get_stocks_by_category,
-    load_cache, export_stock_list_to_file, STOCK_DATA_WITH_CATEGORIES,
-    _INDUSTRY_TO_CATEGORY_MAP
-)
 from data_fetcher import DataFetcher
-from technical_indicators import TechnicalIndicators
+from history_saver import HistorySaver
 from institutional_tracker import InstitutionalTracker
 from price_volume_alert import PriceVolumeAlert
+from stock_list import (
+    _INDUSTRY_TO_CATEGORY_MAP,
+    STOCK_DATA_WITH_CATEGORIES,
+    export_stock_list_to_file,
+    get_all_stocks,
+    get_stock_count,
+    get_stocks_by_category,
+    load_cache,
+)
 from support_resistance import SupportResistance
-from history_saver import HistorySaver
+from technical_indicators import TechnicalIndicators
 
-# ── 頁面設定 ──────────────────────────────────────────────
 st.set_page_config(
-    page_title="台股選股分析系統",
-    page_icon="📈",
-    layout="wide",
-    initial_sidebar_state="expanded",  # 永遠展開
+    page_title='台股選股分析系統',
+    page_icon='📈',
+    layout='wide',
+    initial_sidebar_state='expanded',
 )
 
-# ── 全域樣式 ──────────────────────────────────────────────
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+TC:wght@400;500;700&display=swap');
 
-:root {
-    --bg:       #0a0e14;
-    --surface:  #111720;
-    --border:   #1e2d3d;
-    --text:     #cdd9e5;
-    --muted:    #637083;
-    --accent:   #e6b450;
-    --green:    #3fb950;
-    --red:      #f85149;
-    --blue:     #58a6ff;
-    --purple:   #bc8cff;
-}
-
-html, body, [data-testid="stAppViewContainer"] {
-    background: var(--bg) !important;
-    color: var(--text) !important;
-    font-family: 'Noto Sans TC', sans-serif;
-}
-
-/* 側邊欄 */
-[data-testid="stSidebar"] {
-    background: var(--surface) !important;
-    border-right: 1px solid var(--border);
-}
-[data-testid="stSidebar"] * { color: var(--text) !important; }
-
-/* 頂部標題列 */
-.top-bar {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 18px 0 12px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 24px;
-}
-.top-bar h1 {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 0.04em;
-    margin: 0;
-}
-.top-bar .subtitle {
-    font-size: 0.78rem;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-}
-
-/* 指標卡片 */
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-}
-.kpi-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 16px 20px;
-    position: relative;
-    overflow: hidden;
-}
-.kpi-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent);
-}
-.kpi-label {
-    font-size: 0.72rem;
-    color: var(--muted);
-    font-family: 'IBM Plex Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 8px;
-}
-.kpi-value {
-    font-size: 1.8rem;
-    font-weight: 700;
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--accent);
-    line-height: 1;
-}
-.kpi-sub {
-    font-size: 0.72rem;
-    color: var(--muted);
-    margin-top: 4px;
-}
-
-/* 區塊標題 */
-.section-title {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    margin: 28px 0 12px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--border);
-}
-
-/* 股票列 */
-.stock-row {
-    display: grid;
-    grid-template-columns: 80px 120px 90px 90px 120px 1fr 100px;
-    align-items: center;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.15s;
-    gap: 8px;
-}
-.stock-row:hover { background: rgba(230,180,80,0.04); }
-.stock-row.header {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    border-bottom: 2px solid var(--border);
-}
-.code { font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: var(--blue); font-size: 0.9rem; }
-.name { color: var(--text); font-size: 0.85rem; }
-.price { font-family: 'IBM Plex Mono', monospace; color: var(--text); font-size: 0.9rem; }
-.up   { color: var(--red) !important; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; }
-.down { color: var(--green) !important; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; }
-.vol  { color: var(--muted); font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; }
-
-/* 評分條 */
-.score-bar-wrap { display: flex; align-items: center; gap: 8px; }
-.score-bar {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--border);
-    flex: 1;
-    overflow: hidden;
-}
-.score-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.4s ease;
-}
-.score-num { font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem; min-width: 28px; text-align: right; }
-
-/* 標籤 */
-.badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.68rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-}
-.badge-fire  { background: rgba(248,81,73,0.15);  color: var(--red); }
-.badge-buy   { background: rgba(63,185,80,0.15);  color: var(--green); }
-.badge-hold  { background: rgba(88,166,255,0.15); color: var(--blue); }
-.badge-pass  { background: rgba(99,112,131,0.15); color: var(--muted); }
-
-/* 詳情卡 */
-.detail-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 12px;
-}
-.detail-card h3 {
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--accent);
-    font-size: 1rem;
-    margin: 0 0 16px;
-}
-.ind-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-.ind-item { text-align: center; }
-.ind-label { font-size: 0.7rem; color: var(--muted); font-family: 'IBM Plex Mono', monospace; text-transform: uppercase; }
-.ind-val { font-size: 1.2rem; font-weight: 700; font-family: 'IBM Plex Mono', monospace; color: var(--text); }
-
-/* 警示 */
-.alert-up   { background: rgba(248,81,73,0.08); border-left: 3px solid var(--red);   padding: 8px 12px; border-radius: 4px; margin: 4px 0; font-size: 0.85rem; }
-.alert-down { background: rgba(63,185,80,0.08); border-left: 3px solid var(--green); padding: 8px 12px; border-radius: 4px; margin: 4px 0; font-size: 0.85rem; }
-
-/* 隱藏 Streamlit 預設元件 */
-#MainMenu, footer, header { visibility: hidden; }
-[data-testid="stDecoration"] { display: none; }
-
-/* 隱藏側邊欄收合按鈕，讓側邊欄永遠固定展開 */
-[data-testid="collapsedControl"] { display: none !important; }
-[data-testid="stSidebarCollapseButton"] { display: none !important; }
-
-/* 按鈕 */
-.stButton > button {
-    background: var(--accent) !important;
-    color: #0a0e14 !important;
-    border: none !important;
-    font-family: 'IBM Plex Mono', monospace !important;
-    font-weight: 600 !important;
-    letter-spacing: 0.05em !important;
-    border-radius: 6px !important;
-    padding: 8px 20px !important;
-}
-.stButton > button:hover { opacity: 0.88 !important; }
-
-/* selectbox / slider */
-[data-baseweb="select"] > div,
-[data-baseweb="input"] > div {
-    background: var(--bg) !important;
-    border-color: var(--border) !important;
-    color: var(--text) !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
-
-# ── 分析核心函數 ──────────────────────────────────────────
 @st.cache_resource
-def get_shared_fetcher():
+def get_shared_fetcher() -> DataFetcher:
     return DataFetcher()
 
-def analyze_one(code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc):
+
+def score_badge(score: int) -> str:
+    if score >= 25:
+        return '🔥 強力買進'
+    if score >= 15:
+        return '✅ 建議買進'
+    if score >= 8:
+        return '🟡 觀察'
+    return '⚪ 略過'
+
+
+def fmt_vol(v: int) -> str:
+    if v >= 10000:
+        return f'{v / 10000:.1f}萬'
+    if v >= 1000:
+        return f'{v / 1000:.1f}千'
+    return str(v)
+
+
+@st.cache_data(ttl=1800)
+def fetch_twse_news() -> list[dict]:
+    news: list[dict] = []
+    try:
+        url = 'https://openapi.twse.com.tw/v1/news/news'
+        resp = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10, verify=False)
+        for item in resp.json()[:100]:
+            title = item.get('title', '') or item.get('Title', '')
+            date = item.get('date', '') or item.get('Date', '')
+            if title:
+                news.append({'title': title, 'date': date})
+    except Exception:
+        pass
+    return news
+
+
+def get_news_sentiment(code: str, name: str, news_list: list[dict]) -> tuple[list[dict], int]:
+    pos_kw = ['成長', '創高', '利多', '突破', '上修', '買超', '營收增', '獲利增']
+    neg_kw = ['下修', '虧損', '衰退', '跌破', '利空', '賣超', '營收減', '獲利減']
+
+    related = []
+    total_score = 0
+    for n in news_list:
+        title = n.get('title', '')
+        if code in title or name in title:
+            pos = sum(1 for k in pos_kw if k in title)
+            neg = sum(1 for k in neg_kw if k in title)
+            sentiment = pos - neg
+            related.append({**n, 'sentiment': sentiment})
+            total_score += sentiment
+    return related, total_score
+
+
+def analyze_one(
+    code: str,
+    name: str,
+    fetcher: DataFetcher,
+    tech_ind: TechnicalIndicators,
+    inst_tracker: InstitutionalTracker,
+    pv_alert: PriceVolumeAlert,
+    sr_calc: SupportResistance,
+    news_list: list[dict],
+) -> dict | None:
     try:
         price_data = fetcher.get_stock_price(code)
-        if not price_data or price_data['price'] == 0:
+        historical_data = fetcher.get_historical_price(code, days=60)
+
+        if (not price_data or price_data.get('price', 0) == 0) and historical_data:
+            last = historical_data[-1]
+            prev = historical_data[-2]['close'] if len(historical_data) >= 2 else last['close']
+            price_data = {
+                'price': last['close'],
+                'open': last['open'],
+                'high': last['high'],
+                'low': last['low'],
+                'volume': last['volume'],
+                'prev_close': prev,
+                'is_premarket': False,
+            }
+
+        if not price_data or price_data.get('price', 0) == 0:
             return None
 
-        institutional_data = fetcher.get_institutional_investors(code)
-        historical_data    = fetcher.get_historical_price(code, days=60)
+        if not historical_data:
+            historical_data = []
 
-        tech_score, tech_reasons = 0, []
-        tech_indicators = None
-        if historical_data:
-            tech_indicators = tech_ind.calculate_all(historical_data)
-            if tech_indicators:
-                tech_score, tech_reasons = tech_ind.get_technical_score(tech_indicators)
+        tech_indicators = tech_ind.calculate_all(historical_data) if historical_data else None
+        tech_score, tech_reasons = tech_ind.get_technical_score(tech_indicators) if tech_indicators else (0, [])
 
-        inst_result = inst_tracker.analyze_institutional(institutional_data)
-        pv_result   = pv_alert.check_alerts(price_data, historical_data)
+        inst_data = fetcher.get_institutional_investors(code)
+        inst_result = inst_tracker.analyze_institutional(inst_data)
+        inst_score = inst_result['score']
+        inst_reasons = inst_result['reasons']
 
-        sr_data, sr_score, sr_reasons = None, 0, []
-        if historical_data:
-            sr_data = sr_calc.calculate(historical_data)
-            if sr_data:
-                sr_score, sr_reasons = sr_calc.get_support_resistance_score(sr_data)
+        pv_result = pv_alert.check_alerts(price_data, historical_data)
+        pv_score = pv_result['score']
+        pv_reasons = pv_result['reasons']
 
-        w = CONFIG['weights']
-        total_score = round(
-            tech_score             * w['technical'] +
-            inst_result['score']   * w['institutional'] +
-            pv_result['score']     * w['price_volume'] +
-            sr_score               * w['support_resistance']
+        sr_data = sr_calc.calculate(historical_data) if historical_data else None
+        sr_score, sr_reasons = sr_calc.get_support_resistance_score(sr_data) if sr_data else (0, [])
+
+        score = (
+            tech_score * CONFIG['weights']['technical']
+            + inst_score * CONFIG['weights']['institutional']
+            + pv_score * CONFIG['weights']['price_volume']
+            + sr_score * CONFIG['weights']['support_resistance']
         )
 
-        prev = price_data['prev_close']
-        change_pct = ((price_data['price'] - prev) / prev * 100) if prev > 0 else 0
+        related_news, news_score = get_news_sentiment(code, name, news_list)
+        total_score = int(round(score + news_score))
+
+        prev_close = float(price_data.get('prev_close') or 0)
+        if prev_close <= 0 and historical_data:
+            if len(historical_data) >= 2:
+                prev_close = float(historical_data[-2].get('close') or 0)
+            else:
+                prev_close = float(historical_data[-1].get('close') or 0)
+        price = float(price_data.get('price') or 0)
+        change_pct = ((price - prev_close) / prev_close * 100.0) if prev_close > 0 else 0.0
 
         return {
-            'code': code, 'name': name,
-            'price': price_data['price'],
+            'code': code,
+            'name': name,
+            'price': price,
+            'volume': int(price_data.get('volume') or 0),
             'change_pct': change_pct,
-            'volume': price_data['volume'],
-            'high': price_data['high'],
-            'low': price_data['low'],
-            'is_premarket': price_data.get('is_premarket', False),
             'tech_score': tech_score,
-            'inst_score': inst_result['score'],
-            'pv_score': pv_result['score'],
+            'inst_score': inst_score,
+            'pv_score': pv_score,
             'sr_score': sr_score,
+            'news_score': news_score,
             'total_score': total_score,
-            'reasons': tech_reasons + inst_result['reasons'] + pv_result['reasons'] + sr_reasons,
-            'institutional': institutional_data,
-            'indicators': tech_indicators,
+            'reasons': tech_reasons + inst_reasons + pv_reasons + sr_reasons,
+            'institutional': inst_data,
+            'alerts': pv_result,
             'support_resistance': sr_data,
+            'indicators': tech_indicators,
+            'news': related_news,
         }
     except Exception:
         return None
 
 
-def run_analysis(stocks):
-    fetcher      = get_shared_fetcher()
-    tech_ind     = TechnicalIndicators()
+def run_analysis(stocks: list[tuple[str, str]], max_workers: int | None = None) -> list[dict]:
+    fetcher = get_shared_fetcher()
+    tech_ind = TechnicalIndicators()
     inst_tracker = InstitutionalTracker()
-    pv_alert     = PriceVolumeAlert()
-    sr_calc      = SupportResistance()
+    pv_alert = PriceVolumeAlert()
+    sr_calc = SupportResistance()
+    news_list = fetch_twse_news()
 
-    total    = len(stocks)
-    results  = []
-    prog_bar = st.progress(0, text="準備中…")
-    status   = st.empty()
+    # 預抓一次法人批次資料，後續每檔僅做字典查詢
+    fetcher.fetch_institutional_batch()
 
-    for i, (code, name) in enumerate(stocks, 1):
-        status.caption(f"分析中：{code} {name}")
-        r = analyze_one(code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc)
-        if r:
-            results.append(r)
-        prog_bar.progress(i / total, text=f"分析中… {i}/{total}")
+    results: list[dict] = []
+    total = len(stocks)
+    if max_workers is None:
+        max_workers = min(8, max(2, (os.cpu_count() or 4)))
+    prog = st.progress(0, text=f'分析中... (並行 {max_workers} 執行緒)')
 
-    prog_bar.empty()
-    status.empty()
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [
+            executor.submit(
+                analyze_one, code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc, news_list
+            )
+            for code, name in stocks
+        ]
+        for i, future in enumerate(as_completed(futures), start=1):
+            try:
+                r = future.result()
+                if r:
+                    results.append(r)
+            except Exception:
+                pass
+            prog.progress(i / total, text=f'分析中... {i}/{total}')
+
+    prog.empty()
+    results.sort(key=lambda x: x['total_score'], reverse=True)
     return results
 
 
-# ── 輔助渲染函數 ──────────────────────────────────────────
-def score_badge(score):
-    if score >= 25:
-        return '<span class="badge badge-fire">🔥 強買</span>'
-    elif score >= 15:
-        return '<span class="badge badge-buy">✓ 買進</span>'
-    elif score >= 8:
-        return '<span class="badge badge-hold">○ 觀望</span>'
-    else:
-        return '<span class="badge badge-pass">× 不建議</span>'
-
-def score_color(score):
-    if score >= 25: return '#f85149'
-    if score >= 15: return '#3fb950'
-    if score >= 8:  return '#58a6ff'
-    return '#637083'
-
-def change_class(pct):
-    return 'up' if pct > 0 else ('down' if pct < 0 else 'price')
-
-def fmt_vol(v):
-    if v >= 10000: return f'{v/10000:.1f}萬'
-    if v >= 1000:  return f'{v/1000:.1f}千'
-    return str(v)
-
-
-# ── 側邊欄 ────────────────────────────────────────────────
 def render_sidebar():
     with st.sidebar:
-        st.markdown("### 📊 分析設定")
-        st.markdown("---")
-
-        mode = st.selectbox(
-            "分析模式",
-            ["全部股票", "依類別篩選", "隨機抽樣"],
-            key="mode"
+        page = st.selectbox(
+            '功能頁面',
+            ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行', '分享卡片'],
         )
+        st.markdown('---')
+        st.markdown('### 分析設定')
 
-        selected_cats = []
-        if mode == "依類別篩選":
+        mode = st.selectbox('選股模式', ['全部股票', '依產業類別', '隨機抽樣', '自訂股票'])
+
+        selected_cats: list[str] = []
+        if mode == '依產業類別':
             cat_options = sorted(set(_INDUSTRY_TO_CATEGORY_MAP.values()))
-            selected_cats = st.multiselect("選擇類別", cat_options, key="cats")
+            selected_cats = st.multiselect('產業類別', cat_options)
 
         random_n = 50
-        if mode == "隨機抽樣":
-            random_n = st.slider("抽樣數量", 10, 200, 50, 10, key="random_n")
+        if mode == '隨機抽樣':
+            random_n = st.slider('抽樣數量', 10, 200, 50, 10)
 
-        st.markdown("---")
-        st.markdown("### ⚙️ 評分權重")
+        custom_codes: list[str] = []
+        if mode == '自訂股票':
+            custom_input = st.text_area('股票代碼（逗號/空白/換行分隔）', placeholder='2330, 2317\n2454')
+            if custom_input:
+                custom_codes = [c.strip() for c in re.split(r'[,\n\s]+', custom_input) if c.strip()]
+            st.caption(f'已輸入 {len(custom_codes)} 檔')
 
-        w_tech = st.slider("技術面",   0, 100, 30, 5, key="w_tech")
-        w_inst = st.slider("籌碼面",   0, 100, 30, 5, key="w_inst")
-        w_pv   = st.slider("價量",     0, 100, 25, 5, key="w_pv")
-        w_sr   = st.slider("支撐壓力", 0, 100, 15, 5, key="w_sr")
+        st.markdown('---')
+        st.markdown('### 價格過濾')
+        col1, col2 = st.columns(2)
+        with col1:
+            price_min = st.number_input('最低價', min_value=0, max_value=99999, value=0, step=1)
+        with col2:
+            price_max = st.number_input('最高價', min_value=0, max_value=99999, value=0, step=1)
+
+        st.markdown('---')
+        st.markdown('### 評分權重')
+        w_tech = st.slider('技術面', 0, 100, 30, 5)
+        w_inst = st.slider('法人', 0, 100, 30, 5)
+        w_pv = st.slider('價量', 0, 100, 25, 5)
+        w_sr = st.slider('支撐壓力', 0, 100, 15, 5)
         total_w = w_tech + w_inst + w_pv + w_sr
         if total_w > 0:
-            CONFIG["weights"]["technical"]          = w_tech / total_w
-            CONFIG["weights"]["institutional"]      = w_inst / total_w
-            CONFIG["weights"]["price_volume"]       = w_pv   / total_w
-            CONFIG["weights"]["support_resistance"] = w_sr   / total_w
+            CONFIG['weights']['technical'] = w_tech / total_w
+            CONFIG['weights']['institutional'] = w_inst / total_w
+            CONFIG['weights']['price_volume'] = w_pv / total_w
+            CONFIG['weights']['support_resistance'] = w_sr / total_w
 
-        st.markdown("---")
-        st.markdown("### 🔍 結果篩選")
-        min_score = st.slider("最低評分顯示", -20, 50, 0, 1, key="min_score")
-        top_n     = st.slider("顯示筆數", 10, 200, 50, 10, key="top_n")
+        st.markdown('---')
+        min_score = st.slider('最低總分', -20, 50, 0, 1)
+        top_n = st.slider('顯示筆數', 10, 200, 50, 10)
+        max_workers = st.slider('並行執行緒數', 1, 12, min(8, max(2, (os.cpu_count() or 4))), 1)
 
-        st.markdown("---")
-        st.markdown("### 🚫 黑名單")
-        blacklist_input = st.text_input("輸入代碼（逗號分隔）", placeholder="例：2330,2317", key="blacklist")
-        if blacklist_input:
-            codes = [c.strip() for c in blacklist_input.split(",") if c.strip()]
-            CONFIG["list_filter"]["blacklist"]        = codes
-            CONFIG["list_filter"]["enable_blacklist"] = True
-        else:
-            CONFIG["list_filter"]["enable_blacklist"] = False
+        st.markdown('---')
+        min_vol = st.number_input('更新最低成交量（張）', min_value=100, max_value=50000, value=1000, step=100)
+        update_btn = st.button('更新股票清單', use_container_width=True)
 
-        st.markdown("---")
-        run_btn = st.button("▶  開始分析", use_container_width=True, key="run_btn")
+        st.markdown('---')
+        run_btn = st.button('開始分析', use_container_width=True, type='primary')
+        st.caption(f'目前股票檔數：{get_stock_count()}')
 
-        st.markdown("---")
-        st.markdown("### 🔄 更新股票清單")
-        min_vol = st.number_input(
-            "最低成交量（張）", min_value=100, max_value=50000,
-            value=1000, step=100, key="min_vol",
-            help="過濾掉成交量太低的冷門股"
+    return (
+        page,
+        mode,
+        selected_cats,
+        random_n,
+        min_score,
+        top_n,
+        max_workers,
+        run_btn,
+        update_btn,
+        int(min_vol),
+        int(price_min),
+        int(price_max),
+        custom_codes,
+    )
+
+
+def render_kpi(results: list[dict]) -> None:
+    if not results:
+        return
+    buy = [r for r in results if r['total_score'] >= 15]
+    strong = [r for r in results if r['total_score'] >= 25]
+    avg = sum(r['total_score'] for r in results) / len(results)
+
+    c1, c2, c3 = st.columns(3)
+    c1.metric('分析股票數', len(results))
+    c2.metric('建議買進', len(buy), f'強力買進 {len(strong)}')
+    c3.metric('平均分數', f'{avg:.1f}')
+
+
+def build_rows(results: list[dict], min_score: int, top_n: int) -> list[dict]:
+    filtered = [r for r in results if r['total_score'] >= min_score]
+    filtered = sorted(filtered, key=lambda x: x['total_score'], reverse=True)[:top_n]
+    rows = []
+    for r in filtered:
+        rows.append(
+            {
+                '代碼': r['code'],
+                '名稱': r['name'],
+                '價格': round(r['price'], 2),
+                '漲跌%': round(r['change_pct'], 2),
+                '成交量': fmt_vol(r['volume']),
+                '技術': r['tech_score'],
+                '法人': r['inst_score'],
+                '價量': r['pv_score'],
+                '支撐壓力': r['sr_score'],
+                '新聞': r['news_score'],
+                '總分': r['total_score'],
+                '建議': score_badge(r['total_score']),
+            }
         )
-        update_btn = st.button("更新清單", use_container_width=True, key="update_btn")
-
-        count = get_stock_count()
-        if count > 0:
-            st.caption(f"目前清單：{count} 檔股票")
-        else:
-            st.caption("⚠️ 股票清單是空的，請先更新")
-
-    return mode, selected_cats, random_n, min_score, top_n, run_btn, update_btn, int(min_vol)
+    return rows
 
 
-# ── 主頁面：KPI 卡 ─────────────────────────────────────────
-def render_kpi(results):
-    buy     = [r for r in results if r['total_score'] >= 15]
-    strong  = [r for r in results if r['total_score'] >= 25]
-    limit_u = [r for r in results if r['change_pct'] >= 9.5]
-    limit_d = [r for r in results if r['change_pct'] <= -9.5]
+def render_table(results: list[dict], min_score: int, top_n: int) -> list[dict]:
+    rows = build_rows(results, min_score, top_n)
 
-    st.markdown(f"""
-    <div class="kpi-grid">
-        <div class="kpi-card">
-            <div class="kpi-label">分析股票</div>
-            <div class="kpi-value">{len(results)}</div>
-            <div class="kpi-sub">今日掃描</div>
-        </div>
-        <div class="kpi-card" style="--accent:#3fb950">
-            <div class="kpi-label">推薦買進</div>
-            <div class="kpi-value" style="color:#3fb950">{len(buy)}</div>
-            <div class="kpi-sub">其中強買 {len(strong)} 檔</div>
-        </div>
-        <div class="kpi-card" style="--accent:#f85149">
-            <div class="kpi-label">漲停股</div>
-            <div class="kpi-value" style="color:#f85149">{len(limit_u)}</div>
-            <div class="kpi-sub">跌停 {len(limit_d)} 檔</div>
-        </div>
-        <div class="kpi-card" style="--accent:#58a6ff">
-            <div class="kpi-label">平均評分</div>
-            <div class="kpi-value" style="color:#58a6ff">{sum(r['total_score'] for r in results)/len(results):.1f}</div>
-            <div class="kpi-sub">滿分約 50 分</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    if not rows:
+        st.info('沒有符合條件的股票。')
+        return []
 
-
-# ── 主頁面：推薦表格 ──────────────────────────────────────
-def render_table(results, min_score, top_n):
-    import plotly.graph_objects as go
+    st.dataframe(rows, use_container_width=True, hide_index=True)
 
     filtered = [r for r in results if r['total_score'] >= min_score]
-    filtered.sort(key=lambda x: x['total_score'], reverse=True)
-    filtered = filtered[:top_n]
-
-    st.markdown('<div class="section-title">推薦清單</div>', unsafe_allow_html=True)
-
-    # 表頭
-    st.markdown("""
-    <div class="stock-row header">
-        <span>代碼</span>
-        <span>名稱</span>
-        <span>現價</span>
-        <span>漲跌%</span>
-        <span>成交量</span>
-        <span>評分</span>
-        <span>建議</span>
-    </div>
-    """, unsafe_allow_html=True)
-
-    for r in filtered:
-        sc   = r['total_score']
-        pct  = r['change_pct']
-        cc   = change_class(pct)
-        pct_sign = f"+{pct:.2f}%" if pct > 0 else f"{pct:.2f}%"
-        bar_w = max(0, min(100, (sc + 20) * 100 / 70))
-        fill_color = score_color(sc)
-
-        st.markdown(f"""
-        <div class="stock-row">
-            <span class="code">{r['code']}</span>
-            <span class="name">{r['name']}</span>
-            <span class="price">{r['price']:.1f}</span>
-            <span class="{cc}">{pct_sign}</span>
-            <span class="vol">{fmt_vol(r['volume'])}張</span>
-            <div class="score-bar-wrap">
-                <div class="score-bar">
-                    <div class="score-fill" style="width:{bar_w}%;background:{fill_color}"></div>
-                </div>
-                <span class="score-num" style="color:{fill_color}">{sc}</span>
-            </div>
-            {score_badge(sc)}
-        </div>
-        """, unsafe_allow_html=True)
-
-    # 評分分布圖 — 最多顯示30筆，柱子才夠寬
-    if filtered:
-        st.markdown('<div class="section-title">評分分布（前30名）</div>', unsafe_allow_html=True)
-        chart_data = filtered[:30]
-        if len(filtered) > 30:
-            st.caption(f"顯示評分最高的 30 筆（共 {len(filtered)} 筆）")
-
-        scores = [r['total_score'] for r in chart_data]
-        # 用 "代碼 名稱" 當 label，強制加空格前綴讓 plotly 當文字處理
-        labels = [f"{r['code']} {r['name']}" for r in chart_data]
-        colors = [score_color(s) for s in scores]
-
-        fig = go.Figure(go.Bar(
-            x=labels,
-            y=scores,
-            marker_color=colors,
-            marker_line_width=0,
-            text=scores,               # 柱子上顯示分數
-            textposition='outside',
-            textfont=dict(size=10, color='#cdd9e5'),
-            hovertemplate='<b>%{x}</b><br>評分: %{y}<extra></extra>',
-        ))
-        fig.update_layout(
-            paper_bgcolor='#0a0e14',
-            plot_bgcolor='#0a0e14',
-            font=dict(color='#637083', family='IBM Plex Mono', size=11),
-            margin=dict(l=40, r=10, t=30, b=80),
-            height=320,
-            xaxis=dict(
-                type='category',       # 強制當文字，不當數字
-                showgrid=False,
-                tickfont=dict(size=10),
-                tickangle=-40,
-            ),
-            yaxis=dict(
-                showgrid=True, gridcolor='#1e2d3d',
-                zeroline=True, zerolinecolor='#1e2d3d',
-                range=[min(0, min(scores)) - 2, max(scores) + 5],
-            ),
-            bargap=0.25,
-        )
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+    filtered = sorted(filtered, key=lambda x: x['total_score'], reverse=True)[:top_n]
+    with st.expander('查看前 10 檔分析理由'):
+        for r in filtered[:10]:
+            st.markdown(f"**{r['code']} {r['name']}** | 分數: {r['total_score']}")
+            for reason in r.get('reasons', [])[:6]:
+                st.write(f'- {reason}')
+    return rows
 
 
-# ── 主頁面：技術指標詳情 ─────────────────────────────────
-def render_technicals(results):
-    import plotly.graph_objects as go
+def render_market_board(results: list[dict]) -> None:
+    if not results:
+        return
+    st.markdown('### 🔥 熱門榜單')
+    c1, c2, c3 = st.columns(3)
+    top_up = sorted(results, key=lambda x: x['change_pct'], reverse=True)[:5]
+    top_down = sorted(results, key=lambda x: x['change_pct'])[:5]
+    top_volume = sorted(results, key=lambda x: x['volume'], reverse=True)[:5]
+
+    with c1:
+        st.caption('漲幅 Top 5')
+        for r in top_up:
+            st.write(f"{r['code']} {r['name']} {r['change_pct']:+.2f}%")
+    with c2:
+        st.caption('跌幅 Top 5')
+        for r in top_down:
+            st.write(f"{r['code']} {r['name']} {r['change_pct']:+.2f}%")
+    with c3:
+        st.caption('成交量 Top 5')
+        for r in top_volume:
+            st.write(f"{r['code']} {r['name']} {fmt_vol(r['volume'])}")
+
+
+def generate_ai_summary(result: dict) -> str:
+    score = result.get('total_score', 0)
+    change = result.get('change_pct', 0.0)
+    tech = result.get('tech_score', 0)
+    inst = result.get('inst_score', 0)
+    pv = result.get('pv_score', 0)
+    sr = result.get('sr_score', 0)
+
+    if score >= 25:
+        level = '強勢候選'
+    elif score >= 15:
+        level = '偏多觀察'
+    elif score >= 8:
+        level = '中性觀察'
+    else:
+        level = '保守觀望'
+
+    drivers = sorted(
+        [('技術', tech), ('法人', inst), ('價量', pv), ('支撐壓力', sr)],
+        key=lambda x: x[1],
+        reverse=True,
+    )
+    top_driver = drivers[0][0]
+    weak_driver = sorted(drivers, key=lambda x: x[1])[0][0]
+
+    risk_text = '短線波動偏大' if abs(change) >= 5 else '波動相對可控'
+    return (
+        f"{result['code']} {result['name']} 目前屬於「{level}」，"
+        f"主要加分來源是{top_driver}，相對弱項是{weak_driver}。"
+        f"當日漲跌 {change:+.2f}%（{risk_text}），建議搭配停損與倉位控管。"
+    )
+
+
+def render_ai_summary_card(results: list[dict]) -> None:
+    st.markdown('### 🤖 AI 解讀卡')
+    if not results:
+        st.info('請先執行分析。')
+        return
+    options = [f"{r['code']} {r['name']}" for r in results[:50]]
+    selected = st.selectbox('選擇股票生成解讀', options, key='ai_summary_stock')
+    code = selected.split(' ')[0]
+    target = next((r for r in results if r['code'] == code), None)
+    if not target:
+        st.info('找不到資料。')
+        return
+    summary = generate_ai_summary(target)
+    st.success(summary)
+    st.caption('此解讀卡為規則式自動生成，僅供研究參考。')
+
+
+def render_watchlist(results: list[dict]) -> None:
+    st.markdown('### ⭐ 自選股追蹤')
+    watchlist_input = st.text_input('輸入自選代碼（逗號分隔）', placeholder='2330,2317,2454')
+    if not watchlist_input:
+        return
+    codes = {c.strip() for c in watchlist_input.split(',') if c.strip()}
+    picked = [r for r in results if r['code'] in codes]
+    if not picked:
+        st.info('自選清單目前沒有命中分析結果。')
+        return
+    picked_rows = build_rows(picked, min_score=-999, top_n=999)
+    st.dataframe(picked_rows, use_container_width=True, hide_index=True)
+
+
+def render_kd_price_chart(results: list[dict]) -> None:
+    if not results:
+        return
+
+    st.markdown('### 📈 KD 與歷史股價折線圖')
+    options = [f"{r['code']} {r['name']}" for r in results]
+    selected = st.selectbox('選擇股票', options, key='kd_price_chart_stock')
+    code = selected.split(' ')[0]
+
+    fetcher = get_shared_fetcher()
+    hist = fetcher.get_historical_price(code, days=120)
+    if not hist or len(hist) < 20:
+        st.info('歷史資料不足，無法繪製 KD。')
+        return
+
+    dates = [h['date'] for h in hist]
+    closes = [h['close'] for h in hist]
+    highs = [h['high'] for h in hist]
+    lows = [h['low'] for h in hist]
+
+    tech = TechnicalIndicators()
+    k_values: list[float] = []
+    d_values: list[float] = []
+    for i in range(len(hist)):
+        window_highs = highs[: i + 1]
+        window_lows = lows[: i + 1]
+        window_closes = closes[: i + 1]
+        kd = tech.calculate_kd(window_highs, window_lows, window_closes)
+        k_values.append(float(kd.get('k', 50)))
+        d_values.append(float(kd.get('d', 50)))
+
     from plotly.subplots import make_subplots
-
-    st.markdown('<div class="section-title">技術指標詳情 (前10名)</div>', unsafe_allow_html=True)
-
-    top10 = sorted(results, key=lambda x: x['total_score'], reverse=True)[:10]
-    top10 = [r for r in top10 if r['indicators']]
-
-    if not top10:
-        st.info("沒有足夠的技術指標資料")
-        return
-
-    cols = st.columns(2)
-    for idx, r in enumerate(top10):
-        ind = r['indicators']
-        rsi = ind.get('rsi', {})
-        kd  = ind.get('kd', {})
-        macd = ind.get('macd', {})
-        bb  = ind.get('bollinger', {})
-
-        with cols[idx % 2]:
-            rsi_val  = rsi.get('rsi', 50)
-            k_val    = kd.get('k', 50)
-            d_val    = kd.get('d', 50)
-            macd_val = macd.get('hist', 0)
-            bb_pos   = bb.get('position', 50)
-
-            rsi_color  = '#f85149' if rsi_val > 70 else ('#3fb950' if rsi_val < 30 else '#58a6ff')
-            macd_color = '#f85149' if macd_val > 0 else '#3fb950'
-
-            st.markdown(f"""
-            <div class="detail-card">
-                <h3>{r['code']} {r['name']} <small style="color:#637083;font-size:0.75rem">評分 {r['total_score']}</small></h3>
-                <div class="ind-grid">
-                    <div class="ind-item">
-                        <div class="ind-label">RSI(14)</div>
-                        <div class="ind-val" style="color:{rsi_color}">{rsi_val:.1f}</div>
-                    </div>
-                    <div class="ind-item">
-                        <div class="ind-label">K / D</div>
-                        <div class="ind-val">{k_val:.1f} / {d_val:.1f}</div>
-                    </div>
-                    <div class="ind-item">
-                        <div class="ind-label">MACD柱</div>
-                        <div class="ind-val" style="color:{macd_color}">{macd_val:+.3f}</div>
-                    </div>
-                    <div class="ind-item">
-                        <div class="ind-label">布林位置</div>
-                        <div class="ind-val">{bb_pos:.0f}%</div>
-                    </div>
-                    <div class="ind-item">
-                        <div class="ind-label">技術分</div>
-                        <div class="ind-val" style="color:{score_color(r['tech_score'])}">{r['tech_score']}</div>
-                    </div>
-                    <div class="ind-item">
-                        <div class="ind-label">籌碼分</div>
-                        <div class="ind-val" style="color:{score_color(r['inst_score'])}">{r['inst_score']}</div>
-                    </div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-
-# ── 主頁面：外資追蹤 ──────────────────────────────────────
-def render_institutional(results):
     import plotly.graph_objects as go
 
-    st.markdown('<div class="section-title">外資籌碼 TOP 15</div>', unsafe_allow_html=True)
+    fig = make_subplots(
+        rows=2,
+        cols=1,
+        shared_xaxes=True,
+        row_heights=[0.65, 0.35],
+        vertical_spacing=0.08,
+        subplot_titles=('歷史收盤價', 'KD 指標'),
+    )
+    fig.add_trace(
+        go.Scatter(x=dates, y=closes, mode='lines', name='收盤價', line=dict(color='#1f77b4', width=2)),
+        row=1,
+        col=1,
+    )
+    fig.add_trace(
+        go.Scatter(x=dates, y=k_values, mode='lines', name='K', line=dict(color='#e67e22', width=1.8)),
+        row=2,
+        col=1,
+    )
+    fig.add_trace(
+        go.Scatter(x=dates, y=d_values, mode='lines', name='D', line=dict(color='#16a085', width=1.8)),
+        row=2,
+        col=1,
+    )
+    fig.add_hline(y=80, line_dash='dot', line_color='red', row=2, col=1)
+    fig.add_hline(y=20, line_dash='dot', line_color='green', row=2, col=1)
+    fig.update_layout(height=620, margin=dict(l=30, r=20, t=40, b=20), legend=dict(orientation='h'))
+    fig.update_yaxes(title_text='價格', row=1, col=1)
+    fig.update_yaxes(title_text='KD', range=[0, 100], row=2, col=1)
 
-    inst_data = []
-    for r in results:
-        if r['institutional']:
-            inst = r['institutional']
-            inst_data.append({
-                'code': r['code'],
-                'name': r['name'],
-                'foreign': inst.get('foreign', 0),
-                'trust':   inst.get('investment_trust', 0),
-                'dealer':  inst.get('dealer', 0),
-                'total':   inst.get('total', 0),
-            })
+    st.plotly_chart(fig, use_container_width=True)
+    st.caption(f"最新 KD：K={k_values[-1]:.2f} / D={d_values[-1]:.2f}")
 
-    if not inst_data:
-        st.info("無法人資料")
+
+def aggregate_weekly(hist: list[dict]) -> list[dict]:
+    weekly_map: dict[str, dict] = {}
+    for row in hist:
+        dt = datetime.strptime(row['date'], '%Y-%m-%d')
+        key = f'{dt.isocalendar().year}-W{dt.isocalendar().week:02d}'
+        if key not in weekly_map:
+            weekly_map[key] = {
+                'date': row['date'],
+                'open': row['open'],
+                'high': row['high'],
+                'low': row['low'],
+                'close': row['close'],
+                'volume': row.get('volume', 0),
+            }
+        else:
+            w = weekly_map[key]
+            w['high'] = max(w['high'], row['high'])
+            w['low'] = min(w['low'], row['low'])
+            w['close'] = row['close']
+            w['volume'] += row.get('volume', 0)
+    return [weekly_map[k] for k in sorted(weekly_map.keys())]
+
+
+def timeframe_signal(hist: list[dict], tech: TechnicalIndicators) -> tuple[str, dict]:
+    indicators = tech.calculate_all(hist) if hist else None
+    if not indicators:
+        return '資料不足', {}
+    ma20 = indicators.get('ma', {}).get('ma20')
+    kd = indicators.get('kd', {})
+    k = kd.get('k', 50)
+    d = kd.get('d', 50)
+    last_close = hist[-1]['close'] if hist else 0
+    if ma20 and last_close > ma20 and k > d:
+        return '偏多', indicators
+    if ma20 and last_close < ma20 and k < d:
+        return '偏空', indicators
+    return '盤整', indicators
+
+
+def render_multi_timeframe(results: list[dict]) -> None:
+    st.markdown('### 🕒 多時間框架（日線 / 週線）')
+    if not results:
+        st.info('請先執行分析。')
+        return
+    options = [f"{r['code']} {r['name']}" for r in results]
+    selected = st.selectbox('多時間框架股票', options, key='mtf_stock')
+    code = selected.split(' ')[0]
+
+    fetcher = get_shared_fetcher()
+    hist_daily = fetcher.get_historical_price(code, days=180)
+    if not hist_daily or len(hist_daily) < 30:
+        st.info('歷史資料不足。')
+        return
+    hist_weekly = aggregate_weekly(hist_daily)
+    tech = TechnicalIndicators()
+
+    daily_sig, daily_ind = timeframe_signal(hist_daily, tech)
+    weekly_sig, weekly_ind = timeframe_signal(hist_weekly, tech)
+
+    c1, c2 = st.columns(2)
+    with c1:
+        st.metric('日線訊號', daily_sig)
+        kd = daily_ind.get('kd', {})
+        st.caption(f"K={kd.get('k', 0):.2f} / D={kd.get('d', 0):.2f}")
+    with c2:
+        st.metric('週線訊號', weekly_sig)
+        kd = weekly_ind.get('kd', {})
+        st.caption(f"K={kd.get('k', 0):.2f} / D={kd.get('d', 0):.2f}")
+
+
+def render_comparison_mode(results: list[dict]) -> None:
+    st.markdown('### 🆚 比較模式（多股同圖）')
+    if not results:
+        st.info('請先執行分析。')
         return
 
-    inst_data.sort(key=lambda x: abs(x['total']), reverse=True)
-    top15 = inst_data[:15]
+    options = [f"{r['code']} {r['name']}" for r in results[:80]]
+    selected = st.multiselect('選擇 2~5 檔股票', options, default=options[:2], max_selections=5, key='cmp_stocks')
+    if len(selected) < 2:
+        st.info('請至少選 2 檔。')
+        return
 
-    labels  = [f"{d['code']}" for d in top15]
-    foreign = [d['foreign'] for d in top15]
-    trust   = [d['trust']   for d in top15]
-    dealer  = [d['dealer']  for d in top15]
+    fetcher = get_shared_fetcher()
+    import plotly.graph_objects as go
 
     fig = go.Figure()
-    fig.add_trace(go.Bar(name='外資', x=labels, y=foreign,
-                         marker_color='#58a6ff', marker_line_width=0))
-    fig.add_trace(go.Bar(name='投信', x=labels, y=trust,
-                         marker_color='#bc8cff', marker_line_width=0))
-    fig.add_trace(go.Bar(name='自營', x=labels, y=dealer,
-                         marker_color='#e6b450', marker_line_width=0))
+    for s in selected:
+        code = s.split(' ')[0]
+        hist = fetcher.get_historical_price(code, days=90)
+        if not hist or len(hist) < 10:
+            continue
+        dates = [h['date'] for h in hist]
+        closes = [h['close'] for h in hist]
+        base = closes[0] if closes and closes[0] > 0 else 1
+        norm = [c / base * 100 for c in closes]
+        fig.add_trace(go.Scatter(x=dates, y=norm, mode='lines', name=s))
 
     fig.update_layout(
-        barmode='group',
-        paper_bgcolor='#0a0e14',
-        plot_bgcolor='#0a0e14',
-        font=dict(color='#637083', family='IBM Plex Mono', size=11),
-        legend=dict(bgcolor='rgba(0,0,0,0)', font=dict(color='#cdd9e5'),
-                    orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
-        margin=dict(l=50, r=10, t=30, b=60),
-        height=340,
-        xaxis=dict(showgrid=False, tickangle=-45, tickfont=dict(size=10), type='category'),
-        yaxis=dict(showgrid=True, gridcolor='#1e2d3d',
-                   title=dict(text='張', font=dict(color='#637083'))),
+        title='基準化走勢比較（起始=100）',
+        yaxis_title='基準化價格',
+        height=430,
+        margin=dict(l=20, r=20, t=45, b=20),
     )
-    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+    st.plotly_chart(fig, use_container_width=True)
 
 
-# ── 主頁面：漲跌停 ────────────────────────────────────────
-def render_alerts(results):
-    limit_up   = [r for r in results if r['change_pct'] >= 9.5]
-    near_up    = [r for r in results if 8.5 <= r['change_pct'] < 9.5]
-    limit_down = [r for r in results if r['change_pct'] <= -9.5]
-
-    st.markdown('<div class="section-title">漲跌停監控</div>', unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("**🔥 漲停**")
-        if limit_up:
-            for r in limit_up:
-                st.markdown(f'<div class="alert-up">🔴 <b>{r["code"]}</b> {r["name"]} &nbsp; {r["price"]:.1f}元 &nbsp; <b>{r["change_pct"]:+.2f}%</b></div>', unsafe_allow_html=True)
-        else:
-            st.caption("今日無漲停")
-        if near_up:
-            st.markdown("**⚡ 接近漲停**")
-            for r in near_up:
-                st.markdown(f'<div class="alert-up" style="opacity:0.7">🟡 <b>{r["code"]}</b> {r["name"]} &nbsp; {r["change_pct"]:+.2f}%</div>', unsafe_allow_html=True)
-    with col2:
-        st.markdown("**📉 跌停**")
-        if limit_down:
-            for r in limit_down:
-                st.markdown(f'<div class="alert-down">🟢 <b>{r["code"]}</b> {r["name"]} &nbsp; {r["price"]:.1f}元 &nbsp; <b>{r["change_pct"]:+.2f}%</b></div>', unsafe_allow_html=True)
-        else:
-            st.caption("今日無跌停")
-
-
-# ── 理由展開區 ────────────────────────────────────────────
-def render_reasons(results):
-    st.markdown('<div class="section-title">強買股票詳細理由</div>', unsafe_allow_html=True)
-    strong = [r for r in results if r['total_score'] >= 25]
-    strong.sort(key=lambda x: x['total_score'], reverse=True)
-
-    if not strong:
-        st.info("目前沒有評分 ≥ 25 的股票")
+def render_anomaly_radar(results: list[dict]) -> None:
+    st.markdown('### 🚨 即時異常雷達')
+    if not results:
+        st.info('目前沒有可分析資料。')
         return
 
-    for r in strong[:10]:
-        with st.expander(f"🔥 {r['code']} {r['name']}  —  評分 {r['total_score']}"):
-            c1, c2, c3, c4 = st.columns(4)
-            c1.metric("技術", r['tech_score'])
-            c2.metric("籌碼", r['inst_score'])
-            c3.metric("價量", r['pv_score'])
-            c4.metric("支撐", r['sr_score'])
-            st.markdown("**訊號：**")
-            for reason in r['reasons']:
-                st.markdown(f"- {reason}")
-            if r['support_resistance']:
-                sr = r['support_resistance']
-                if sr.get('support'):
-                    st.markdown(f"**支撐位：** {', '.join(f'{p:.1f}' for p in sr['support'][:3])}")
-                if sr.get('resistance'):
-                    st.markdown(f"**壓力位：** {', '.join(f'{p:.1f}' for p in sr['resistance'][:3])}")
+    volumes = sorted([r.get('volume', 0) for r in results])
+    q75 = volumes[int(len(volumes) * 0.75)] if volumes else 0
+    anomalies: list[dict] = []
+
+    for r in results:
+        reasons: list[str] = []
+        if r.get('total_score', 0) >= 20 and r.get('change_pct', 0) < -1:
+            reasons.append('高分但轉弱')
+        if abs(r.get('change_pct', 0)) <= 0.2 and r.get('volume', 0) >= q75:
+            reasons.append('爆量但不漲')
+        if r.get('change_pct', 0) >= 9.0:
+            reasons.append('接近漲停')
+        if r.get('change_pct', 0) <= -9.0:
+            reasons.append('接近跌停')
+        if reasons:
+            anomalies.append(
+                {
+                    '代碼': r['code'],
+                    '名稱': r['name'],
+                    '價格': round(r['price'], 2),
+                    '漲跌%': round(r['change_pct'], 2),
+                    '成交量': fmt_vol(r.get('volume', 0)),
+                    '異常訊號': ' / '.join(reasons),
+                }
+            )
+
+    if not anomalies:
+        st.success('目前未偵測到顯著異常。')
+        return
+
+    st.dataframe(anomalies, use_container_width=True, hide_index=True)
 
 
-# ── 主程式 ────────────────────────────────────────────────
+def render_custom_alert_center(results: list[dict]) -> None:
+    st.markdown('### 🔔 自訂警報中心')
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        min_score = st.slider('最低總分條件', -20, 50, 15, 1, key='alert_min_score')
+    with c2:
+        min_change = st.slider('最低漲跌%條件', -10.0, 10.0, 0.0, 0.1, key='alert_min_change')
+    with c3:
+        min_volume = st.number_input('最低成交量條件', min_value=0, value=1000, step=100, key='alert_min_volume')
+
+    require_k_over_d = st.checkbox('需要 KD 黃金交叉（K > D）', value=False, key='alert_k_gt_d')
+    require_foreign_buy = st.checkbox('需要外資買超（foreign > 0）', value=False, key='alert_foreign_buy')
+
+    matches = []
+    for r in results:
+        if r.get('total_score', 0) < min_score:
+            continue
+        if r.get('change_pct', 0.0) < min_change:
+            continue
+        if r.get('volume', 0) < min_volume:
+            continue
+        if require_k_over_d:
+            kd = (r.get('indicators') or {}).get('kd', {})
+            if kd.get('k', 0) <= kd.get('d', 0):
+                continue
+        if require_foreign_buy:
+            inst = r.get('institutional') or {}
+            if inst.get('foreign', 0) <= 0:
+                continue
+        matches.append(r)
+
+    if not matches:
+        st.warning('目前沒有符合自訂警報條件的股票。')
+        return
+
+    rows = build_rows(matches, min_score=-999, top_n=999)
+    st.success(f'命中 {len(rows)} 檔。')
+    st.dataframe(rows, use_container_width=True, hide_index=True)
+
+
+def run_simple_backtest_for_stock(
+    fetcher: DataFetcher, tech: TechnicalIndicators, code: str, hold_days: int, lookback_days: int
+) -> list[float]:
+    hist = fetcher.get_historical_price(code, days=lookback_days)
+    if not hist or len(hist) < 40:
+        return []
+
+    closes = [h['close'] for h in hist]
+    highs = [h['high'] for h in hist]
+    lows = [h['low'] for h in hist]
+    returns: list[float] = []
+
+    for i in range(30, len(hist) - hold_days):
+        window = hist[: i + 1]
+        indicators = tech.calculate_all(window)
+        if not indicators:
+            continue
+        ma20 = indicators.get('ma', {}).get('ma20')
+        kd = indicators.get('kd', {})
+        k = kd.get('k', 50)
+        d = kd.get('d', 50)
+
+        if not ma20:
+            continue
+        # 策略: 收盤站上 MA20 且 K>D 視為買進
+        if closes[i] > ma20 and k > d:
+            buy = closes[i]
+            sell = closes[i + hold_days]
+            if buy > 0:
+                returns.append((sell - buy) / buy)
+    return returns
+
+
+def render_backtest(results: list[dict]) -> None:
+    st.markdown('### 🧪 多策略回測')
+    if not results:
+        st.info('請先執行分析後再做回測。')
+        return
+
+    candidates = sorted(results, key=lambda x: x['total_score'], reverse=True)[:30]
+    options = [f"{r['code']} {r['name']}" for r in candidates]
+    selected = st.multiselect('選擇回測股票（最多 20 檔）', options, default=options[:10], max_selections=20)
+    hold_days = st.slider('持有天數', 1, 15, 5, 1, key='bt_hold_days')
+    lookback_days = st.slider('回溯天數', 90, 360, 180, 30, key='bt_lookback')
+
+    if not selected:
+        st.info('請至少選擇一檔股票。')
+        return
+
+    fetcher = get_shared_fetcher()
+    tech = TechnicalIndicators()
+    all_returns: list[float] = []
+    for item in selected:
+        code = item.split(' ')[0]
+        all_returns.extend(run_simple_backtest_for_stock(fetcher, tech, code, hold_days, lookback_days))
+
+    if not all_returns:
+        st.warning('目前條件下沒有產生交易訊號。')
+        return
+
+    wins = [r for r in all_returns if r > 0]
+    avg_ret = sum(all_returns) / len(all_returns)
+    win_rate = len(wins) / len(all_returns) * 100
+
+    equity = 1.0
+    equity_curve = [equity]
+    for r in all_returns:
+        equity *= (1 + r)
+        equity_curve.append(equity)
+    peak = equity_curve[0]
+    max_dd = 0.0
+    for v in equity_curve:
+        peak = max(peak, v)
+        dd = (peak - v) / peak if peak > 0 else 0
+        max_dd = max(max_dd, dd)
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric('交易次數', len(all_returns))
+    c2.metric('勝率', f'{win_rate:.1f}%')
+    c3.metric('平均報酬', f'{avg_ret * 100:.2f}%')
+    c4.metric('最大回撤', f'{max_dd * 100:.2f}%')
+
+    import plotly.graph_objects as go
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(y=equity_curve, mode='lines', name='Equity', line=dict(width=2)))
+    fig.update_layout(height=300, margin=dict(l=20, r=20, t=30, b=20), title='策略資金曲線')
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def render_portfolio_simulator(results: list[dict]) -> None:
+    st.markdown('### 💼 交易清單模擬')
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    if 'paper_portfolio' not in st.session_state:
+        st.session_state.paper_portfolio = []
+
+    price_map = {r['code']: r for r in results}
+    options = [f"{r['code']} {r['name']}" for r in results[:100]]
+
+    c1, c2, c3 = st.columns([2, 1, 1])
+    with c1:
+        selected = st.selectbox('新增持倉股票', options, key='portfolio_add_stock')
+    with c2:
+        shares = st.number_input('股數', min_value=1, value=1000, step=100, key='portfolio_shares')
+    with c3:
+        if st.button('加入持倉', key='portfolio_add_btn', use_container_width=True):
+            code = selected.split(' ')[0]
+            info = price_map.get(code)
+            if info:
+                st.session_state.paper_portfolio.append(
+                    {
+                        'code': code,
+                        'name': info['name'],
+                        'buy_price': float(info['price']),
+                        'shares': int(shares),
+                    }
+                )
+
+    if not st.session_state.paper_portfolio:
+        st.info('尚未有模擬持倉。')
+        return
+
+    rows = []
+    total_cost = 0.0
+    total_value = 0.0
+    remove_idx = None
+    for idx, p in enumerate(st.session_state.paper_portfolio):
+        current = float(price_map.get(p['code'], {}).get('price', p['buy_price']))
+        cost = p['buy_price'] * p['shares']
+        value = current * p['shares']
+        pnl = value - cost
+        pnl_pct = (pnl / cost * 100) if cost > 0 else 0
+        total_cost += cost
+        total_value += value
+        rows.append(
+            {
+                '索引': idx,
+                '代碼': p['code'],
+                '名稱': p['name'],
+                '買入價': round(p['buy_price'], 2),
+                '現價': round(current, 2),
+                '股數': p['shares'],
+                '損益': round(pnl, 2),
+                '損益%': round(pnl_pct, 2),
+            }
+        )
+
+    st.dataframe(rows, use_container_width=True, hide_index=True)
+    total_pnl = total_value - total_cost
+    total_pnl_pct = (total_pnl / total_cost * 100) if total_cost > 0 else 0
+    c1, c2, c3 = st.columns(3)
+    c1.metric('總成本', f'{total_cost:,.0f}')
+    c2.metric('總市值', f'{total_value:,.0f}')
+    c3.metric('總損益', f'{total_pnl:,.0f}', f'{total_pnl_pct:+.2f}%')
+
+    remove_idx = st.number_input('刪除持倉索引', min_value=-1, max_value=len(rows) - 1, value=-1, step=1)
+    if st.button('刪除指定持倉', key='portfolio_remove_btn') and remove_idx >= 0:
+        st.session_state.paper_portfolio.pop(int(remove_idx))
+
+
+def render_industry_heatmap(results: list[dict]) -> None:
+    st.markdown('### 🧭 產業熱度儀表板')
+    if not STOCK_DATA_WITH_CATEGORIES:
+        load_cache()
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    industry_rows: dict[str, dict] = {}
+    for r in results:
+        meta = STOCK_DATA_WITH_CATEGORIES.get(r['code'], {})
+        cat = meta.get('category', '其他')
+        row = industry_rows.setdefault(cat, {'category': cat, 'count': 0, 'score_sum': 0.0, 'chg_sum': 0.0, 'vol_sum': 0})
+        row['count'] += 1
+        row['score_sum'] += r.get('total_score', 0)
+        row['chg_sum'] += r.get('change_pct', 0.0)
+        row['vol_sum'] += int(r.get('volume', 0))
+
+    agg = []
+    for cat, row in industry_rows.items():
+        cnt = max(1, row['count'])
+        agg.append(
+            {
+                '產業': cat,
+                '檔數': row['count'],
+                '平均分數': round(row['score_sum'] / cnt, 2),
+                '平均漲跌%': round(row['chg_sum'] / cnt, 2),
+                '平均成交量': int(row['vol_sum'] / cnt),
+            }
+        )
+    agg = sorted(agg, key=lambda x: x['平均分數'], reverse=True)
+    st.dataframe(agg, use_container_width=True, hide_index=True)
+
+    import plotly.graph_objects as go
+
+    fig = go.Figure(
+        data=go.Scatter(
+            x=[x['平均漲跌%'] for x in agg],
+            y=[x['平均分數'] for x in agg],
+            mode='markers+text',
+            text=[x['產業'] for x in agg],
+            textposition='top center',
+            marker=dict(
+                size=[max(10, min(45, int((x['檔數'] ** 0.5) * 6))) for x in agg],
+                color=[x['平均分數'] for x in agg],
+                colorscale='RdYlGn',
+                showscale=True,
+            ),
+        )
+    )
+    fig.update_layout(
+        title='產業熱力圖（X=平均漲跌%, Y=平均分數, 泡泡=檔數）',
+        height=430,
+        margin=dict(l=30, r=20, t=60, b=20),
+        xaxis_title='平均漲跌%',
+        yaxis_title='平均分數',
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def render_daily_rankings(results: list[dict]) -> None:
+    st.markdown('### 🏆 每日排行')
+    st.caption(f"榜單時間：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    top_score = sorted(results, key=lambda x: x['total_score'], reverse=True)[:20]
+    top_up = sorted(results, key=lambda x: x['change_pct'], reverse=True)[:20]
+    top_volume = sorted(results, key=lambda x: x['volume'], reverse=True)[:20]
+    reversal = [r for r in results if r['total_score'] >= 15 and r['change_pct'] < 0]
+    reversal = sorted(reversal, key=lambda x: x['total_score'], reverse=True)[:20]
+
+    tab1, tab2, tab3, tab4 = st.tabs(['高分榜', '漲幅榜', '量能榜', '反轉觀察'])
+    with tab1:
+        st.dataframe(build_rows(top_score, -999, 999), use_container_width=True, hide_index=True)
+    with tab2:
+        st.dataframe(build_rows(top_up, -999, 999), use_container_width=True, hide_index=True)
+    with tab3:
+        st.dataframe(build_rows(top_volume, -999, 999), use_container_width=True, hide_index=True)
+    with tab4:
+        st.dataframe(build_rows(reversal, -999, 999), use_container_width=True, hide_index=True)
+
+
+def render_share_card(results: list[dict]) -> None:
+    st.markdown('### 🖼️ 一鍵分享卡片')
+    if not results:
+        st.info('請先執行分析。')
+        return
+    options = [f"{r['code']} {r['name']}" for r in results[:50]]
+    selected = st.selectbox('選擇要分享的股票', options, key='share_stock')
+    code = selected.split(' ')[0]
+    r = next((x for x in results if x['code'] == code), None)
+    if not r:
+        return
+
+    summary = generate_ai_summary(r)
+    reasons = (r.get('reasons') or [])[:3]
+    reason_lines = ' / '.join(reasons) if reasons else '無'
+
+    def esc(s: str) -> str:
+        return str(s).replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
+
+    svg = f"""<svg xmlns='http://www.w3.org/2000/svg' width='920' height='420'>
+<rect width='100%' height='100%' fill='#0f172a'/>
+<rect x='24' y='24' width='872' height='372' rx='18' fill='#111827' stroke='#334155' stroke-width='2'/>
+<text x='48' y='78' fill='#f8fafc' font-size='36' font-family='Arial'>台股分析卡片</text>
+<text x='48' y='124' fill='#93c5fd' font-size='30' font-family='Arial'>{esc(r['code'])} {esc(r['name'])}</text>
+<text x='48' y='174' fill='#e2e8f0' font-size='24' font-family='Arial'>價格: {r['price']:.2f} / 漲跌: {r['change_pct']:+.2f}%</text>
+<text x='48' y='214' fill='#fde68a' font-size='24' font-family='Arial'>總分: {r['total_score']} / 建議: {esc(score_badge(r['total_score']))}</text>
+<text x='48' y='262' fill='#cbd5e1' font-size='20' font-family='Arial'>重點原因: {esc(reason_lines)}</text>
+<text x='48' y='312' fill='#a7f3d0' font-size='18' font-family='Arial'>{esc(summary[:90])}</text>
+<text x='48' y='340' fill='#a7f3d0' font-size='18' font-family='Arial'>{esc(summary[90:180])}</text>
+<text x='48' y='378' fill='#64748b' font-size='14' font-family='Arial'>Generated {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</text>
+</svg>"""
+
+    st.markdown('#### 預覽')
+    st.image(svg.encode('utf-8'))
+    st.download_button(
+        label='下載 SVG 分享卡',
+        data=svg.encode('utf-8'),
+        file_name=f"share_card_{r['code']}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.svg",
+        mime='image/svg+xml',
+    )
+    st.download_button(
+        label='下載摘要文字',
+        data=(summary + '\n\n' + reason_lines).encode('utf-8'),
+        file_name=f"share_summary_{r['code']}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+        mime='text/plain',
+    )
+
+
+def render_export(rows: list[dict]) -> None:
+    if not rows:
+        return
+    st.markdown('### 📥 匯出')
+    import csv
+    import io
+
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=list(rows[0].keys()))
+    writer.writeheader()
+    writer.writerows(rows)
+    st.download_button(
+        label='下載分析結果 CSV',
+        data=output.getvalue().encode('utf-8-sig'),
+        file_name=f"stock_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+        mime='text/csv',
+    )
+
+
 def main():
-    # 標題列
-    st.markdown("""
-    <div class="top-bar">
-        <div>
-            <h1>台股選股分析系統</h1>
-            <div class="subtitle">TAIWAN STOCK PICKER  ·  POWERED BY TWSE/TPEX API</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.title('台股選股分析系統')
+    st.caption(f'更新時間：{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
 
+    (
+        page,
+        mode,
+        selected_cats,
+        random_n,
+        min_score,
+        top_n,
+        max_workers,
+        run_btn,
+        update_btn,
+        min_vol,
+        price_min,
+        price_max,
+        custom_codes,
+    ) = render_sidebar()
 
-
-    mode, selected_cats, random_n, min_score, top_n, run_btn, update_btn, min_vol = render_sidebar()
-
-    # session state 初始化
-    if "results" not in st.session_state:
+    if 'results' not in st.session_state:
         st.session_state.results = []
-    if "analyzed" not in st.session_state:
+    if 'analyzed' not in st.session_state:
         st.session_state.analyzed = False
 
-    # 更新股票清單
     if update_btn:
-        with st.spinner(f"正在從 TWSE API 更新股票清單（成交量 ≥ {min_vol} 張）…"):
+        with st.spinner(f'更新股票清單中（最低成交量 {min_vol} 張）...'):
             export_stock_list_to_file(min_vol)
-        st.success(f"✓ 股票清單已更新，共 {get_stock_count()} 檔")
+        st.success(f'已更新股票清單，共 {get_stock_count()} 檔。')
 
-    # 股票清單狀態
     if get_stock_count() == 0:
-        st.warning("⚠️ 股票清單是空的，請先點側邊欄的「更新清單」")
+        st.warning('目前沒有股票清單，請先按「更新股票清單」。')
         return
 
-    # 開始分析
     if run_btn:
-        if mode == "全部股票":
+        stocks: list[tuple[str, str]] = []
+        if mode == '全部股票':
             stocks = get_all_stocks()
-        elif mode == "依類別篩選":
+        elif mode == '依產業類別':
             if not selected_cats:
-                st.warning("請先選擇至少一個類別")
-                stocks = []
+                st.warning('請至少選一個產業類別。')
             else:
-                stocks = get_stocks_by_category(",".join(selected_cats))
-        else:
-            import random
+                stocks = get_stocks_by_category(','.join(selected_cats))
+        elif mode == '隨機抽樣':
             all_s = get_all_stocks()
             random.shuffle(all_s)
             stocks = all_s[:random_n]
+        elif mode == '自訂股票':
+            if custom_codes:
+                all_dict = dict(get_all_stocks())
+                stocks = [(c, all_dict.get(c, c)) for c in custom_codes]
+            else:
+                st.warning('請輸入至少一個股票代碼。')
+
+        if stocks and (price_min > 0 or price_max > 0):
+            fetcher = get_shared_fetcher()
+            filtered = []
+            for code, name in stocks:
+                p = fetcher.get_stock_price(code)
+                if not p:
+                    continue
+                price = float(p.get('price', 0) or 0)
+                if price_min > 0 and price < price_min:
+                    continue
+                if price_max > 0 and price > price_max:
+                    continue
+                filtered.append((code, name))
+            stocks = filtered
 
         if stocks:
-            st.info(f"開始分析 **{len(stocks)}** 檔股票，請稍候…")
-            results = run_analysis(stocks)
-            st.session_state.results  = results
+            results = run_analysis(stocks, max_workers=max_workers)
+            st.session_state.results = results
             st.session_state.analyzed = True
-            # 不用 rerun，讓下方直接顯示
+            if CONFIG['output'].get('save_history', False) and results:
+                HistorySaver().save_analysis(results)
 
-    # 顯示結果
-    if st.session_state.analyzed and st.session_state.results:
+    if st.session_state.analyzed:
         results = st.session_state.results
-        render_kpi(results)
+        if page == '分析總覽':
+            render_kpi(results)
+            render_market_board(results)
+            rows = render_table(results, min_score, top_n)
+            render_ai_summary_card(results)
+            render_watchlist(results)
+            render_export(rows)
+        elif page == '技術圖表':
+            render_kd_price_chart(results)
+            render_multi_timeframe(results)
+            render_comparison_mode(results)
+        elif page == '警報中心':
+            render_anomaly_radar(results)
+            render_custom_alert_center(results)
+        elif page == '產業熱度':
+            render_industry_heatmap(results)
+        elif page == '回測與模擬':
+            render_backtest(results)
+            render_portfolio_simulator(results)
+        elif page == '每日排行':
+            render_daily_rankings(results)
+        elif page == '分享卡片':
+            render_share_card(results)
 
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(
-            ["📋 推薦清單", "📊 技術指標", "🏛 外資籌碼", "🚨 漲跌停", "🔍 詳細理由"]
-        )
-        with tab1: render_table(results, min_score, top_n)
-        with tab2: render_technicals(results)
-        with tab3: render_institutional(results)
-        with tab4: render_alerts(results)
-        with tab5: render_reasons(results)
 
-        if CONFIG["output"]["save_history"]:
-            HistorySaver().save_analysis(results)
-
-    elif not st.session_state.analyzed:
-        st.markdown("""
-        <div style="text-align:center; padding: 80px 0; color: #637083;">
-            <div style="font-size:3rem; margin-bottom:16px">📈</div>
-            <div style="font-family:'IBM Plex Mono',monospace; font-size:1rem; margin-bottom:8px; color:#cdd9e5">
-                準備好了
-            </div>
-            <div style="font-size:0.85rem">在左側設定參數，然後點擊「開始分析」</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
