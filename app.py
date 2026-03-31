@@ -68,16 +68,47 @@ def fmt_vol(v: int) -> str:
 def fetch_twse_news() -> list[dict]:
     news: list[dict] = []
     try:
-        url = 'https://openapi.twse.com.tw/v1/news/news'
-        resp = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=10, verify=False)
-        for item in resp.json()[:100]:
-            title = item.get('title', '') or item.get('Title', '')
-            date = item.get('date', '') or item.get('Date', '')
-            if title:
-                news.append({'title': title, 'date': date})
+        headers = {'User-Agent': 'Mozilla/5.0'}
+
+        # 新聞清單（舊 openapi 路徑已失效，改用 twse 可用端點）
+        news_resp = requests.get('https://www.twse.com.tw/news/newsList?response=json', headers=headers, timeout=12, verify=False)
+        news_json = news_resp.json()
+        for row in news_json.get('data', [])[:200]:
+            # fields: 項次, 標題, 日期, ...
+            if len(row) >= 3:
+                title = str(row[1]).strip()
+                date = str(row[2]).strip()
+                if title:
+                    news.append({'title': title, 'date': date})
+
+        # 公告清單（補強公司/代碼命中機率）
+        ann_resp = requests.get(
+            'https://www.twse.com.tw/rwd/zh/announcement/announcement?response=json',
+            headers=headers,
+            timeout=15,
+            verify=False,
+        )
+        ann_json = ann_resp.json()
+        for row in ann_json.get('data', [])[:400]:
+            # fields: 項次, 發文日期, 發文字號, 主旨, id
+            if len(row) >= 4:
+                title = str(row[3]).strip()
+                date = str(row[1]).strip()
+                if title:
+                    news.append({'title': title, 'date': date})
     except Exception:
         pass
-    return news
+
+    # 去重
+    dedup = []
+    seen = set()
+    for n in news:
+        key = (n.get('title', ''), n.get('date', ''))
+        if key in seen:
+            continue
+        seen.add(key)
+        dedup.append(n)
+    return dedup
 
 
 def get_news_sentiment(code: str, name: str, news_list: list[dict]) -> tuple[list[dict], int]:
@@ -94,6 +125,19 @@ def get_news_sentiment(code: str, name: str, news_list: list[dict]) -> tuple[lis
             sentiment = pos - neg
             related.append({**n, 'sentiment': sentiment})
             total_score += sentiment
+
+    # 無個股新聞時，提供市場情緒 +1/-1 保底分
+    if not related and news_list:
+        market_score = 0
+        for n in news_list[:80]:
+            t = n.get('title', '')
+            market_score += sum(1 for k in pos_kw if k in t)
+            market_score -= sum(1 for k in neg_kw if k in t)
+        if market_score > 0:
+            total_score = 1
+        elif market_score < 0:
+            total_score = -1
+
     return related, total_score
 
 
