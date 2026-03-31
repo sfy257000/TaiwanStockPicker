@@ -96,6 +96,29 @@ def fetch_twse_news() -> list[dict]:
                 date = str(row[1]).strip()
                 if title:
                     news.append({'title': title, 'date': date})
+
+        # Yahoo 股市 RSS
+        import xml.etree.ElementTree as ET
+
+        yahoo_resp = requests.get('https://tw.stock.yahoo.com/rss', headers=headers, timeout=12, verify=False)
+        if yahoo_resp.ok and yahoo_resp.text.strip().startswith('<?xml'):
+            root = ET.fromstring(yahoo_resp.text)
+            for item in root.findall('.//item')[:120]:
+                title = (item.findtext('title') or '').strip()
+                date = (item.findtext('pubDate') or '').strip()
+                if title:
+                    news.append({'title': title, 'date': date})
+
+        # Google News 台股 RSS
+        google_url = 'https://news.google.com/rss/search?q=%E5%8F%B0%E8%82%A1&hl=zh-TW&gl=TW&ceid=TW:zh-Hant'
+        google_resp = requests.get(google_url, headers=headers, timeout=12, verify=False)
+        if google_resp.ok and '<rss' in google_resp.text[:300]:
+            root = ET.fromstring(google_resp.text)
+            for item in root.findall('.//item')[:120]:
+                title = (item.findtext('title') or '').strip()
+                date = (item.findtext('pubDate') or '').strip()
+                if title:
+                    news.append({'title': title, 'date': date})
     except Exception:
         pass
 
@@ -111,15 +134,65 @@ def fetch_twse_news() -> list[dict]:
     return dedup
 
 
-def get_news_sentiment(code: str, name: str, news_list: list[dict]) -> tuple[list[dict], int]:
+def _normalize_text(text: str) -> str:
+    if not text:
+        return ''
+    full = '０１２３４５６７８９（）－'
+    half = '0123456789()--'
+    trans = str.maketrans({f: h for f, h in zip(full, half)})
+    return str(text).translate(trans).replace(' ', '').strip()
+
+
+@st.cache_data(ttl=1800)
+def build_news_index(news_list: list[dict]) -> dict[str, list[dict]]:
+    if not STOCK_DATA_WITH_CATEGORIES:
+        load_cache()
+
+    index: dict[str, list[dict]] = {}
+    stock_codes = set(STOCK_DATA_WITH_CATEGORIES.keys())
+    name_to_codes: dict[str, list[str]] = {}
+    for code, meta in STOCK_DATA_WITH_CATEGORIES.items():
+        name = _normalize_text(meta.get('name', ''))
+        if not name:
+            continue
+        name_to_codes.setdefault(name, []).append(code)
+
+    for n in news_list:
+        title_raw = n.get('title', '')
+        title = _normalize_text(title_raw)
+        matched_codes = set()
+
+        # 1) 從標題抓代碼（四碼/五碼）
+        for m in re.findall(r'(?<!\d)(\d{4,5})(?!\d)', title):
+            if m in stock_codes:
+                matched_codes.add(m)
+
+        # 2) 公司名稱命中（索引式，不只單一 name in title）
+        for stock_name, codes in name_to_codes.items():
+            if stock_name and stock_name in title:
+                matched_codes.update(codes)
+
+        for code in matched_codes:
+            index.setdefault(code, []).append(n)
+
+    return index
+
+
+def get_news_sentiment(
+    code: str, name: str, news_list: list[dict], news_index: dict[str, list[dict]] | None = None
+) -> tuple[list[dict], int]:
     pos_kw = ['成長', '創高', '利多', '突破', '上修', '買超', '營收增', '獲利增']
     neg_kw = ['下修', '虧損', '衰退', '跌破', '利空', '賣超', '營收減', '獲利減']
 
     related = []
     total_score = 0
-    for n in news_list:
+    candidate_news = news_index.get(code, []) if news_index else news_list
+    for n in candidate_news:
         title = n.get('title', '')
-        if code in title or name in title:
+        title_n = _normalize_text(title)
+        code_hit = code in title_n
+        name_hit = _normalize_text(name) in title_n if name else False
+        if news_index or code_hit or name_hit:
             pos = sum(1 for k in pos_kw if k in title)
             neg = sum(1 for k in neg_kw if k in title)
             sentiment = pos - neg
@@ -150,6 +223,7 @@ def analyze_one(
     pv_alert: PriceVolumeAlert,
     sr_calc: SupportResistance,
     news_list: list[dict],
+    news_index: dict[str, list[dict]],
 ) -> dict | None:
     try:
         price_data = fetcher.get_stock_price(code)
@@ -196,7 +270,7 @@ def analyze_one(
             + sr_score * CONFIG['weights']['support_resistance']
         )
 
-        related_news, news_score = get_news_sentiment(code, name, news_list)
+        related_news, news_score = get_news_sentiment(code, name, news_list, news_index)
         total_score = int(round(score + news_score))
 
         prev_close = float(price_data.get('prev_close') or 0)
@@ -226,6 +300,7 @@ def analyze_one(
             'support_resistance': sr_data,
             'indicators': tech_indicators,
             'news': related_news,
+            'news_hits': len(related_news),
         }
     except Exception:
         return None
@@ -238,6 +313,7 @@ def run_analysis(stocks: list[tuple[str, str]], max_workers: int | None = None) 
     pv_alert = PriceVolumeAlert()
     sr_calc = SupportResistance()
     news_list = fetch_twse_news()
+    news_index = build_news_index(news_list)
 
     # 預抓一次法人批次資料，後續每檔僅做字典查詢
     fetcher.fetch_institutional_batch()
@@ -251,7 +327,7 @@ def run_analysis(stocks: list[tuple[str, str]], max_workers: int | None = None) 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [
             executor.submit(
-                analyze_one, code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc, news_list
+                analyze_one, code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc, news_list, news_index
             )
             for code, name in stocks
         ]
