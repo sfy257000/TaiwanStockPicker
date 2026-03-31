@@ -38,7 +38,7 @@ st.set_page_config(
     initial_sidebar_state='expanded',
 )
 
-PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行', '分享卡片']
+PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行']
 
 
 @st.cache_resource
@@ -1160,8 +1160,8 @@ def main():
             render_portfolio_simulator(results)
         elif page == '每日排行':
             render_daily_rankings(results)
-        elif page == '分享卡片':
-            render_share_card(results)
+        # elif page == '分享卡片':
+        #     render_share_card(results)
 
 
 if __name__ == '__main__':
