@@ -6,6 +6,7 @@ import os
 import threading
 import time
 from datetime import datetime, timedelta
+from urllib.parse import urlparse
 
 import requests
 import urllib3
@@ -31,8 +32,16 @@ class DataFetcher:
         self._mis_session.headers.update(self.headers)
         self._mis_initialized = False
 
-        self._last_request_time = 0.0
-        self._min_interval = 0.5
+        # 依 host 節流，避免多執行緒被全域鎖完全序列化
+        self._host_min_interval = {
+            'mis.twse.com.tw': 0.06,
+            'www.twse.com.tw': 0.12,
+            'www.tpex.org.tw': 0.12,
+        }
+        self._default_min_interval = 0.10
+        self._host_last_request_time: dict[str, float] = {}
+        self._host_locks: dict[str, threading.Lock] = {}
+        self._host_locks_guard = threading.Lock()
 
         self._stock_market_cache: dict[str, str] = {}
         self._institutional_cache: dict | None = None
@@ -42,7 +51,7 @@ class DataFetcher:
         self._ensure_cache_dir()
 
         self._institutional_lock = threading.Lock()
-        self._throttle_lock = threading.Lock()
+        self._init_lock = threading.Lock()
 
     def _ensure_cache_dir(self) -> None:
         if not os.path.exists(self._cache_dir):
@@ -51,12 +60,16 @@ class DataFetcher:
     def _init_mis_session(self) -> None:
         if self._mis_initialized:
             return
-        try:
-            self._throttle()
-            self._mis_session.get('https://mis.twse.com.tw/stock/fibest.jsp', timeout=10, verify=False)
-        except Exception:
-            pass
-        self._mis_initialized = True
+        with self._init_lock:
+            if self._mis_initialized:
+                return
+            try:
+                url = 'https://mis.twse.com.tw/stock/fibest.jsp'
+                self._throttle(url)
+                self._mis_session.get(url, timeout=10, verify=False)
+            except Exception:
+                pass
+            self._mis_initialized = True
 
     def _get_cache_path(self, code: str) -> str:
         return os.path.join(self._cache_dir, f'{code}.json')
@@ -79,13 +92,21 @@ class DataFetcher:
         except Exception:
             pass
 
-    def _throttle(self) -> None:
-        with self._throttle_lock:
+    def _throttle(self, url: str) -> None:
+        host = urlparse(url).netloc.lower()
+        with self._host_locks_guard:
+            lock = self._host_locks.get(host)
+            if lock is None:
+                lock = threading.Lock()
+                self._host_locks[host] = lock
+        min_interval = self._host_min_interval.get(host, self._default_min_interval)
+        with lock:
             now = time.time()
-            elapsed = now - self._last_request_time
-            if elapsed < self._min_interval:
-                time.sleep(self._min_interval - elapsed)
-            self._last_request_time = time.time()
+            last = self._host_last_request_time.get(host, 0.0)
+            elapsed = now - last
+            if elapsed < min_interval:
+                time.sleep(min_interval - elapsed)
+            self._host_last_request_time[host] = time.time()
 
     @staticmethod
     def _safe_float(val) -> float:
@@ -112,8 +133,8 @@ class DataFetcher:
 
         for market in markets_to_try:
             try:
-                self._throttle()
                 url = f'https://mis.twse.com.tw/stock/api/getStockInfo.jsp?ex_ch={market}_{code}.tw&json=1&delay=0'
+                self._throttle(url)
                 data = self._mis_session.get(url, timeout=10, verify=False).json()
                 msg = data.get('msgArray', [])
                 if not msg:
@@ -140,6 +161,7 @@ class DataFetcher:
                     'volume': self._safe_int(stock.get('v', 0)),
                     'prev_close': prev_close,
                     'is_premarket': datetime.now().hour < 9,
+                    'market': actual_market,
                 }
             except Exception:
                 continue
@@ -158,9 +180,9 @@ class DataFetcher:
             latest_date = None
             for days_ago in range(1, 6):
                 try:
-                    self._throttle()
                     date_str = (datetime.now() - timedelta(days=days_ago)).strftime('%Y%m%d')
                     url = f'https://www.twse.com.tw/fund/T86?response=json&date={date_str}&selectType=ALL'
+                    self._throttle(url)
                     rows = requests.get(url, headers=self.headers, timeout=15, verify=False).json().get('data', [])
                     if not rows:
                         continue
@@ -215,10 +237,10 @@ class DataFetcher:
     def _fetch_historical_tse(self, code: str, months_ago: int) -> list[dict]:
         prices = []
         try:
-            self._throttle()
             target_date = datetime.now() - timedelta(days=months_ago * 30)
             date_str = target_date.strftime('%Y%m01')
             url = f'https://www.twse.com.tw/exchangeReport/STOCK_DAY?response=json&date={date_str}&stockNo={code}'
+            self._throttle(url)
             rows = requests.get(url, headers=self.headers, timeout=10, verify=False).json().get('data', [])
             for row in rows:
                 close = self._safe_float(str(row[6]).replace(',', '').replace('X', '').strip())
@@ -241,7 +263,6 @@ class DataFetcher:
     def _fetch_historical_otc(self, code: str, months_ago: int) -> list[dict]:
         prices = []
         try:
-            self._throttle()
             target_date = datetime.now() - timedelta(days=months_ago * 30)
             roc_year = target_date.year - 1911
             date_str = f'{roc_year}/{target_date.month:02d}'
@@ -249,6 +270,7 @@ class DataFetcher:
                 'https://www.tpex.org.tw/web/stock/aftertrading/daily_trading_info/'
                 f'st43_result.php?l=zh-tw&d={date_str}&stkno={code}&s=0,asc,0'
             )
+            self._throttle(url)
             rows = requests.get(url, headers=self.headers, timeout=10, verify=False).json().get('aaData', [])
             for row in rows:
                 close = self._safe_float(str(row[6]).replace(',', '').replace('X', '').strip())

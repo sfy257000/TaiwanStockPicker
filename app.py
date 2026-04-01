@@ -15,10 +15,13 @@ import streamlit as st
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from config import CONFIG
+from data_quality import DataQualityMonitor
 from data_fetcher import DataFetcher
+from fundamental_analyzer import FundamentalAnalyzer
 from history_saver import HistorySaver
 from institutional_tracker import InstitutionalTracker
 from price_volume_alert import PriceVolumeAlert
+from risk_control import RiskControlEngine
 from stock_list import (
     _INDUSTRY_TO_CATEGORY_MAP,
     STOCK_DATA_WITH_CATEGORIES,
@@ -29,7 +32,9 @@ from stock_list import (
     load_cache,
 )
 from support_resistance import SupportResistance
+from strategy_workshop import StrategyWorkshop
 from technical_indicators import TechnicalIndicators
+from trade_journal import TradeJournal
 
 st.set_page_config(
     page_title='台股選股分析系統',
@@ -39,6 +44,9 @@ st.set_page_config(
 )
 
 PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行']
+
+CONFIG.setdefault('weights', {})
+CONFIG['weights'].setdefault('fundamental', 0.20)
 
 
 @st.cache_resource
@@ -62,6 +70,56 @@ def fmt_vol(v: int) -> str:
     if v >= 1000:
         return f'{v / 1000:.1f}千'
     return str(v)
+
+
+def _filter_stock_options(options: list[str], query: str, max_items: int = 2000) -> list[str]:
+    q = (query or '').strip().lower()
+    if not q:
+        return options[:max_items]
+    code_hits = [o for o in options if o.split(' ')[0].lower().startswith(q)]
+    name_hits = [o for o in options if q in o.lower() and o not in code_hits]
+    return (code_hits + name_hits)[:max_items]
+
+
+def stock_autocomplete_selectbox(label: str, options: list[str], key: str) -> str:
+    query = st.text_input(f'{label} 搜尋（代碼/名稱）', key=f'{key}_query', placeholder='例如 2330 或 台積')
+    filtered = _filter_stock_options(options, query)
+    if not filtered:
+        st.info('搜尋無結果，請調整關鍵字。')
+        return ''
+    st.caption(f'符合 {len(filtered)} 筆（最多顯示 {min(2000, len(options))} 筆）')
+    return st.selectbox(label, filtered, key=key)
+
+
+def stock_autocomplete_multiselect(
+    label: str,
+    options: list[str],
+    key: str,
+    max_selections: int | None = None,
+    default_count: int = 2,
+) -> list[str]:
+    query = st.text_input(f'{label} 搜尋（代碼/名稱）', key=f'{key}_query', placeholder='例如 23 或 金融')
+    filtered = _filter_stock_options(options, query)
+    if not filtered:
+        st.info('搜尋無結果，請調整關鍵字。')
+        return []
+    st.caption(f'符合 {len(filtered)} 筆（最多顯示 {min(2000, len(options))} 筆）')
+    default = filtered[: min(default_count, len(filtered))]
+    return st.multiselect(label, filtered, default=default, max_selections=max_selections, key=key)
+
+
+def classify_market(code: str, market_raw: str | None = None) -> str:
+    meta = STOCK_DATA_WITH_CATEGORIES.get(code, {})
+    category = str(meta.get('category', '')).upper()
+    industry = str(meta.get('industry', '')).upper()
+    name = str(meta.get('name', '')).upper()
+    if 'ETF' in category or 'ETF' in industry or 'ETF' in name or code.startswith('00'):
+        return 'ETF'
+    if market_raw == 'otc':
+        return '上櫃'
+    if market_raw == 'tse':
+        return '上市'
+    return '未知'
 
 
 @st.cache_data(ttl=1800)
@@ -214,12 +272,63 @@ def get_news_sentiment(
     return related, total_score
 
 
+def parse_news_date(date_str: str) -> datetime | None:
+    text = str(date_str or '').strip()
+    if not text:
+        return None
+    text = text.replace('年', '-').replace('月', '-').replace('日', '')
+    patterns = ['%Y-%m-%d', '%Y/%m/%d', '%Y.%m.%d', '%a, %d %b %Y %H:%M:%S %Z']
+    for fmt in patterns:
+        try:
+            return datetime.strptime(text, fmt)
+        except Exception:
+            continue
+    if '/' in text:
+        parts = text.split('/')
+        if len(parts) == 3:
+            try:
+                roc_year = int(parts[0])
+                month = int(parts[1])
+                day = int(parts[2])
+                return datetime(roc_year + 1911, month, day)
+            except Exception:
+                return None
+    return None
+
+
+def extract_events_from_news(news_list: list[dict]) -> list[dict]:
+    event_keywords = {
+        '法說會': ['法說會', '法人說明會', '業績說明會'],
+        '除權息': ['除權', '除息', '除權息'],
+        '財報': ['財報', '季報', '年報', 'Q1', 'Q2', 'Q3', 'Q4'],
+        '月營收': ['月營收', '營收公告'],
+        '股東會': ['股東會', '股東常會', '臨時股東會'],
+    }
+    events: list[dict] = []
+    for n in news_list:
+        title = str(n.get('title', ''))
+        dt = parse_news_date(str(n.get('date', '')))
+        for event_type, words in event_keywords.items():
+            if any(w in title for w in words):
+                events.append(
+                    {
+                        'type': event_type,
+                        'title': title,
+                        'date': dt.strftime('%Y-%m-%d') if dt else str(n.get('date', '')),
+                        'event_dt': dt,
+                    }
+                )
+                break
+    return events
+
+
 def analyze_one(
     code: str,
     name: str,
     fetcher: DataFetcher,
     tech_ind: TechnicalIndicators,
     inst_tracker: InstitutionalTracker,
+    fundamental_analyzer: FundamentalAnalyzer,
     pv_alert: PriceVolumeAlert,
     sr_calc: SupportResistance,
     news_list: list[dict],
@@ -228,6 +337,7 @@ def analyze_one(
     try:
         price_data = fetcher.get_stock_price(code)
         historical_data = fetcher.get_historical_price(code, days=60)
+        price_source = 'realtime'
 
         if (not price_data or price_data.get('price', 0) == 0) and historical_data:
             last = historical_data[-1]
@@ -241,6 +351,7 @@ def analyze_one(
                 'prev_close': prev,
                 'is_premarket': False,
             }
+            price_source = 'history_fallback'
 
         if not price_data or price_data.get('price', 0) == 0:
             return None
@@ -256,6 +367,9 @@ def analyze_one(
         inst_score = inst_result['score']
         inst_reasons = inst_result['reasons']
 
+        fundamental_data = fundamental_analyzer.get_fundamental_data(code)
+        fundamental_score, fundamental_reasons = fundamental_analyzer.score(fundamental_data)
+
         pv_result = pv_alert.check_alerts(price_data, historical_data)
         pv_score = pv_result['score']
         pv_reasons = pv_result['reasons']
@@ -266,11 +380,13 @@ def analyze_one(
         score = (
             tech_score * CONFIG['weights']['technical']
             + inst_score * CONFIG['weights']['institutional']
+            + fundamental_score * CONFIG['weights'].get('fundamental', 0.0)
             + pv_score * CONFIG['weights']['price_volume']
             + sr_score * CONFIG['weights']['support_resistance']
         )
 
         related_news, news_score = get_news_sentiment(code, name, news_list, news_index)
+        events = extract_events_from_news(related_news)
         total_score = int(round(score + news_score))
 
         prev_close = float(price_data.get('prev_close') or 0)
@@ -285,22 +401,30 @@ def analyze_one(
         return {
             'code': code,
             'name': name,
+            'market': classify_market(code, str(price_data.get('market') or '')),
             'price': price,
             'volume': int(price_data.get('volume') or 0),
             'change_pct': change_pct,
             'tech_score': tech_score,
             'inst_score': inst_score,
+            'fundamental_score': fundamental_score,
             'pv_score': pv_score,
             'sr_score': sr_score,
             'news_score': news_score,
             'total_score': total_score,
-            'reasons': tech_reasons + inst_reasons + pv_reasons + sr_reasons,
+            'reasons': tech_reasons + inst_reasons + fundamental_reasons + pv_reasons + sr_reasons,
             'institutional': inst_data,
+            'fundamental': fundamental_data,
             'alerts': pv_result,
             'support_resistance': sr_data,
             'indicators': tech_indicators,
             'news': related_news,
             'news_hits': len(related_news),
+            'events': events,
+            'qa': {
+                'price_source': price_source,
+                'market_raw': str(price_data.get('market') or ''),
+            },
         }
     except Exception:
         return None
@@ -310,6 +434,7 @@ def run_analysis(stocks: list[tuple[str, str]], max_workers: int | None = None) 
     fetcher = get_shared_fetcher()
     tech_ind = TechnicalIndicators()
     inst_tracker = InstitutionalTracker()
+    fundamental_analyzer = FundamentalAnalyzer()
     pv_alert = PriceVolumeAlert()
     sr_calc = SupportResistance()
     news_list = fetch_twse_news()
@@ -327,7 +452,17 @@ def run_analysis(stocks: list[tuple[str, str]], max_workers: int | None = None) 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [
             executor.submit(
-                analyze_one, code, name, fetcher, tech_ind, inst_tracker, pv_alert, sr_calc, news_list, news_index
+                analyze_one,
+                code,
+                name,
+                fetcher,
+                tech_ind,
+                inst_tracker,
+                fundamental_analyzer,
+                pv_alert,
+                sr_calc,
+                news_list,
+                news_index,
             )
             for code, name in stocks
         ]
@@ -385,20 +520,24 @@ def render_sidebar():
 
         st.markdown('---')
         st.markdown('### 評分權重')
-        w_tech = st.slider('技術面', 0, 100, 30, 5)
-        w_inst = st.slider('法人', 0, 100, 30, 5)
-        w_pv = st.slider('價量', 0, 100, 25, 5)
-        w_sr = st.slider('支撐壓力', 0, 100, 15, 5)
-        total_w = w_tech + w_inst + w_pv + w_sr
+        w_tech = st.slider('技術面', 0, 100, 25, 5)
+        w_inst = st.slider('法人', 0, 100, 25, 5)
+        w_fundamental = st.slider('基本面', 0, 100, 20, 5)
+        w_pv = st.slider('價量', 0, 100, 20, 5)
+        w_sr = st.slider('支撐壓力', 0, 100, 10, 5)
+        total_w = w_tech + w_inst + w_fundamental + w_pv + w_sr
         if total_w > 0:
             CONFIG['weights']['technical'] = w_tech / total_w
             CONFIG['weights']['institutional'] = w_inst / total_w
+            CONFIG['weights']['fundamental'] = w_fundamental / total_w
             CONFIG['weights']['price_volume'] = w_pv / total_w
             CONFIG['weights']['support_resistance'] = w_sr / total_w
 
         st.markdown('---')
+        market_scope = st.multiselect('市場範圍', ['上市', '上櫃', 'ETF'], default=['上市', '上櫃', 'ETF'])
+        st.markdown('---')
         min_score = st.slider('最低總分', -20, 50, 0, 1)
-        top_n = st.slider('顯示筆數', 10, 200, 50, 10)
+        top_n = st.slider('顯示筆數', 10, 2000, 200, 10)
         max_workers = st.slider('並行執行緒數', 1, 12, min(8, max(2, (os.cpu_count() or 4))), 1)
 
         st.markdown('---')
@@ -417,6 +556,7 @@ def render_sidebar():
         min_score,
         top_n,
         max_workers,
+        market_scope,
         run_btn,
         update_btn,
         int(min_vol),
@@ -448,11 +588,13 @@ def build_rows(results: list[dict], min_score: int, top_n: int) -> list[dict]:
             {
                 '代碼': r['code'],
                 '名稱': r['name'],
+                '市場': r.get('market', '未知'),
                 '價格': round(r['price'], 2),
                 '漲跌%': round(r['change_pct'], 2),
                 '成交量': fmt_vol(r['volume']),
                 '技術': r['tech_score'],
                 '法人': r['inst_score'],
+                '基本面': r.get('fundamental_score', 0),
                 '價量': r['pv_score'],
                 '支撐壓力': r['sr_score'],
                 '新聞': r['news_score'],
@@ -480,6 +622,27 @@ def render_table(results: list[dict], min_score: int, top_n: int) -> list[dict]:
             for reason in r.get('reasons', [])[:6]:
                 st.write(f'- {reason}')
     return rows
+
+
+def render_data_quality_dashboard(results: list[dict]) -> None:
+    st.markdown('### 🧪 資料品質監控')
+    summary = DataQualityMonitor.summarize(results)
+    if summary['total'] == 0:
+        st.info('請先執行分析。')
+        return
+
+    total = max(1, summary['total'])
+    c1, c2, c3, c4 = st.columns(4)
+    realtime_count = total - summary['price_from_history']
+    c1.metric('歷史回退價來源', summary['price_from_history'], f"{summary['price_from_history'] / total * 100:.1f}%")
+    c2.metric('即時價來源', realtime_count, f"{realtime_count / total * 100:.1f}%")
+    c3.metric('基本面缺資料', summary['missing_fundamental'], f"{summary['missing_fundamental'] / total * 100:.1f}%")
+    c4.metric('原始市場缺失/異常', summary['unknown_market'], f"{summary['unknown_market'] / total * 100:.1f}%")
+
+    bad_rows = summary.get('bad_rows', [])
+    if bad_rows:
+        with st.expander('查看資料異常明細'):
+            st.dataframe(bad_rows, use_container_width=True, hide_index=True)
 
 
 def render_market_board(results: list[dict]) -> None:
@@ -510,6 +673,7 @@ def generate_ai_summary(result: dict) -> str:
     change = result.get('change_pct', 0.0)
     tech = result.get('tech_score', 0)
     inst = result.get('inst_score', 0)
+    fundamental = result.get('fundamental_score', 0)
     pv = result.get('pv_score', 0)
     sr = result.get('sr_score', 0)
 
@@ -523,7 +687,7 @@ def generate_ai_summary(result: dict) -> str:
         level = '保守觀望'
 
     drivers = sorted(
-        [('技術', tech), ('法人', inst), ('價量', pv), ('支撐壓力', sr)],
+        [('技術', tech), ('法人', inst), ('基本面', fundamental), ('價量', pv), ('支撐壓力', sr)],
         key=lambda x: x[1],
         reverse=True,
     )
@@ -543,8 +707,11 @@ def render_ai_summary_card(results: list[dict]) -> None:
     if not results:
         st.info('請先執行分析。')
         return
-    options = [f"{r['code']} {r['name']}" for r in results[:50]]
-    selected = st.selectbox('選擇股票生成解讀', options, key='ai_summary_stock')
+    options = [f"{r['code']} {r['name']}" for r in results]
+    st.caption(f'可選股票數：{len(options)}')
+    selected = stock_autocomplete_selectbox('選擇股票生成解讀', options, key='ai_summary_stock')
+    if not selected:
+        return
     code = selected.split(' ')[0]
     target = next((r for r in results if r['code'] == code), None)
     if not target:
@@ -575,7 +742,9 @@ def render_kd_price_chart(results: list[dict]) -> None:
 
     st.markdown('### 📈 KD 與歷史股價折線圖')
     options = [f"{r['code']} {r['name']}" for r in results]
-    selected = st.selectbox('選擇股票', options, key='kd_price_chart_stock')
+    selected = stock_autocomplete_selectbox('選擇股票', options, key='kd_price_chart_stock')
+    if not selected:
+        return
     code = selected.split(' ')[0]
 
     fetcher = get_shared_fetcher()
@@ -681,7 +850,9 @@ def render_multi_timeframe(results: list[dict]) -> None:
         st.info('請先執行分析。')
         return
     options = [f"{r['code']} {r['name']}" for r in results]
-    selected = st.selectbox('多時間框架股票', options, key='mtf_stock')
+    selected = stock_autocomplete_selectbox('多時間框架股票', options, key='mtf_stock')
+    if not selected:
+        return
     code = selected.split(' ')[0]
 
     fetcher = get_shared_fetcher()
@@ -712,8 +883,14 @@ def render_comparison_mode(results: list[dict]) -> None:
         st.info('請先執行分析。')
         return
 
-    options = [f"{r['code']} {r['name']}" for r in results[:80]]
-    selected = st.multiselect('選擇 2~5 檔股票', options, default=options[:2], max_selections=5, key='cmp_stocks')
+    options = [f"{r['code']} {r['name']}" for r in results]
+    selected = stock_autocomplete_multiselect(
+        '選擇 2~5 檔股票',
+        options,
+        key='cmp_stocks',
+        max_selections=5,
+        default_count=2,
+    )
     if len(selected) < 2:
         st.info('請至少選 2 檔。')
         return
@@ -825,6 +1002,55 @@ def render_custom_alert_center(results: list[dict]) -> None:
     st.dataframe(rows, use_container_width=True, hide_index=True)
 
 
+def render_event_calendar(results: list[dict]) -> None:
+    st.markdown('### 🗓️ 事件行事曆與風險提醒')
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    c1, c2 = st.columns(2)
+    with c1:
+        pre_days = st.slider('事件前提醒天數', 0, 14, 3, 1, key='event_pre_days')
+    with c2:
+        post_days = st.slider('事件後觀察天數', 0, 14, 2, 1, key='event_post_days')
+
+    today = datetime.now().date()
+    rows = []
+    risk_rows = []
+
+    for r in results:
+        for e in r.get('events', []):
+            dt = e.get('event_dt')
+            days_to = None
+            if dt:
+                days_to = (dt.date() - today).days
+            row = {
+                '代碼': r['code'],
+                '名稱': r['name'],
+                '事件': e.get('type', '未知'),
+                '日期': e.get('date', ''),
+                '標題': e.get('title', ''),
+                '距今天數': days_to if days_to is not None else 'N/A',
+            }
+            rows.append(row)
+            if days_to is not None and -post_days <= days_to <= pre_days:
+                risk_rows.append(row)
+
+    if not rows:
+        st.info('目前沒有可辨識的事件資料。')
+        return
+
+    st.caption(f'共辨識 {len(rows)} 筆事件。')
+    if risk_rows:
+        st.warning(f'事件前後視窗內共 {len(risk_rows)} 筆，建議降低槓桿與縮小單筆風險。')
+        st.dataframe(risk_rows[:200], use_container_width=True, hide_index=True)
+    else:
+        st.success('目前沒有落在事件前後提醒視窗內的事件。')
+
+    with st.expander('查看完整事件清單'):
+        st.dataframe(rows[:400], use_container_width=True, hide_index=True)
+
+
 def run_simple_backtest_for_stock(
     fetcher: DataFetcher, tech: TechnicalIndicators, code: str, hold_days: int, lookback_days: int
 ) -> list[float]:
@@ -864,9 +1090,15 @@ def render_backtest(results: list[dict]) -> None:
         st.info('請先執行分析後再做回測。')
         return
 
-    candidates = sorted(results, key=lambda x: x['total_score'], reverse=True)[:30]
-    options = [f"{r['code']} {r['name']}" for r in candidates]
-    selected = st.multiselect('選擇回測股票（最多 20 檔）', options, default=options[:10], max_selections=20)
+    options = [f"{r['code']} {r['name']}" for r in results]
+    st.caption(f'可選股票數：{len(options)}')
+    selected = stock_autocomplete_multiselect(
+        '選擇回測股票（最多 20 檔）',
+        options,
+        key='bt_stocks',
+        max_selections=20,
+        default_count=10,
+    )
     hold_days = st.slider('持有天數', 1, 15, 5, 1, key='bt_hold_days')
     lookback_days = st.slider('回溯天數', 90, 360, 180, 30, key='bt_lookback')
 
@@ -925,15 +1157,18 @@ def render_portfolio_simulator(results: list[dict]) -> None:
         st.session_state.paper_portfolio = []
 
     price_map = {r['code']: r for r in results}
-    options = [f"{r['code']} {r['name']}" for r in results[:100]]
+    options = [f"{r['code']} {r['name']}" for r in results]
 
     c1, c2, c3 = st.columns([2, 1, 1])
     with c1:
-        selected = st.selectbox('新增持倉股票', options, key='portfolio_add_stock')
+        selected = stock_autocomplete_selectbox('新增持倉股票', options, key='portfolio_add_stock')
     with c2:
         shares = st.number_input('股數', min_value=1, value=1000, step=100, key='portfolio_shares')
     with c3:
         if st.button('加入持倉', key='portfolio_add_btn', use_container_width=True):
+            if not selected:
+                st.warning('請先選擇股票。')
+                return
             code = selected.split(' ')[0]
             info = price_map.get(code)
             if info:
@@ -986,6 +1221,157 @@ def render_portfolio_simulator(results: list[dict]) -> None:
     remove_idx = st.number_input('刪除持倉索引', min_value=-1, max_value=len(rows) - 1, value=-1, step=1)
     if st.button('刪除指定持倉', key='portfolio_remove_btn') and remove_idx >= 0:
         st.session_state.paper_portfolio.pop(int(remove_idx))
+
+
+def render_risk_control(results: list[dict]) -> None:
+    st.markdown('### 🛡️ 風險控管引擎')
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    capital = st.number_input('總資金', min_value=10000, value=1000000, step=10000, key='risk_capital')
+    risk_pct = st.slider('單筆可承受風險(%)', 0.2, 5.0, 1.0, 0.1, key='risk_pct')
+    stop_atr = st.slider('停損 ATR 倍數', 1.0, 4.0, 2.0, 0.5, key='risk_stop_atr')
+    max_portfolio_dd = st.slider('組合最大回撤警戒(%)', 5, 40, 15, 1, key='risk_max_dd')
+
+    options = [f"{r['code']} {r['name']}" for r in results]
+    selected = stock_autocomplete_selectbox('選擇股票做部位建議', options, key='risk_pick_stock')
+    if not selected:
+        return
+    code = selected.split(' ')[0]
+    picked = next((r for r in results if r['code'] == code), None)
+    if not picked:
+        st.warning('找不到股票資料。')
+        return
+
+    hist = get_shared_fetcher().get_historical_price(code, days=80) or []
+    atr = RiskControlEngine.calc_atr(hist, period=14)
+    suggested = RiskControlEngine.suggest_position(
+        price=float(picked.get('price', 0)),
+        atr=atr,
+        capital=float(capital),
+        risk_pct_per_trade=float(risk_pct),
+        stop_atr_multiple=float(stop_atr),
+    )
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric('建議股數', suggested['shares'])
+    c2.metric('建議停損', f"{(suggested['stop_loss'] or 0):.2f}")
+    c3.metric('建議停利', f"{(suggested['take_profit'] or 0):.2f}")
+    c4.metric('資金占比', f"{suggested['position_pct']:.2f}%")
+    st.caption(
+        f"ATR14: {atr:.3f}" if atr is not None else 'ATR14: 無足夠資料，已使用價格 3% 當風險代理值'
+    )
+
+    portfolio = st.session_state.get('paper_portfolio', [])
+    if portfolio:
+        price_map = {r['code']: r for r in results}
+        values = []
+        for p in portfolio:
+            current = float(price_map.get(p['code'], {}).get('price', p.get('buy_price', 0)))
+            values.append(current * float(p.get('shares', 0)))
+        total_value = sum(values)
+        top_weight = (max(values) / total_value * 100.0) if total_value > 0 else 0.0
+        if top_weight > 35:
+            st.warning(f'部位集中度偏高：單一持倉占比 {top_weight:.1f}%（建議 < 35%）')
+        else:
+            st.success(f'部位集中度可控：單一持倉最高占比 {top_weight:.1f}%')
+    st.info(f'建議把策略回測最大回撤控制在 {max_portfolio_dd}% 以內。')
+
+
+def render_trade_journal(results: list[dict]) -> None:
+    st.markdown('### 📒 交易日誌與策略檢討')
+    journal = TradeJournal()
+    entries = journal.load()
+
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    options = [f"{r['code']} {r['name']}" for r in results]
+    with st.expander('新增交易日誌', expanded=False):
+        c1, c2 = st.columns(2)
+        with c1:
+            selected = stock_autocomplete_selectbox('股票', options, key='journal_stock')
+            strategy = st.text_input('策略名稱', value='策略A', key='journal_strategy')
+            signal_tag = st.text_input('訊號標籤', value='MA20+KD', key='journal_signal_tag')
+            trade_date = st.date_input('交易日期', key='journal_trade_date')
+        with c2:
+            entry_price = st.number_input('進場價', min_value=0.0, value=100.0, step=0.1, key='journal_entry')
+            exit_price = st.number_input('出場價', min_value=0.0, value=105.0, step=0.1, key='journal_exit')
+            shares = st.number_input('股數', min_value=1, value=1000, step=100, key='journal_shares')
+            note = st.text_area('備註', value='', key='journal_note')
+
+        if st.button('新增交易紀錄', key='journal_add_btn'):
+            if not selected:
+                st.warning('請先選擇股票。')
+                return
+            code = selected.split(' ')[0]
+            name = selected.split(' ', 1)[1] if ' ' in selected else code
+            journal.add_entry(
+                code=code,
+                name=name,
+                strategy=strategy,
+                signal_tag=signal_tag,
+                entry_price=float(entry_price),
+                exit_price=float(exit_price),
+                shares=int(shares),
+                note=note,
+                trade_date=str(trade_date),
+            )
+            st.success('已新增交易紀錄。')
+            entries = journal.load()
+
+    if not entries:
+        st.info('目前尚無交易日誌。')
+        return
+
+    summary = journal.summarize(entries)
+    c1, c2, c3 = st.columns(3)
+    c1.metric('交易筆數', summary['count'])
+    c2.metric('勝率', f"{summary['win_rate']:.1f}%")
+    c3.metric('平均報酬', f"{summary['avg_pnl_pct']:.2f}%")
+
+    st.dataframe(entries[-200:], use_container_width=True, hide_index=True)
+    if summary['by_signal']:
+        st.markdown('#### 訊號有效性')
+        st.dataframe(summary['by_signal'], use_container_width=True, hide_index=True)
+
+
+def render_strategy_workshop(results: list[dict]) -> None:
+    st.markdown('### 🧰 策略工坊')
+    if not results:
+        st.info('請先執行分析。')
+        return
+
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        min_total_score = st.slider('最低總分', -20, 50, 15, 1, key='ws_min_score')
+    with c2:
+        min_change_pct = st.slider('最低漲跌%', -10.0, 10.0, 0.0, 0.1, key='ws_min_chg')
+    with c3:
+        min_volume = st.number_input('最低成交量（張）', min_value=0, value=1000, step=100, key='ws_min_vol')
+    require_k_gt_d = st.checkbox('KD 黃金交叉（K > D）', value=False, key='ws_k_gt_d')
+    require_foreign_buy = st.checkbox('外資買超', value=False, key='ws_foreign_buy')
+
+    picks = StrategyWorkshop.filter_by_rules(
+        results=results,
+        min_total_score=min_total_score,
+        min_change_pct=min_change_pct,
+        min_volume=int(min_volume),
+        require_k_gt_d=require_k_gt_d,
+        require_foreign_buy=require_foreign_buy,
+    )
+
+    if picks:
+        st.success(f'規則命中 {len(picks)} 檔。')
+        st.dataframe(build_rows(picks, min_score=-999, top_n=999), use_container_width=True, hide_index=True)
+    else:
+        st.warning('目前規則沒有命中股票。')
+
+    with st.expander('參數掃描（Grid Search）', expanded=False):
+        grid_rows = StrategyWorkshop.grid_search_candidates(results)
+        st.dataframe(grid_rows[:20], use_container_width=True, hide_index=True)
 
 
 def render_industry_heatmap(results: list[dict]) -> None:
@@ -1077,8 +1463,10 @@ def render_share_card(results: list[dict]) -> None:
     if not results:
         st.info('請先執行分析。')
         return
-    options = [f"{r['code']} {r['name']}" for r in results[:50]]
-    selected = st.selectbox('選擇要分享的股票', options, key='share_stock')
+    options = [f"{r['code']} {r['name']}" for r in results]
+    selected = stock_autocomplete_selectbox('選擇要分享的股票', options, key='share_stock')
+    if not selected:
+        return
     code = selected.split(' ')[0]
     r = next((x for x in results if x['code'] == code), None)
     if not r:
@@ -1193,6 +1581,7 @@ def main():
         min_score,
         top_n,
         max_workers,
+        market_scope,
         run_btn,
         update_btn,
         min_vol,
@@ -1235,20 +1624,50 @@ def main():
             else:
                 st.warning('請輸入至少一個股票代碼。')
 
-        if stocks and (price_min > 0 or price_max > 0):
+        all_markets = {'上市', '上櫃', 'ETF'}
+        need_market_filter = set(market_scope or []) != all_markets
+        if stocks and (price_min > 0 or price_max > 0 or need_market_filter):
             fetcher = get_shared_fetcher()
-            filtered = []
-            for code, name in stocks:
-                p = fetcher.get_stock_price(code)
-                if not p:
-                    continue
-                price = float(p.get('price', 0) or 0)
-                if price_min > 0 and price < price_min:
-                    continue
-                if price_max > 0 and price > price_max:
-                    continue
-                filtered.append((code, name))
-            stocks = filtered
+            total_candidates = len(stocks)
+            filter_prog = st.progress(0, text=f'過濾中... 0/{total_candidates}')
+            filtered_with_idx: list[tuple[int, tuple[str, str]]] = []
+
+            def _passes_prefilter(idx: int, code: str, name: str):
+                try:
+                    p = fetcher.get_stock_price(code)
+                    if not p:
+                        return None
+                    market = classify_market(code, str(p.get('market') or ''))
+                    if need_market_filter and market_scope and market not in market_scope:
+                        return None
+                    price = float(p.get('price', 0) or 0)
+                    if price_min > 0 and price < price_min:
+                        return None
+                    if price_max > 0 and price > price_max:
+                        return None
+                    return (idx, (code, name))
+                except Exception:
+                    return None
+
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                futures = [
+                    executor.submit(_passes_prefilter, idx, code, name)
+                    for idx, (code, name) in enumerate(stocks)
+                ]
+                for i, future in enumerate(as_completed(futures), start=1):
+                    try:
+                        item = future.result()
+                        if item is not None:
+                            filtered_with_idx.append(item)
+                    except Exception:
+                        pass
+                    filter_prog.progress(i / total_candidates, text=f'過濾中... {i}/{total_candidates}')
+
+            filter_prog.empty()
+            filtered_with_idx.sort(key=lambda x: x[0])
+            stocks = [item for _, item in filtered_with_idx]
+            if not stocks:
+                st.warning('價格/市場過濾後沒有符合條件的股票。')
 
         if stocks:
             results = run_analysis(stocks, max_workers=max_workers)
@@ -1264,6 +1683,7 @@ def main():
             render_market_board(results)
             rows = render_table(results, min_score, top_n)
             render_ai_summary_card(results)
+            render_data_quality_dashboard(results)
             render_watchlist(results)
             render_export(rows)
         elif page == '技術圖表':
@@ -1273,11 +1693,15 @@ def main():
         elif page == '警報中心':
             render_anomaly_radar(results)
             render_custom_alert_center(results)
+            render_event_calendar(results)
         elif page == '產業熱度':
             render_industry_heatmap(results)
         elif page == '回測與模擬':
             render_backtest(results)
             render_portfolio_simulator(results)
+            render_risk_control(results)
+            render_trade_journal(results)
+            render_strategy_workshop(results)
         elif page == '每日排行':
             render_daily_rankings(results)
         # elif page == '分享卡片':

@@ -37,7 +37,8 @@ def smoke_data_fetcher() -> None:
     from data_fetcher import DataFetcher
 
     fetcher = DataFetcher()
-    assert_true(hasattr(fetcher, '_throttle_lock'), 'DataFetcher 缺少 _throttle_lock')
+    assert_true(hasattr(fetcher, '_host_locks_guard'), 'DataFetcher 缺少 _host_locks_guard')
+    assert_true(hasattr(fetcher, '_host_min_interval'), 'DataFetcher 缺少 _host_min_interval')
     assert_true(fetcher._safe_int('1,234') == 1234, '_safe_int 轉換異常')
     assert_true(fetcher._safe_float('12.5') == 12.5, '_safe_float 轉換異常')
     assert_true(fetcher._parse_date_to_iso('115/03/04') == '2026-03-04', '日期轉換異常')
