@@ -1629,25 +1629,39 @@ def main():
         if stocks and (price_min > 0 or price_max > 0 or need_market_filter):
             fetcher = get_shared_fetcher()
             total_candidates = len(stocks)
+            effective_max_price = float(price_max) if price_max > 0 else None
+            if price_min > 0 and effective_max_price is None:
+                st.caption(f'價格過濾條件：>= {price_min}（最高價 0 視為無上限）')
             filter_prog = st.progress(0, text=f'過濾中... 0/{total_candidates}')
             filtered_with_idx: list[tuple[int, tuple[str, str]]] = []
+            reason_counts = {'pass': 0, 'no_price': 0, 'market': 0, 'below_min': 0, 'above_max': 0}
 
             def _passes_prefilter(idx: int, code: str, name: str):
                 try:
                     p = fetcher.get_stock_price(code)
-                    if not p:
-                        return None
-                    market = classify_market(code, str(p.get('market') or ''))
+                    price = 0.0
+                    market_raw = ''
+                    if p:
+                        price = float(p.get('price', 0) or 0)
+                        market_raw = str(p.get('market') or '')
+                    if price <= 0:
+                        hist = fetcher.get_historical_price(code, days=3)
+                        if hist:
+                            price = float(hist[-1].get('close') or 0)
+                            if not market_raw:
+                                market_raw = str(fetcher._stock_market_cache.get(code, ''))
+                    if price <= 0:
+                        return idx, None, 'no_price'
+                    market = classify_market(code, market_raw)
                     if need_market_filter and market_scope and market not in market_scope:
-                        return None
-                    price = float(p.get('price', 0) or 0)
+                        return idx, None, 'market'
                     if price_min > 0 and price < price_min:
-                        return None
-                    if price_max > 0 and price > price_max:
-                        return None
-                    return (idx, (code, name))
+                        return idx, None, 'below_min'
+                    if effective_max_price is not None and price > effective_max_price:
+                        return idx, None, 'above_max'
+                    return idx, (code, name), 'pass'
                 except Exception:
-                    return None
+                    return idx, None, 'no_price'
 
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = [
@@ -1656,16 +1670,25 @@ def main():
                 ]
                 for i, future in enumerate(as_completed(futures), start=1):
                     try:
-                        item = future.result()
+                        idx, item, reason = future.result()
+                        reason_counts[reason] = reason_counts.get(reason, 0) + 1
                         if item is not None:
-                            filtered_with_idx.append(item)
+                            filtered_with_idx.append((idx, item))
                     except Exception:
-                        pass
+                        reason_counts['no_price'] = reason_counts.get('no_price', 0) + 1
                     filter_prog.progress(i / total_candidates, text=f'過濾中... {i}/{total_candidates}')
 
             filter_prog.empty()
             filtered_with_idx.sort(key=lambda x: x[0])
             stocks = [item for _, item in filtered_with_idx]
+            st.caption(
+                '過濾結果：'
+                f"保留 {reason_counts.get('pass', 0)} 檔，"
+                f"價格資料不足 {reason_counts.get('no_price', 0)} 檔，"
+                f"低於最低價 {reason_counts.get('below_min', 0)} 檔，"
+                f"高於最高價 {reason_counts.get('above_max', 0)} 檔，"
+                f"市場不符 {reason_counts.get('market', 0)} 檔。"
+            )
             if not stocks:
                 st.warning('價格/市場過濾後沒有符合條件的股票。')
 
