@@ -5,6 +5,7 @@ import os
 import random
 import re
 import sys
+import json
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import quote
@@ -579,6 +580,167 @@ def render_kpi(results: list[dict]) -> None:
     c3.metric('平均分數', f'{avg:.1f}')
 
 
+@st.cache_data(ttl=180)
+def fetch_opening_market_context() -> dict:
+    try:
+        return get_shared_fetcher().get_opening_market_context()
+    except Exception:
+        return {}
+
+
+@st.cache_data(ttl=300)
+def fetch_us_sector_proxy(code: str) -> dict:
+    if not STOCK_DATA_WITH_CATEGORIES:
+        load_cache()
+    meta = STOCK_DATA_WITH_CATEGORIES.get(code, {})
+    category = resolve_effective_category(code, meta)
+    try:
+        return get_shared_fetcher().get_us_sector_quote_for_category(category)
+    except Exception:
+        return {'category': category, 'unavailable': True}
+
+
+def resolve_effective_category(code: str, meta: dict) -> str:
+    category = str(meta.get('category', '') or '').strip()
+    if category and category != '其他':
+        return category
+
+    name = str(meta.get('name', '') or '')
+    industry = str(meta.get('industry', '') or '')
+    text = f'{name} {industry}'.upper()
+
+    # 優先處理 ETF
+    if code.startswith('00') or 'ETF' in text:
+        return 'ETF'
+
+    rules = [
+        ('半導體', ['半導體', '晶圓', 'IC', '封測', '矽']),
+        ('金融', ['金融', '金控', '銀行', '證券', '保險']),
+        ('航運', ['航運', '海運', '貨櫃', '散裝', '航空']),
+        ('生技醫療', ['生技', '醫療', '製藥', '藥']),
+        ('綠能環保', ['綠能', '太陽能', '風電', '儲能', '環保']),
+        ('電子零組件', ['電子零組件', '連接器', '被動元件', 'PCB', '載板']),
+        ('電腦週邊', ['電腦', '伺服器', '筆電']),
+        ('通信網路', ['網通', '通信', '5G']),
+        ('光電', ['光電', '面板', 'LED', '鏡頭']),
+        ('電機', ['電機', '機械', '自動化']),
+        ('汽車', ['汽車', '車用']),
+        ('營建', ['營建', '建設', '不動產']),
+        ('食品', ['食品', '飲料']),
+        ('化工', ['化工']),
+        ('化學', ['化學']),
+        ('塑膠', ['塑膠']),
+        ('橡膠', ['橡膠']),
+        ('紡織', ['紡織', '成衣']),
+        ('造紙', ['造紙']),
+        ('觀光', ['觀光', '旅遊', '飯店', '餐飲']),
+        ('貿易百貨', ['百貨', '零售', '通路', '貿易']),
+        ('油電燃氣', ['油', '燃氣', '天然氣']),
+    ]
+    for target, keywords in rules:
+        if any(k in text for k in keywords):
+            return target
+
+    return '其他'
+
+
+def refine_categories_after_update() -> tuple[int, int]:
+    if not STOCK_DATA_WITH_CATEGORIES:
+        load_cache()
+    if not STOCK_DATA_WITH_CATEGORIES:
+        return 0, 0
+
+    changed = 0
+    total = 0
+    for code, meta in STOCK_DATA_WITH_CATEGORIES.items():
+        total += 1
+        old_category = str(meta.get('category', '') or '').strip() or '其他'
+        new_category = resolve_effective_category(code, meta)
+        if new_category != old_category:
+            meta['category'] = new_category
+            changed += 1
+
+    cache_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'stock_cache.json')
+    try:
+        with open(cache_path, 'w', encoding='utf-8') as f:
+            json.dump(STOCK_DATA_WITH_CATEGORIES, f, ensure_ascii=False, indent=2)
+    except Exception:
+        return changed, total
+    return changed, total
+
+
+def _fmt_change(change_pct: float | None) -> str:
+    if change_pct is None:
+        return 'N/A'
+    return f'{change_pct:+.2f}%'
+
+
+def render_opening_market_context() -> None:
+    st.markdown('### 🌏 開盤前 / 盤中情緒分析（夜盤 + 美股）')
+    ctx = fetch_opening_market_context()
+    if not ctx:
+        st.info('暫時無法取得夜盤 / 美股資料，請稍後重試。')
+        return
+
+    night = ctx.get('night_quote') or {}
+    twii = ctx.get('twii') or {}
+    us = ctx.get('us') or {}
+    us_avg = float(ctx.get('us_avg_change_pct') or 0.0)
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric('台股階段', str(ctx.get('phase_label') or 'N/A'))
+    c2.metric('台指夜盤', _fmt_change(night.get('change_pct')))
+    c3.metric('美股綜合', _fmt_change(us_avg))
+    c4.metric('綜合判斷', f"{ctx.get('bias', '中性')}（信心 {ctx.get('confidence', '中')}）")
+
+    st.caption(f"資料時間：{ctx.get('generated_at', 'N/A')}")
+    if night:
+        src = str(night.get('source') or 'external')
+        night_date = str(night.get('session_date') or '')
+        night_vol = night.get('night_volume')
+        extra = f' | 夜盤日期: {night_date}' if night_date else ''
+        if night_vol is not None:
+            extra += f' | 夜盤量: {int(night_vol):,}'
+        st.caption(f'夜盤來源: {src}{extra}')
+
+    us_rows = []
+    for label, key in [('S&P 500', 'spx'), ('NASDAQ', 'nasdaq'), ('道瓊', 'dow'), ('費半', 'sox')]:
+        q = us.get(key) or {}
+        if q:
+            us_rows.append(f"{label} {_fmt_change(q.get('change_pct'))}")
+    if us_rows:
+        st.write('美股指數：' + ' | '.join(us_rows))
+
+    fut_rows = []
+    for label, key in [('ES 期貨', 'es_fut'), ('NQ 期貨', 'nq_fut')]:
+        q = us.get(key) or {}
+        if q:
+            fut_rows.append(f"{label} {_fmt_change(q.get('change_pct'))}")
+    if fut_rows:
+        st.write('美股期貨：' + ' | '.join(fut_rows))
+
+    phase = str(ctx.get('phase') or '')
+    bias = str(ctx.get('bias') or '中性')
+    if phase == 'pre_open':
+        phase_text = '目前是開盤前，建議先看開盤後 15~30 分鐘是否延續夜盤與美股方向。'
+    elif phase == 'intraday':
+        phase_text = '目前是盤中，建議把夜盤/美股方向與台股即時強弱做二次確認。'
+    else:
+        phase_text = '目前是收盤後，適合做隔日盤前情境推演。'
+
+    if bias == '偏多':
+        bias_text = '短線風向偏多，優先關注高分且量能放大的強勢股。'
+    elif bias == '偏空':
+        bias_text = '短線風向偏空，建議降低追價，優先防守與風險控管。'
+    else:
+        bias_text = '短線風向中性，建議等待盤面主軸明確後再加碼。'
+    st.info(f'{phase_text} {bias_text}')
+
+    notes = ctx.get('notes') or []
+    for n in notes[:2]:
+        st.caption(f'備註：{n}')
+
+
 def build_rows(results: list[dict], min_score: int, top_n: int) -> list[dict]:
     filtered = [r for r in results if r['total_score'] >= min_score]
     filtered = sorted(filtered, key=lambda x: x['total_score'], reverse=True)[:top_n]
@@ -668,7 +830,7 @@ def render_market_board(results: list[dict]) -> None:
             st.write(f"{r['code']} {r['name']} {fmt_vol(r['volume'])}")
 
 
-def generate_ai_summary(result: dict) -> str:
+def generate_ai_summary(result: dict, market_ctx: dict | None = None, sector_ctx: dict | None = None) -> str:
     score = result.get('total_score', 0)
     change = result.get('change_pct', 0.0)
     tech = result.get('tech_score', 0)
@@ -695,11 +857,29 @@ def generate_ai_summary(result: dict) -> str:
     weak_driver = sorted(drivers, key=lambda x: x[1])[0][0]
 
     risk_text = '短線波動偏大' if abs(change) >= 5 else '波動相對可控'
-    return (
+    base = (
         f"{result['code']} {result['name']} 目前屬於「{level}」，"
         f"主要加分來源是{top_driver}，相對弱項是{weak_driver}。"
         f"當日漲跌 {change:+.2f}%（{risk_text}），建議搭配停損與倉位控管。"
     )
+    sector_line = ''
+    if sector_ctx and not sector_ctx.get('unavailable'):
+        label = str(sector_ctx.get('label') or '美股同產業')
+        symbol = str(sector_ctx.get('proxy_symbol') or '')
+        chg = sector_ctx.get('change_pct')
+        sector_line = f' 美股同產業（{label}/{symbol}）{_fmt_change(chg)}。'
+    elif sector_ctx:
+        label = str(sector_ctx.get('label') or '美股同產業')
+        sector_line = f' 美股同產業（{label}）暫無即時資料。'
+
+    if not market_ctx:
+        return f'{base}{sector_line}'
+
+    phase = str(market_ctx.get('phase_label') or '')
+    bias = str(market_ctx.get('bias') or '')
+    if phase and bias:
+        return f'{base}{sector_line} 目前{phase}市場情緒為「{bias}」，請留意整體盤勢對個股延續性的影響。'
+    return f'{base}{sector_line}'
 
 
 def render_ai_summary_card(results: list[dict]) -> None:
@@ -717,7 +897,11 @@ def render_ai_summary_card(results: list[dict]) -> None:
     if not target:
         st.info('找不到資料。')
         return
-    summary = generate_ai_summary(target)
+    summary = generate_ai_summary(
+        target,
+        market_ctx=fetch_opening_market_context(),
+        sector_ctx=fetch_us_sector_proxy(target['code']),
+    )
     st.success(summary)
     st.caption('此解讀卡為規則式自動生成，僅供研究參考。')
 
@@ -1598,7 +1782,11 @@ def main():
     if update_btn:
         with st.spinner(f'更新股票清單中（最低成交量 {min_vol} 張）...'):
             export_stock_list_to_file(min_vol)
-        st.success(f'已更新股票清單，共 {get_stock_count()} 檔。')
+            changed_count, total_count = refine_categories_after_update()
+        st.success(
+            f'已更新股票清單，共 {get_stock_count()} 檔。'
+            f' 分類修正 {changed_count}/{total_count} 檔。'
+        )
 
     if get_stock_count() == 0:
         st.warning('目前沒有股票清單，請先按「更新股票清單」。')
@@ -1703,6 +1891,7 @@ def main():
         results = st.session_state.results
         if page == '分析總覽':
             render_kpi(results)
+            render_opening_market_context()
             render_market_board(results)
             rows = render_table(results, min_score, top_n)
             render_ai_summary_card(results)

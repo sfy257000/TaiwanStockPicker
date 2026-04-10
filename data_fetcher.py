@@ -3,10 +3,11 @@
 
 import json
 import os
+import re
 import threading
 import time
 from datetime import datetime, timedelta
-from urllib.parse import urlparse
+from urllib.parse import quote, urlparse
 
 import requests
 import urllib3
@@ -345,3 +346,290 @@ class DataFetcher:
             if price_data:
                 results[code] = {'name': name, **price_data}
         return results
+
+    def _get_json(self, url: str, timeout: int = 12, use_session: bool = False) -> dict | None:
+        try:
+            self._throttle(url)
+            if use_session:
+                resp = self._mis_session.get(url, timeout=timeout, verify=False)
+            else:
+                resp = requests.get(url, headers=self.headers, timeout=timeout, verify=False)
+            return resp.json() if resp.ok else None
+        except Exception:
+            return None
+
+    def _fetch_yahoo_quote_single(self, symbol: str) -> dict | None:
+        encoded = quote(symbol, safe='')
+        url = f'https://query1.finance.yahoo.com/v7/finance/quote?symbols={encoded}'
+        payload = self._get_json(url, timeout=12)
+        if not payload:
+            return None
+        rows = payload.get('quoteResponse', {}).get('result', [])
+        if not rows:
+            return None
+
+        q = rows[0]
+        change_pct = self._safe_float(q.get('regularMarketChangePercent'))
+        price = self._safe_float(q.get('regularMarketPrice'))
+        if price <= 0:
+            return None
+        return {
+            'symbol': str(q.get('symbol') or symbol),
+            'name': str(q.get('shortName') or q.get('longName') or symbol),
+            'price': price,
+            'change_pct': change_pct,
+            'change': self._safe_float(q.get('regularMarketChange')),
+            'market_state': str(q.get('marketState') or ''),
+            'timestamp': int(q.get('regularMarketTime') or 0),
+        }
+
+    def _fetch_stooq_quote_single(self, symbol: str) -> dict | None:
+        stooq_map = {
+            '^GSPC': 'spy.us',
+            '^IXIC': 'qqq.us',
+            '^DJI': 'dia.us',
+            '^SOX': 'soxx.us',
+            'ES=F': 'spy.us',
+            'NQ=F': 'qqq.us',
+            '^TWII': None,
+        }
+        if symbol in stooq_map and stooq_map[symbol] is None:
+            return None
+        stooq_symbol = stooq_map.get(symbol, f'{symbol.lower()}.us')
+        url = f'https://stooq.com/q/l/?s={stooq_symbol}&f=sd2t2cp&h&e=csv'
+        try:
+            self._throttle(url)
+            resp = requests.get(url, headers=self.headers, timeout=12, verify=False)
+            if not resp.ok:
+                return None
+            lines = [ln.strip() for ln in resp.text.splitlines() if ln.strip()]
+            if len(lines) < 2:
+                return None
+            cols = lines[1].split(',')
+            if len(cols) < 5:
+                return None
+            close = self._safe_float(cols[3])
+            prev = self._safe_float(cols[4])
+            if close <= 0:
+                return None
+            change = close - prev
+            change_pct = (change / prev * 100.0) if prev > 0 else 0.0
+            return {
+                'symbol': symbol,
+                'name': symbol,
+                'price': close,
+                'change_pct': round(change_pct, 2),
+                'change': round(change, 2),
+                'market_state': 'CLOSED',
+                'timestamp': 0,
+                'source': 'stooq',
+            }
+        except Exception:
+            return None
+
+    def _fetch_quote_with_fallback(self, symbol: str) -> dict | None:
+        q = self._fetch_yahoo_quote_single(symbol)
+        if q:
+            q.setdefault('source', 'yahoo')
+            return q
+        return self._fetch_stooq_quote_single(symbol)
+
+    @staticmethod
+    def _extract_numeric(text: str) -> float:
+        s = str(text or '').replace(',', '').strip()
+        m = re.search(r'[-+]?\d+(?:\.\d+)?', s)
+        return float(m.group(0)) if m else 0.0
+
+    def _fetch_taifex_tx_night_quote(self, max_lookback_days: int = 7) -> dict | None:
+        for d in range(max_lookback_days + 1):
+            query_dt = datetime.now() - timedelta(days=d)
+            date_str = query_dt.strftime('%Y/%m/%d')
+            url = (
+                'https://www.taifex.com.tw/cht/3/futDailyMarketReport'
+                f'?queryType=2&marketCode=0&commodity_id=TX&queryDate={date_str}'
+            )
+            try:
+                self._throttle(url)
+                resp = requests.get(url, headers=self.headers, timeout=15, verify=False)
+                if not resp.ok:
+                    continue
+                html = resp.text
+                body_match = re.search(r'<tbody>(.*?)</tbody>', html, re.S | re.I)
+                if not body_match:
+                    continue
+                rows = re.findall(r'<tr[^>]*>(.*?)</tr>', body_match.group(1), re.S | re.I)
+                if not rows:
+                    continue
+
+                tx_row = None
+                for row_html in rows:
+                    cols = [
+                        re.sub(r'<.*?>', '', c).replace('\r', '').replace('\n', '').replace('\t', '').strip()
+                        for c in re.findall(r'<td[^>]*>(.*?)</td>', row_html, re.S | re.I)
+                    ]
+                    if len(cols) >= 10 and str(cols[0]).strip().upper() == 'TX':
+                        tx_row = cols
+                        break
+
+                if not tx_row:
+                    continue
+
+                night_vol = int(self._extract_numeric(tx_row[8]))
+                change_pct = self._extract_numeric(tx_row[7])
+                last_price = self._extract_numeric(tx_row[5])
+                if last_price <= 0:
+                    continue
+
+                return {
+                    'symbol': 'TX-NIGHT',
+                    'name': '台指期夜盤',
+                    'price': last_price,
+                    'change_pct': change_pct,
+                    'change': self._extract_numeric(tx_row[6]),
+                    'market_state': 'CLOSED',
+                    'timestamp': int(query_dt.timestamp()),
+                    'night_volume': night_vol,
+                    'session_date': query_dt.strftime('%Y-%m-%d'),
+                    'source': 'taifex',
+                }
+            except Exception:
+                continue
+        return None
+
+    @staticmethod
+    def _map_tw_category_to_us_proxy(category: str) -> tuple[str, list[str]]:
+        c = str(category or '')
+        mapping = {
+            'ETF': ('美股大盤ETF', ['SPY', 'QQQ']),
+            '半導體': ('美股半導體', ['SOXX', 'SMH']),
+            '其他電子': ('美股科技', ['XLK', 'QQQ']),
+            '電子零組件': ('美股科技硬體', ['XLK', 'SOXX']),
+            '電腦週邊': ('美股科技硬體', ['XLK', 'QQQ']),
+            '通信網路': ('美股通訊服務', ['XLC', 'QQQ']),
+            '資訊服務': ('美股軟體科技', ['XLK', 'QQQ']),
+            '電子通路': ('美股科技通路', ['XLK', 'XLY']),
+            '金融': ('美股金融', ['XLF']),
+            '航運': ('美股運輸', ['IYT']),
+            '油電燃氣': ('美股能源', ['XLE']),
+            '生技醫療': ('美股醫療', ['XLV', 'IBB']),
+            '化學': ('美股原物料', ['XLB']),
+            '化工': ('美股原物料', ['XLB']),
+            '塑膠': ('美股原物料', ['XLB']),
+            '橡膠': ('美股原物料', ['XLB']),
+            '鋼鐵': ('美股原物料', ['XLB']),
+            '電機': ('美股工業', ['XLI']),
+            '汽車': ('美股非必需消費', ['XLY']),
+            '營建': ('美股工業/房地產', ['XLI', 'XLRE']),
+            '紡織': ('美股非必需消費', ['XLY']),
+            '食品': ('美股必需消費', ['XLP']),
+            '造紙': ('美股原物料', ['XLB']),
+            '觀光': ('美股非必需消費', ['XLY']),
+            '貿易百貨': ('美股零售消費', ['XRT', 'XLY']),
+            '綠能環保': ('美股公用事業/潔能', ['XLU', 'ICLN']),
+            '水泥': ('美股原物料', ['XLB']),
+            '玻璃陶瓷': ('美股原物料', ['XLB']),
+            '電線電纜': ('美股工業', ['XLI']),
+            '運動休閒': ('美股非必需消費', ['XLY']),
+        }
+        return mapping.get(c, ('美股大盤', ['SPY', 'QQQ']))
+
+    def get_us_sector_quote_for_category(self, category: str) -> dict:
+        label, symbols = self._map_tw_category_to_us_proxy(category)
+        for sym in symbols:
+            q = self._fetch_quote_with_fallback(sym)
+            if q:
+                return {'label': label, 'category': category, 'proxy_symbol': sym, **q}
+        return {'label': label, 'category': category, 'proxy_symbol': symbols[0], 'unavailable': True}
+
+    @staticmethod
+    def _tw_market_phase(now_dt: datetime) -> tuple[str, str]:
+        hm = now_dt.hour * 60 + now_dt.minute
+        if hm < 9 * 60:
+            return 'pre_open', '開盤前'
+        if hm <= 13 * 60 + 30:
+            return 'intraday', '盤中'
+        return 'post_close', '收盤後'
+
+    @staticmethod
+    def _score_direction(change_pct: float, strong: float = 0.7, mild: float = 0.25) -> int:
+        if change_pct >= strong:
+            return 2
+        if change_pct >= mild:
+            return 1
+        if change_pct <= -strong:
+            return -2
+        if change_pct <= -mild:
+            return -1
+        return 0
+
+    def get_opening_market_context(self) -> dict:
+        now_dt = datetime.now()
+        phase, phase_label = self._tw_market_phase(now_dt)
+
+        # 台指夜盤來源：優先台期所官方頁面，失敗才改用外部代號嘗試。
+        night_quote = self._fetch_taifex_tx_night_quote(max_lookback_days=7)
+        if not night_quote:
+            night_candidates = ['WTX&', 'TXF1!', 'TX00.TW']
+            for sym in night_candidates:
+                night_quote = self._fetch_yahoo_quote_single(sym)
+                if night_quote:
+                    break
+
+        spx = self._fetch_quote_with_fallback('^GSPC')
+        nasdaq = self._fetch_quote_with_fallback('^IXIC')
+        dow = self._fetch_quote_with_fallback('^DJI')
+        sox = self._fetch_quote_with_fallback('^SOX')
+        es = self._fetch_quote_with_fallback('ES=F')
+        nq = self._fetch_quote_with_fallback('NQ=F')
+        twii = self._fetch_quote_with_fallback('^TWII')
+
+        us_major = [q for q in [spx, nasdaq, dow] if q]
+        us_futures = [q for q in [es, nq] if q]
+        us_for_avg = us_major if us_major else us_futures
+        us_avg = 0.0
+        if us_for_avg:
+            us_avg = sum(float(q.get('change_pct') or 0.0) for q in us_for_avg) / len(us_for_avg)
+
+        score = self._score_direction(us_avg, strong=0.8, mild=0.3)
+        if night_quote:
+            score += self._score_direction(float(night_quote.get('change_pct') or 0.0), strong=0.8, mild=0.3)
+        if phase == 'intraday' and twii:
+            score += self._score_direction(float(twii.get('change_pct') or 0.0), strong=0.6, mild=0.2)
+
+        if score >= 3:
+            bias = '偏多'
+        elif score <= -3:
+            bias = '偏空'
+        else:
+            bias = '中性'
+
+        confidence = '中'
+        signals = sum(1 for q in [night_quote, spx, nasdaq, dow, es, nq, twii] if q)
+        if signals >= 5:
+            confidence = '高'
+        elif signals <= 2:
+            confidence = '低'
+
+        return {
+            'generated_at': now_dt.strftime('%Y-%m-%d %H:%M:%S'),
+            'phase': phase,
+            'phase_label': phase_label,
+            'bias': bias,
+            'confidence': confidence,
+            'score': score,
+            'us_avg_change_pct': round(us_avg, 2),
+            'night_quote': night_quote,
+            'twii': twii,
+            'us': {
+                'spx': spx,
+                'nasdaq': nasdaq,
+                'dow': dow,
+                'sox': sox,
+                'es_fut': es,
+                'nq_fut': nq,
+            },
+            'notes': [
+                '夜盤優先使用台期所資料，抓不到時才改用外部代號/美股期貨代理訊號。',
+                '此模組用於盤前/盤中情境研判，不構成投資建議。',
+            ],
+        }

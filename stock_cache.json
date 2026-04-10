@@ -1,1037 +1,7 @@
 {
-  "0050": {
-    "name": "元大台灣50",
-    "category": "其他",
-    "industry": ""
-  },
-  "0052": {
-    "name": "富邦科技",
-    "category": "其他",
-    "industry": ""
-  },
-  "0055": {
-    "name": "元大MSCI金融",
-    "category": "其他",
-    "industry": ""
-  },
-  "0056": {
-    "name": "元大高股息",
-    "category": "其他",
-    "industry": ""
-  },
-  "0061": {
-    "name": "元大寶滬深",
-    "category": "其他",
-    "industry": ""
-  },
-  "006205": {
-    "name": "富邦上証",
-    "category": "其他",
-    "industry": ""
-  },
-  "006207": {
-    "name": "復華滬深",
-    "category": "其他",
-    "industry": ""
-  },
-  "006208": {
-    "name": "富邦台50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00632R": {
-    "name": "元大台灣50反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00633L": {
-    "name": "富邦上証正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00634R": {
-    "name": "富邦上証反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00635U": {
-    "name": "期元大S&P黃金",
-    "category": "其他",
-    "industry": ""
-  },
-  "00636": {
-    "name": "國泰中國A50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00637L": {
-    "name": "元大滬深300正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00638R": {
-    "name": "元大滬深300反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00639": {
-    "name": "富邦深100",
-    "category": "其他",
-    "industry": ""
-  },
-  "00640L": {
-    "name": "富邦日本正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00641R": {
-    "name": "富邦日本反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00642U": {
-    "name": "期元大S&P石油",
-    "category": "其他",
-    "industry": ""
-  },
-  "00643": {
-    "name": "群益深証中小",
-    "category": "其他",
-    "industry": ""
-  },
-  "00645": {
-    "name": "富邦日本",
-    "category": "其他",
-    "industry": ""
-  },
-  "00646": {
-    "name": "元大S&P500",
-    "category": "其他",
-    "industry": ""
-  },
-  "00647L": {
-    "name": "元大S&P500正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00648R": {
-    "name": "元大S&P500反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00650L": {
-    "name": "復華香港正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00651R": {
-    "name": "復華香港反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00652": {
-    "name": "富邦印度",
-    "category": "其他",
-    "industry": ""
-  },
-  "00653L": {
-    "name": "富邦印度正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00654R": {
-    "name": "富邦印度反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00655L": {
-    "name": "國泰中國A50正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00656R": {
-    "name": "國泰中國A50反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00661": {
-    "name": "元大日經225",
-    "category": "其他",
-    "industry": ""
-  },
-  "00662": {
-    "name": "富邦NASDAQ",
-    "category": "其他",
-    "industry": ""
-  },
-  "00663L": {
-    "name": "國泰臺灣加權正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00664R": {
-    "name": "國泰臺灣加權反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00665L": {
-    "name": "富邦恒生國企正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00666R": {
-    "name": "富邦恒生國企反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00669R": {
-    "name": "國泰美國道瓊反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00670L": {
-    "name": "富邦NASDAQ正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00671R": {
-    "name": "富邦NASDAQ反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00673R": {
-    "name": "期元大S&P原油反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00674R": {
-    "name": "期元大S&P黃金反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00675L": {
-    "name": "富邦臺灣加權正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00676R": {
-    "name": "富邦臺灣加權反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00678": {
-    "name": "群益那斯達克生技",
-    "category": "其他",
-    "industry": ""
-  },
-  "00680L": {
-    "name": "元大美債20正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00681R": {
-    "name": "元大美債20反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00683L": {
-    "name": "期元大美元指正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00685L": {
-    "name": "群益臺灣加權正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00686R": {
-    "name": "群益臺灣加權反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00688L": {
-    "name": "國泰20年美債正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00689R": {
-    "name": "國泰20年美債反1",
-    "category": "其他",
-    "industry": ""
-  },
-  "00690": {
-    "name": "兆豐藍籌30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00692": {
-    "name": "富邦公司治理",
-    "category": "其他",
-    "industry": ""
-  },
-  "00693U": {
-    "name": "期街口S&P黃豆",
-    "category": "其他",
-    "industry": ""
-  },
-  "00700": {
-    "name": "富邦恒生國企",
-    "category": "其他",
-    "industry": ""
-  },
-  "00701": {
-    "name": "國泰股利精選30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00702": {
-    "name": "國泰標普低波高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00703": {
-    "name": "台新MSCI中國",
-    "category": "其他",
-    "industry": ""
-  },
-  "00706L": {
-    "name": "期元大S&P日圓正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00708L": {
-    "name": "期元大S&P黃金正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00709": {
-    "name": "富邦歐洲",
-    "category": "其他",
-    "industry": ""
-  },
-  "00710B": {
-    "name": "復華彭博非投等債",
-    "category": "其他",
-    "industry": ""
-  },
-  "00711B": {
-    "name": "復華彭博新興債",
-    "category": "其他",
-    "industry": ""
-  },
-  "00712": {
-    "name": "復華富時不動產",
-    "category": "其他",
-    "industry": ""
-  },
-  "00713": {
-    "name": "元大台灣高息低波",
-    "category": "其他",
-    "industry": ""
-  },
-  "00714": {
-    "name": "群益道瓊美國地產",
-    "category": "其他",
-    "industry": ""
-  },
-  "00715L": {
-    "name": "期街口布蘭特正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00717": {
-    "name": "富邦美國特別股",
-    "category": "其他",
-    "industry": ""
-  },
-  "00728": {
-    "name": "第一金工業30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00730": {
-    "name": "富邦臺灣優質高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00731": {
-    "name": "復華富時高息低波",
-    "category": "其他",
-    "industry": ""
-  },
-  "00733": {
-    "name": "富邦臺灣中小",
-    "category": "其他",
-    "industry": ""
-  },
-  "00735": {
-    "name": "國泰臺韓科技",
-    "category": "其他",
-    "industry": ""
-  },
-  "00736": {
-    "name": "國泰新興市場",
-    "category": "其他",
-    "industry": ""
-  },
-  "00737": {
-    "name": "國泰AI機器人",
-    "category": "其他",
-    "industry": ""
-  },
-  "00738U": {
-    "name": "期元大道瓊白銀",
-    "category": "其他",
-    "industry": ""
-  },
-  "00752": {
-    "name": "中信中國50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00753L": {
-    "name": "中信中國50正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00757": {
-    "name": "統一FANG+",
-    "category": "其他",
-    "industry": ""
-  },
-  "00762": {
-    "name": "元大全球AI",
-    "category": "其他",
-    "industry": ""
-  },
-  "00763U": {
-    "name": "期街口道瓊銅",
-    "category": "其他",
-    "industry": ""
-  },
-  "00770": {
-    "name": "國泰北美科技",
-    "category": "其他",
-    "industry": ""
-  },
-  "00783": {
-    "name": "富邦中証500",
-    "category": "其他",
-    "industry": ""
-  },
-  "00830": {
-    "name": "國泰費城半導體",
-    "category": "其他",
-    "industry": ""
-  },
-  "00850": {
-    "name": "元大臺灣ESG永續",
-    "category": "其他",
-    "industry": ""
-  },
-  "00852L": {
-    "name": "國泰美國道瓊正2",
-    "category": "其他",
-    "industry": ""
-  },
-  "00861": {
-    "name": "元大全球未來通訊",
-    "category": "其他",
-    "industry": ""
-  },
-  "00865B": {
-    "name": "國泰US短期公債",
-    "category": "其他",
-    "industry": ""
-  },
-  "00875": {
-    "name": "國泰網路資安",
-    "category": "其他",
-    "industry": ""
-  },
-  "00876": {
-    "name": "元大全球5G",
-    "category": "其他",
-    "industry": ""
-  },
-  "00878": {
-    "name": "國泰永續高股息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00881": {
-    "name": "國泰台灣科技龍頭",
-    "category": "其他",
-    "industry": ""
-  },
-  "00882": {
-    "name": "中信中國高股息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00885": {
-    "name": "富邦越南",
-    "category": "其他",
-    "industry": ""
-  },
-  "00891": {
-    "name": "中信關鍵半導體",
-    "category": "其他",
-    "industry": ""
-  },
-  "00892": {
-    "name": "富邦台灣半導體",
-    "category": "其他",
-    "industry": ""
-  },
-  "00893": {
-    "name": "國泰智能電動車",
-    "category": "其他",
-    "industry": ""
-  },
-  "00894": {
-    "name": "中信小資高價30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00895": {
-    "name": "富邦未來車",
-    "category": "其他",
-    "industry": ""
-  },
-  "00896": {
-    "name": "中信綠能及電動車",
-    "category": "其他",
-    "industry": ""
-  },
-  "00897": {
-    "name": "富邦基因免疫生技",
-    "category": "其他",
-    "industry": ""
-  },
-  "00898": {
-    "name": "國泰基因免疫革命",
-    "category": "其他",
-    "industry": ""
-  },
-  "00900": {
-    "name": "富邦特選高股息30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00901": {
-    "name": "永豐智能車供應鏈",
-    "category": "其他",
-    "industry": ""
-  },
-  "00902": {
-    "name": "中信電池及儲能",
-    "category": "其他",
-    "industry": ""
-  },
-  "00903": {
-    "name": "富邦元宇宙",
-    "category": "其他",
-    "industry": ""
-  },
-  "00904": {
-    "name": "新光臺灣半導體30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00905": {
-    "name": "FT臺灣Smart",
-    "category": "其他",
-    "industry": ""
-  },
-  "00907": {
-    "name": "永豐優息存股",
-    "category": "其他",
-    "industry": ""
-  },
-  "00908": {
-    "name": "富邦入息REITs+",
-    "category": "其他",
-    "industry": ""
-  },
-  "00909": {
-    "name": "國泰數位支付服務",
-    "category": "其他",
-    "industry": ""
-  },
-  "00910": {
-    "name": "第一金太空衛星",
-    "category": "其他",
-    "industry": ""
-  },
-  "00911": {
-    "name": "兆豐洲際半導體",
-    "category": "其他",
-    "industry": ""
-  },
-  "00912": {
-    "name": "中信臺灣智慧50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00913": {
-    "name": "兆豐台灣晶圓製造",
-    "category": "其他",
-    "industry": ""
-  },
-  "00915": {
-    "name": "凱基優選高股息30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00916": {
-    "name": "國泰全球品牌50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00917": {
-    "name": "中信特選金融",
-    "category": "其他",
-    "industry": ""
-  },
-  "00918": {
-    "name": "大華優利高填息30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00919": {
-    "name": "群益台灣精選高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00920": {
-    "name": "富邦ESG綠色電力",
-    "category": "其他",
-    "industry": ""
-  },
-  "00921": {
-    "name": "兆豐龍頭等權重",
-    "category": "其他",
-    "industry": ""
-  },
-  "00922": {
-    "name": "國泰台灣領袖50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00923": {
-    "name": "群益台ESG低碳50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00924": {
-    "name": "復華S&P500成長",
-    "category": "其他",
-    "industry": ""
-  },
-  "00926": {
-    "name": "凱基全球菁英55",
-    "category": "其他",
-    "industry": ""
-  },
-  "00927": {
-    "name": "群益半導體收益",
-    "category": "其他",
-    "industry": ""
-  },
-  "00929": {
-    "name": "復華台灣科技優息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00930": {
-    "name": "永豐ESG低碳高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00932": {
-    "name": "兆豐永續高息等權",
-    "category": "其他",
-    "industry": ""
-  },
-  "00934": {
-    "name": "中信成長高股息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00935": {
-    "name": "野村臺灣新科技50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00936": {
-    "name": "台新永續高息中小",
-    "category": "其他",
-    "industry": ""
-  },
-  "00938": {
-    "name": "凱基優選30",
-    "category": "其他",
-    "industry": ""
-  },
-  "00939": {
-    "name": "統一台灣高息動能",
-    "category": "其他",
-    "industry": ""
-  },
-  "00940": {
-    "name": "元大台灣價值高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00941": {
-    "name": "中信上游半導體",
-    "category": "其他",
-    "industry": ""
-  },
-  "00943": {
-    "name": "兆豐電子高息等權",
-    "category": "其他",
-    "industry": ""
-  },
-  "00944": {
-    "name": "野村趨勢動能高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00945B": {
-    "name": "凱基美國非投等債",
-    "category": "其他",
-    "industry": ""
-  },
-  "00946": {
-    "name": "群益科技高息成長",
-    "category": "其他",
-    "industry": ""
-  },
-  "00947": {
-    "name": "台新臺灣IC設計",
-    "category": "其他",
-    "industry": ""
-  },
-  "00949": {
-    "name": "復華日本龍頭",
-    "category": "其他",
-    "industry": ""
-  },
-  "00951": {
-    "name": "台新日本半導體",
-    "category": "其他",
-    "industry": ""
-  },
-  "00952": {
-    "name": "凱基台灣AI50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00953B": {
-    "name": "群益優選非投等債",
-    "category": "其他",
-    "industry": ""
-  },
-  "00954": {
-    "name": "中信日本半導體",
-    "category": "其他",
-    "industry": ""
-  },
-  "00956": {
-    "name": "中信日經高股息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00960": {
-    "name": "野村全球航運龍頭",
-    "category": "其他",
-    "industry": ""
-  },
-  "00961": {
-    "name": "FT臺灣永續高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00962": {
-    "name": "台新AI優息動能",
-    "category": "其他",
-    "industry": ""
-  },
-  "00963": {
-    "name": "中信全球高股息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00964": {
-    "name": "中信亞太高股息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00965": {
-    "name": "元大航太防衛科技",
-    "category": "其他",
-    "industry": ""
-  },
-  "00971": {
-    "name": "野村美國研發龍頭",
-    "category": "其他",
-    "industry": ""
-  },
-  "00972": {
-    "name": "野村日本動能高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "009800": {
-    "name": "中信NASDAQ",
-    "category": "其他",
-    "industry": ""
-  },
-  "009801": {
-    "name": "中信美國創新科技",
-    "category": "其他",
-    "industry": ""
-  },
-  "009802": {
-    "name": "富邦旗艦50",
-    "category": "其他",
-    "industry": ""
-  },
-  "009803": {
-    "name": "保德信市值動能50",
-    "category": "其他",
-    "industry": ""
-  },
-  "009804": {
-    "name": "聯邦台精彩50",
-    "category": "其他",
-    "industry": ""
-  },
-  "009805": {
-    "name": "新光美國電力基建",
-    "category": "其他",
-    "industry": ""
-  },
-  "009808": {
-    "name": "華南永昌優選50",
-    "category": "其他",
-    "industry": ""
-  },
-  "009809": {
-    "name": "富邦淨零ESG50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00980A": {
-    "name": "主動野村臺灣優選",
-    "category": "其他",
-    "industry": ""
-  },
-  "009810": {
-    "name": "保德信全球藍籌",
-    "category": "其他",
-    "industry": ""
-  },
-  "009811": {
-    "name": "統一美國50",
-    "category": "其他",
-    "industry": ""
-  },
-  "009812": {
-    "name": "野村日本東證",
-    "category": "其他",
-    "industry": ""
-  },
-  "009813": {
-    "name": "貝萊德標普卓越50",
-    "category": "其他",
-    "industry": ""
-  },
-  "009816": {
-    "name": "凱基台灣TOP50",
-    "category": "其他",
-    "industry": ""
-  },
-  "009817": {
-    "name": "國泰日本不動產",
-    "category": "其他",
-    "industry": ""
-  },
-  "009818": {
-    "name": "華南永昌NASDAQxT",
-    "category": "其他",
-    "industry": ""
-  },
-  "00981A": {
-    "name": "主動統一台股增長",
-    "category": "其他",
-    "industry": ""
-  },
-  "00981T": {
-    "name": "平衡凱基雙核收息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00982A": {
-    "name": "主動群益台灣強棒",
-    "category": "其他",
-    "industry": ""
-  },
-  "00982D": {
-    "name": "主動富邦動態入息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00982T": {
-    "name": "平衡兆豐台美動能",
-    "category": "其他",
-    "industry": ""
-  },
-  "00983A": {
-    "name": "主動中信ARK創新",
-    "category": "其他",
-    "industry": ""
-  },
-  "00983D": {
-    "name": "主動富邦複合收益",
-    "category": "其他",
-    "industry": ""
-  },
-  "00984A": {
-    "name": "主動安聯台灣高息",
-    "category": "其他",
-    "industry": ""
-  },
-  "00984D": {
-    "name": "主動聯博全球非投",
-    "category": "其他",
-    "industry": ""
-  },
-  "00985A": {
-    "name": "主動野村台灣50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00985B": {
-    "name": "群益ESG投等債0-5",
-    "category": "其他",
-    "industry": ""
-  },
-  "00986A": {
-    "name": "主動台新龍頭成長",
-    "category": "其他",
-    "industry": ""
-  },
-  "00987A": {
-    "name": "主動台新優勢成長",
-    "category": "其他",
-    "industry": ""
-  },
-  "00988A": {
-    "name": "主動統一全球創新",
-    "category": "其他",
-    "industry": ""
-  },
-  "00989A": {
-    "name": "主動摩根美國科技",
-    "category": "其他",
-    "industry": ""
-  },
-  "00990A": {
-    "name": "主動元大AI新經濟",
-    "category": "其他",
-    "industry": ""
-  },
-  "00991A": {
-    "name": "主動復華未來50",
-    "category": "其他",
-    "industry": ""
-  },
-  "00992A": {
-    "name": "主動群益科技創新",
-    "category": "其他",
-    "industry": ""
-  },
-  "00993A": {
-    "name": "主動安聯台灣",
-    "category": "其他",
-    "industry": ""
-  },
-  "00994A": {
-    "name": "主動第一金台股優",
-    "category": "其他",
-    "industry": ""
-  },
-  "00995A": {
-    "name": "主動中信台灣卓越",
-    "category": "其他",
-    "industry": ""
-  },
-  "00996A": {
-    "name": "主動兆豐台灣豐收",
-    "category": "其他",
-    "industry": ""
-  },
-  "01009T": {
-    "name": "王道圓滿R1",
-    "category": "其他",
-    "industry": ""
-  },
-  "02001R": {
-    "name": "富邦蘋果反一N",
-    "category": "其他",
-    "industry": ""
-  },
-  "020029": {
-    "name": "元大ESG高股息N",
-    "category": "其他",
-    "industry": ""
-  },
-  "1103": {
-    "name": "嘉泥",
-    "category": "其他",
-    "industry": ""
-  },
-  "1104": {
-    "name": "環泥",
-    "category": "其他",
-    "industry": ""
-  },
-  "1108": {
-    "name": "幸福",
-    "category": "其他",
-    "industry": ""
-  },
-  "1109": {
-    "name": "信大",
-    "category": "其他",
-    "industry": ""
-  },
-  "1110": {
-    "name": "東泥",
-    "category": "其他",
-    "industry": ""
-  },
-  "1201": {
-    "name": "味全",
-    "category": "其他",
-    "industry": ""
-  },
-  "1215": {
-    "name": "卜蜂",
-    "category": "其他",
-    "industry": ""
-  },
-  "1217": {
-    "name": "愛之味",
-    "category": "其他",
-    "industry": ""
-  },
-  "1218": {
-    "name": "泰山",
-    "category": "其他",
+  "00400A": {
+    "name": "主動國泰動能高息",
+    "category": "ETF",
     "industry": ""
   },
   "1219": {
@@ -1039,113 +9,8 @@
     "category": "其他",
     "industry": ""
   },
-  "1220": {
-    "name": "台榮",
-    "category": "其他",
-    "industry": ""
-  },
-  "1225": {
-    "name": "福懋油",
-    "category": "其他",
-    "industry": ""
-  },
-  "1227": {
-    "name": "佳格",
-    "category": "其他",
-    "industry": ""
-  },
-  "1231": {
-    "name": "聯華食",
-    "category": "其他",
-    "industry": ""
-  },
-  "1234": {
-    "name": "黑松",
-    "category": "其他",
-    "industry": ""
-  },
-  "1321": {
-    "name": "大洋",
-    "category": "其他",
-    "industry": ""
-  },
-  "1323": {
-    "name": "永裕",
-    "category": "其他",
-    "industry": ""
-  },
-  "1324": {
-    "name": "地球",
-    "category": "其他",
-    "industry": ""
-  },
-  "1325": {
-    "name": "恆大",
-    "category": "其他",
-    "industry": ""
-  },
-  "1337": {
-    "name": "再生-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "1340": {
-    "name": "勝悅-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "1342": {
-    "name": "八貫",
-    "category": "其他",
-    "industry": ""
-  },
-  "1414": {
-    "name": "東和",
-    "category": "其他",
-    "industry": ""
-  },
-  "1416": {
-    "name": "廣豐",
-    "category": "其他",
-    "industry": ""
-  },
-  "1417": {
-    "name": "嘉裕",
-    "category": "其他",
-    "industry": ""
-  },
-  "1419": {
-    "name": "新紡",
-    "category": "其他",
-    "industry": ""
-  },
-  "1432": {
-    "name": "大魯閣",
-    "category": "其他",
-    "industry": ""
-  },
-  "1436": {
-    "name": "華友聯",
-    "category": "其他",
-    "industry": ""
-  },
   "1440": {
     "name": "南紡",
-    "category": "其他",
-    "industry": ""
-  },
-  "1442": {
-    "name": "名軒",
-    "category": "其他",
-    "industry": ""
-  },
-  "1444": {
-    "name": "力麗",
-    "category": "其他",
-    "industry": ""
-  },
-  "1446": {
-    "name": "宏和",
     "category": "其他",
     "industry": ""
   },
@@ -1159,108 +24,8 @@
     "category": "其他",
     "industry": ""
   },
-  "1451": {
-    "name": "年興",
-    "category": "其他",
-    "industry": ""
-  },
-  "1455": {
-    "name": "集盛",
-    "category": "其他",
-    "industry": ""
-  },
-  "1457": {
-    "name": "宜進",
-    "category": "其他",
-    "industry": ""
-  },
-  "1460": {
-    "name": "宏遠",
-    "category": "其他",
-    "industry": ""
-  },
-  "1464": {
-    "name": "得力",
-    "category": "其他",
-    "industry": ""
-  },
-  "1465": {
-    "name": "偉全",
-    "category": "其他",
-    "industry": ""
-  },
-  "1466": {
-    "name": "聚隆",
-    "category": "其他",
-    "industry": ""
-  },
-  "1467": {
-    "name": "南緯",
-    "category": "其他",
-    "industry": ""
-  },
   "1476": {
     "name": "儒鴻",
-    "category": "其他",
-    "industry": ""
-  },
-  "1506": {
-    "name": "正道",
-    "category": "其他",
-    "industry": ""
-  },
-  "1515": {
-    "name": "力山",
-    "category": "其他",
-    "industry": ""
-  },
-  "1517": {
-    "name": "利奇",
-    "category": "其他",
-    "industry": ""
-  },
-  "1522": {
-    "name": "堤維西",
-    "category": "其他",
-    "industry": ""
-  },
-  "1524": {
-    "name": "耿鼎",
-    "category": "其他",
-    "industry": ""
-  },
-  "1529": {
-    "name": "樂事綠能",
-    "category": "其他",
-    "industry": ""
-  },
-  "1532": {
-    "name": "勤美",
-    "category": "其他",
-    "industry": ""
-  },
-  "1540": {
-    "name": "喬福",
-    "category": "其他",
-    "industry": ""
-  },
-  "1563": {
-    "name": "巧新",
-    "category": "其他",
-    "industry": ""
-  },
-  "1587": {
-    "name": "吉茂",
-    "category": "其他",
-    "industry": ""
-  },
-  "1589": {
-    "name": "永冠-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "1590": {
-    "name": "亞德客-KY",
     "category": "其他",
     "industry": ""
   },
@@ -1274,66 +39,6 @@
     "category": "其他",
     "industry": ""
   },
-  "1603": {
-    "name": "華電",
-    "category": "其他",
-    "industry": ""
-  },
-  "1604": {
-    "name": "聲寶",
-    "category": "其他",
-    "industry": ""
-  },
-  "1611": {
-    "name": "中電",
-    "category": "其他",
-    "industry": ""
-  },
-  "1612": {
-    "name": "宏泰",
-    "category": "其他",
-    "industry": ""
-  },
-  "1616": {
-    "name": "億泰",
-    "category": "其他",
-    "industry": ""
-  },
-  "1618": {
-    "name": "合機",
-    "category": "其他",
-    "industry": ""
-  },
-  "1623": {
-    "name": "大東電",
-    "category": "其他",
-    "industry": ""
-  },
-  "1702": {
-    "name": "南僑",
-    "category": "其他",
-    "industry": ""
-  },
-  "1707": {
-    "name": "葡萄王",
-    "category": "其他",
-    "industry": ""
-  },
-  "1709": {
-    "name": "和益",
-    "category": "其他",
-    "industry": ""
-  },
-  "1712": {
-    "name": "興農",
-    "category": "其他",
-    "industry": ""
-  },
-  "1720": {
-    "name": "生達",
-    "category": "其他",
-    "industry": ""
-  },
   "1721": {
     "name": "三晃",
     "category": "其他",
@@ -1344,58 +49,8 @@
     "category": "其他",
     "industry": ""
   },
-  "1725": {
-    "name": "元禎",
-    "category": "其他",
-    "industry": ""
-  },
-  "1731": {
-    "name": "美吾華",
-    "category": "其他",
-    "industry": ""
-  },
-  "1732": {
-    "name": "毛寶",
-    "category": "其他",
-    "industry": ""
-  },
-  "1733": {
-    "name": "五鼎",
-    "category": "其他",
-    "industry": ""
-  },
-  "1735": {
-    "name": "日勝化",
-    "category": "其他",
-    "industry": ""
-  },
-  "1736": {
-    "name": "喬山",
-    "category": "其他",
-    "industry": ""
-  },
-  "1760": {
-    "name": "寶齡富錦",
-    "category": "其他",
-    "industry": ""
-  },
-  "1762": {
-    "name": "中化生",
-    "category": "其他",
-    "industry": ""
-  },
   "1773": {
     "name": "勝一",
-    "category": "其他",
-    "industry": ""
-  },
-  "1776": {
-    "name": "展宇",
-    "category": "其他",
-    "industry": ""
-  },
-  "1786": {
-    "name": "科妍",
     "category": "其他",
     "industry": ""
   },
@@ -1404,23 +59,8 @@
     "category": "其他",
     "industry": ""
   },
-  "1806": {
-    "name": "冠軍",
-    "category": "其他",
-    "industry": ""
-  },
   "1808": {
     "name": "潤隆",
-    "category": "其他",
-    "industry": ""
-  },
-  "1810": {
-    "name": "和成",
-    "category": "其他",
-    "industry": ""
-  },
-  "1903": {
-    "name": "士紙",
     "category": "其他",
     "industry": ""
   },
@@ -1429,113 +69,8 @@
     "category": "其他",
     "industry": ""
   },
-  "1906": {
-    "name": "寶隆",
-    "category": "其他",
-    "industry": ""
-  },
-  "1907": {
-    "name": "永豐餘",
-    "category": "其他",
-    "industry": ""
-  },
-  "2007": {
-    "name": "燁興",
-    "category": "其他",
-    "industry": ""
-  },
-  "2013": {
-    "name": "中鋼構",
-    "category": "其他",
-    "industry": ""
-  },
-  "2015": {
-    "name": "豐興",
-    "category": "其他",
-    "industry": ""
-  },
-  "2020": {
-    "name": "美亞",
-    "category": "其他",
-    "industry": ""
-  },
-  "2022": {
-    "name": "聚亨",
-    "category": "其他",
-    "industry": ""
-  },
-  "2025": {
-    "name": "千興",
-    "category": "其他",
-    "industry": ""
-  },
-  "2028": {
-    "name": "威致",
-    "category": "其他",
-    "industry": ""
-  },
-  "2029": {
-    "name": "盛餘",
-    "category": "其他",
-    "industry": ""
-  },
-  "2030": {
-    "name": "彰源",
-    "category": "其他",
-    "industry": ""
-  },
-  "2031": {
-    "name": "新光鋼",
-    "category": "其他",
-    "industry": ""
-  },
-  "2032": {
-    "name": "新鋼",
-    "category": "其他",
-    "industry": ""
-  },
-  "2038": {
-    "name": "海光",
-    "category": "其他",
-    "industry": ""
-  },
-  "2059": {
-    "name": "川湖",
-    "category": "其他",
-    "industry": ""
-  },
-  "2062": {
-    "name": "橋椿",
-    "category": "其他",
-    "industry": ""
-  },
-  "2069": {
-    "name": "運錩",
-    "category": "其他",
-    "industry": ""
-  },
-  "2072": {
-    "name": "世紀風電",
-    "category": "其他",
-    "industry": ""
-  },
-  "2102": {
-    "name": "泰豐",
-    "category": "其他",
-    "industry": ""
-  },
-  "2107": {
-    "name": "厚生",
-    "category": "其他",
-    "industry": ""
-  },
   "2108": {
     "name": "南帝",
-    "category": "其他",
-    "industry": ""
-  },
-  "2109": {
-    "name": "華豐",
     "category": "其他",
     "industry": ""
   },
@@ -1544,63 +79,8 @@
     "category": "其他",
     "industry": ""
   },
-  "2206": {
-    "name": "三陽工業",
-    "category": "其他",
-    "industry": ""
-  },
-  "2207": {
-    "name": "和泰車",
-    "category": "其他",
-    "industry": ""
-  },
-  "2211": {
-    "name": "長榮鋼",
-    "category": "其他",
-    "industry": ""
-  },
-  "2228": {
-    "name": "劍麟",
-    "category": "其他",
-    "industry": ""
-  },
-  "2231": {
-    "name": "為升",
-    "category": "其他",
-    "industry": ""
-  },
-  "2233": {
-    "name": "宇隆",
-    "category": "其他",
-    "industry": ""
-  },
-  "2236": {
-    "name": "百達-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "2241": {
-    "name": "艾姆勒",
-    "category": "其他",
-    "industry": ""
-  },
   "2243": {
     "name": "宏旭-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "2250": {
-    "name": "IKKA-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "2258": {
-    "name": "鴻華先進-創",
-    "category": "其他",
-    "industry": ""
-  },
-  "2302": {
-    "name": "麗正",
     "category": "其他",
     "industry": ""
   },
@@ -1609,38 +89,8 @@
     "category": "其他",
     "industry": ""
   },
-  "2314": {
-    "name": "台揚",
-    "category": "其他",
-    "industry": ""
-  },
-  "2342": {
-    "name": "茂矽",
-    "category": "其他",
-    "industry": ""
-  },
-  "2348": {
-    "name": "海悅",
-    "category": "其他",
-    "industry": ""
-  },
   "2359": {
     "name": "所羅門",
-    "category": "其他",
-    "industry": ""
-  },
-  "2362": {
-    "name": "藍天",
-    "category": "其他",
-    "industry": ""
-  },
-  "2380": {
-    "name": "虹光",
-    "category": "其他",
-    "industry": ""
-  },
-  "2390": {
-    "name": "云辰",
     "category": "其他",
     "industry": ""
   },
@@ -1649,38 +99,8 @@
     "category": "其他",
     "industry": ""
   },
-  "2414": {
-    "name": "精技",
-    "category": "其他",
-    "industry": ""
-  },
-  "2415": {
-    "name": "錩新",
-    "category": "其他",
-    "industry": ""
-  },
   "2417": {
     "name": "圓剛",
-    "category": "其他",
-    "industry": ""
-  },
-  "2420": {
-    "name": "新巨",
-    "category": "其他",
-    "industry": ""
-  },
-  "2424": {
-    "name": "隴華",
-    "category": "其他",
-    "industry": ""
-  },
-  "2425": {
-    "name": "承啟",
-    "category": "其他",
-    "industry": ""
-  },
-  "2427": {
-    "name": "三商電",
     "category": "其他",
     "industry": ""
   },
@@ -1689,48 +109,13 @@
     "category": "其他",
     "industry": ""
   },
-  "2429": {
-    "name": "銘旺科",
-    "category": "其他",
-    "industry": ""
-  },
-  "2431": {
-    "name": "聯昌",
-    "category": "其他",
-    "industry": ""
-  },
-  "2438": {
-    "name": "翔耀",
-    "category": "其他",
-    "industry": ""
-  },
   "2439": {
     "name": "美律",
     "category": "其他",
     "industry": ""
   },
-  "2440": {
-    "name": "太空梭",
-    "category": "其他",
-    "industry": ""
-  },
-  "2444": {
-    "name": "兆勁",
-    "category": "其他",
-    "industry": ""
-  },
-  "2453": {
-    "name": "凌群",
-    "category": "其他",
-    "industry": ""
-  },
   "2460": {
     "name": "建通",
-    "category": "其他",
-    "industry": ""
-  },
-  "2462": {
-    "name": "良得電",
     "category": "其他",
     "industry": ""
   },
@@ -1744,33 +129,8 @@
     "category": "其他",
     "industry": ""
   },
-  "2468": {
-    "name": "華經",
-    "category": "其他",
-    "industry": ""
-  },
-  "2471": {
-    "name": "資通",
-    "category": "其他",
-    "industry": ""
-  },
   "2476": {
     "name": "鉅祥",
-    "category": "其他",
-    "industry": ""
-  },
-  "2477": {
-    "name": "美隆電",
-    "category": "其他",
-    "industry": ""
-  },
-  "2480": {
-    "name": "敦陽科",
-    "category": "其他",
-    "industry": ""
-  },
-  "2482": {
-    "name": "連宇",
     "category": "其他",
     "industry": ""
   },
@@ -1779,238 +139,13 @@
     "category": "其他",
     "industry": ""
   },
-  "2491": {
-    "name": "吉祥全",
-    "category": "其他",
-    "industry": ""
-  },
-  "2497": {
-    "name": "怡利電",
-    "category": "其他",
-    "industry": ""
-  },
-  "2505": {
-    "name": "國揚",
-    "category": "其他",
-    "industry": ""
-  },
-  "2506": {
-    "name": "太設",
-    "category": "其他",
-    "industry": ""
-  },
-  "2509": {
-    "name": "全坤建",
-    "category": "其他",
-    "industry": ""
-  },
-  "2511": {
-    "name": "太子",
-    "category": "其他",
-    "industry": ""
-  },
-  "2514": {
-    "name": "龍邦",
-    "category": "其他",
-    "industry": ""
-  },
-  "2516": {
-    "name": "新建",
-    "category": "其他",
-    "industry": ""
-  },
-  "2527": {
-    "name": "宏璟",
-    "category": "其他",
-    "industry": ""
-  },
-  "2528": {
-    "name": "皇普",
-    "category": "其他",
-    "industry": ""
-  },
-  "2530": {
-    "name": "華建",
-    "category": "其他",
-    "industry": ""
-  },
-  "2534": {
-    "name": "宏盛",
-    "category": "其他",
-    "industry": ""
-  },
   "2535": {
     "name": "達欣工",
     "category": "其他",
     "industry": ""
   },
-  "2536": {
-    "name": "宏普",
-    "category": "其他",
-    "industry": ""
-  },
-  "2537": {
-    "name": "聯上發",
-    "category": "其他",
-    "industry": ""
-  },
-  "2538": {
-    "name": "基泰",
-    "category": "其他",
-    "industry": ""
-  },
-  "2539": {
-    "name": "櫻花建",
-    "category": "其他",
-    "industry": ""
-  },
-  "2540": {
-    "name": "愛山林",
-    "category": "其他",
-    "industry": ""
-  },
-  "2545": {
-    "name": "皇翔",
-    "category": "其他",
-    "industry": ""
-  },
-  "2546": {
-    "name": "根基",
-    "category": "其他",
-    "industry": ""
-  },
-  "2597": {
-    "name": "潤弘",
-    "category": "其他",
-    "industry": ""
-  },
-  "2607": {
-    "name": "榮運",
-    "category": "其他",
-    "industry": ""
-  },
-  "2608": {
-    "name": "嘉里大榮",
-    "category": "其他",
-    "industry": ""
-  },
-  "2611": {
-    "name": "志信",
-    "category": "其他",
-    "industry": ""
-  },
-  "2612": {
-    "name": "中航",
-    "category": "其他",
-    "industry": ""
-  },
-  "2613": {
-    "name": "中櫃",
-    "category": "其他",
-    "industry": ""
-  },
-  "2614": {
-    "name": "東森",
-    "category": "其他",
-    "industry": ""
-  },
-  "2616": {
-    "name": "山隆",
-    "category": "其他",
-    "industry": ""
-  },
-  "2617": {
-    "name": "台航",
-    "category": "其他",
-    "industry": ""
-  },
-  "2636": {
-    "name": "台驊控股",
-    "category": "其他",
-    "industry": ""
-  },
-  "2704": {
-    "name": "國賓",
-    "category": "其他",
-    "industry": ""
-  },
-  "2705": {
-    "name": "六福",
-    "category": "其他",
-    "industry": ""
-  },
-  "2707": {
-    "name": "晶華",
-    "category": "其他",
-    "industry": ""
-  },
-  "2723": {
-    "name": "美食-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "2727": {
-    "name": "王品",
-    "category": "其他",
-    "industry": ""
-  },
-  "2748": {
-    "name": "雲品",
-    "category": "其他",
-    "industry": ""
-  },
-  "2753": {
-    "name": "八方雲集",
-    "category": "其他",
-    "industry": ""
-  },
-  "2816": {
-    "name": "旺旺保",
-    "category": "其他",
-    "industry": ""
-  },
-  "2820": {
-    "name": "華票",
-    "category": "其他",
-    "industry": ""
-  },
-  "2832": {
-    "name": "台產",
-    "category": "其他",
-    "industry": ""
-  },
-  "2849": {
-    "name": "安泰銀",
-    "category": "其他",
-    "industry": ""
-  },
-  "2850": {
-    "name": "新產",
-    "category": "其他",
-    "industry": ""
-  },
-  "2852": {
-    "name": "第一保",
-    "category": "其他",
-    "industry": ""
-  },
-  "2881B": {
-    "name": "富邦金乙特",
-    "category": "其他",
-    "industry": ""
-  },
-  "2881C": {
-    "name": "富邦金丙特",
-    "category": "其他",
-    "industry": ""
-  },
   "2883B": {
     "name": "凱基金乙特",
-    "category": "其他",
-    "industry": ""
-  },
-  "2887G": {
-    "name": "台新新光庚特一",
     "category": "其他",
     "industry": ""
   },
@@ -2024,43 +159,8 @@
     "category": "其他",
     "industry": ""
   },
-  "2905": {
-    "name": "三商",
-    "category": "其他",
-    "industry": ""
-  },
-  "2908": {
-    "name": "特力",
-    "category": "其他",
-    "industry": ""
-  },
-  "2923": {
-    "name": "鼎固-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "2929": {
-    "name": "淘帝-KY",
-    "category": "其他",
-    "industry": ""
-  },
   "3002": {
     "name": "歐格",
-    "category": "其他",
-    "industry": ""
-  },
-  "3003": {
-    "name": "健和興",
-    "category": "其他",
-    "industry": ""
-  },
-  "3004": {
-    "name": "豐達科",
-    "category": "其他",
-    "industry": ""
-  },
-  "3008": {
-    "name": "大立光",
     "category": "其他",
     "industry": ""
   },
@@ -2074,28 +174,8 @@
     "category": "其他",
     "industry": ""
   },
-  "3014": {
-    "name": "聯陽",
-    "category": "其他",
-    "industry": ""
-  },
-  "3015": {
-    "name": "全漢",
-    "category": "其他",
-    "industry": ""
-  },
-  "3022": {
-    "name": "威強電",
-    "category": "其他",
-    "industry": ""
-  },
   "3023": {
     "name": "信邦",
-    "category": "其他",
-    "industry": ""
-  },
-  "3024": {
-    "name": "憶聲",
     "category": "其他",
     "industry": ""
   },
@@ -2104,33 +184,8 @@
     "category": "其他",
     "industry": ""
   },
-  "3027": {
-    "name": "盛達",
-    "category": "其他",
-    "industry": ""
-  },
   "3031": {
     "name": "佰鴻",
-    "category": "其他",
-    "industry": ""
-  },
-  "3032": {
-    "name": "偉訓",
-    "category": "其他",
-    "industry": ""
-  },
-  "3038": {
-    "name": "全台",
-    "category": "其他",
-    "industry": ""
-  },
-  "3040": {
-    "name": "遠見",
-    "category": "其他",
-    "industry": ""
-  },
-  "3041": {
-    "name": "揚智",
     "category": "其他",
     "industry": ""
   },
@@ -2139,38 +194,8 @@
     "category": "其他",
     "industry": ""
   },
-  "3047": {
-    "name": "訊舟",
-    "category": "其他",
-    "industry": ""
-  },
-  "3050": {
-    "name": "鈺德",
-    "category": "其他",
-    "industry": ""
-  },
-  "3051": {
-    "name": "力特",
-    "category": "其他",
-    "industry": ""
-  },
   "3052": {
     "name": "夆典",
-    "category": "其他",
-    "industry": ""
-  },
-  "3054": {
-    "name": "立萬利",
-    "category": "其他",
-    "industry": ""
-  },
-  "3055": {
-    "name": "蔚華科",
-    "category": "其他",
-    "industry": ""
-  },
-  "3057": {
-    "name": "喬鼎",
     "category": "其他",
     "industry": ""
   },
@@ -2179,78 +204,8 @@
     "category": "其他",
     "industry": ""
   },
-  "3092": {
-    "name": "鴻碩",
-    "category": "其他",
-    "industry": ""
-  },
-  "3094": {
-    "name": "聯傑",
-    "category": "其他",
-    "industry": ""
-  },
   "3209": {
     "name": "全科",
-    "category": "其他",
-    "industry": ""
-  },
-  "3229": {
-    "name": "晟鈦",
-    "category": "其他",
-    "industry": ""
-  },
-  "3257": {
-    "name": "虹冠電",
-    "category": "其他",
-    "industry": ""
-  },
-  "3308": {
-    "name": "聯德",
-    "category": "其他",
-    "industry": ""
-  },
-  "3311": {
-    "name": "閎暉",
-    "category": "其他",
-    "industry": ""
-  },
-  "3312": {
-    "name": "弘憶股",
-    "category": "其他",
-    "industry": ""
-  },
-  "3321": {
-    "name": "同泰",
-    "category": "其他",
-    "industry": ""
-  },
-  "3338": {
-    "name": "泰碩",
-    "category": "其他",
-    "industry": ""
-  },
-  "3346": {
-    "name": "麗清",
-    "category": "其他",
-    "industry": ""
-  },
-  "3356": {
-    "name": "奇偶",
-    "category": "其他",
-    "industry": ""
-  },
-  "3406": {
-    "name": "玉晶光",
-    "category": "其他",
-    "industry": ""
-  },
-  "3416": {
-    "name": "融程電",
-    "category": "其他",
-    "industry": ""
-  },
-  "3419": {
-    "name": "譁裕",
     "category": "其他",
     "industry": ""
   },
@@ -2259,68 +214,8 @@
     "category": "其他",
     "industry": ""
   },
-  "3447": {
-    "name": "展達",
-    "category": "其他",
-    "industry": ""
-  },
-  "3494": {
-    "name": "誠研",
-    "category": "其他",
-    "industry": ""
-  },
-  "3501": {
-    "name": "維熹",
-    "category": "其他",
-    "industry": ""
-  },
-  "3504": {
-    "name": "揚明光",
-    "category": "其他",
-    "industry": ""
-  },
-  "3515": {
-    "name": "華擎",
-    "category": "其他",
-    "industry": ""
-  },
-  "3518": {
-    "name": "柏騰",
-    "category": "其他",
-    "industry": ""
-  },
-  "3530": {
-    "name": "晶相光",
-    "category": "其他",
-    "industry": ""
-  },
-  "3588": {
-    "name": "通嘉",
-    "category": "其他",
-    "industry": ""
-  },
   "3591": {
     "name": "艾笛森",
-    "category": "其他",
-    "industry": ""
-  },
-  "3592": {
-    "name": "瑞鼎",
-    "category": "其他",
-    "industry": ""
-  },
-  "3607": {
-    "name": "谷崧",
-    "category": "其他",
-    "industry": ""
-  },
-  "3617": {
-    "name": "碩天",
-    "category": "其他",
-    "industry": ""
-  },
-  "3622": {
-    "name": "洋華",
     "category": "其他",
     "industry": ""
   },
@@ -2329,33 +224,8 @@
     "category": "其他",
     "industry": ""
   },
-  "3686": {
-    "name": "達能",
-    "category": "其他",
-    "industry": ""
-  },
-  "3694": {
-    "name": "海華",
-    "category": "其他",
-    "industry": ""
-  },
-  "3703": {
-    "name": "欣陸",
-    "category": "其他",
-    "industry": ""
-  },
-  "3705": {
-    "name": "永信",
-    "category": "其他",
-    "industry": ""
-  },
   "3712": {
     "name": "永崴投控",
-    "category": "其他",
-    "industry": ""
-  },
-  "3716": {
-    "name": "中化控股",
     "category": "其他",
     "industry": ""
   },
@@ -2364,83 +234,8 @@
     "category": "其他",
     "industry": ""
   },
-  "4104": {
-    "name": "佳醫",
-    "category": "其他",
-    "industry": ""
-  },
-  "4108": {
-    "name": "懷特",
-    "category": "其他",
-    "industry": ""
-  },
-  "4119": {
-    "name": "旭富",
-    "category": "其他",
-    "industry": ""
-  },
-  "4137": {
-    "name": "麗豐-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "4148": {
-    "name": "全宇生技-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "4155": {
-    "name": "訊映",
-    "category": "其他",
-    "industry": ""
-  },
-  "4164": {
-    "name": "承業醫",
-    "category": "其他",
-    "industry": ""
-  },
-  "4306": {
-    "name": "炎洲",
-    "category": "其他",
-    "industry": ""
-  },
-  "4414": {
-    "name": "如興",
-    "category": "其他",
-    "industry": ""
-  },
-  "4441": {
-    "name": "振大環球",
-    "category": "其他",
-    "industry": ""
-  },
-  "4536": {
-    "name": "拓凱",
-    "category": "其他",
-    "industry": ""
-  },
-  "4540": {
-    "name": "全球傳動",
-    "category": "其他",
-    "industry": ""
-  },
-  "4551": {
-    "name": "智伸科",
-    "category": "其他",
-    "industry": ""
-  },
-  "4552": {
-    "name": "力達-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "4560": {
-    "name": "強信-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "4562": {
-    "name": "穎漢",
+  "4169": {
+    "name": "泰宗",
     "category": "其他",
     "industry": ""
   },
@@ -2454,38 +249,8 @@
     "category": "其他",
     "industry": ""
   },
-  "4569": {
-    "name": "六方科-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "4571": {
-    "name": "鈞興-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "4583": {
-    "name": "台灣精銳",
-    "category": "其他",
-    "industry": ""
-  },
-  "4585": {
-    "name": "達明",
-    "category": "其他",
-    "industry": ""
-  },
-  "4588": {
-    "name": "玖鼎電力",
-    "category": "其他",
-    "industry": ""
-  },
   "4722": {
     "name": "國精化",
-    "category": "其他",
-    "industry": ""
-  },
-  "4737": {
-    "name": "華廣",
     "category": "其他",
     "industry": ""
   },
@@ -2494,78 +259,13 @@
     "category": "其他",
     "industry": ""
   },
-  "4755": {
-    "name": "三福化",
-    "category": "其他",
-    "industry": ""
-  },
-  "4766": {
-    "name": "南寶",
-    "category": "其他",
-    "industry": ""
-  },
-  "4770": {
-    "name": "上品",
-    "category": "其他",
-    "industry": ""
-  },
-  "4771": {
-    "name": "望隼",
-    "category": "其他",
-    "industry": ""
-  },
-  "4807": {
-    "name": "日成-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "4912": {
-    "name": "聯德控股-KY",
-    "category": "其他",
-    "industry": ""
-  },
   "4915": {
     "name": "致伸",
     "category": "其他",
     "industry": ""
   },
-  "4952": {
-    "name": "凌通",
-    "category": "其他",
-    "industry": ""
-  },
   "4961": {
     "name": "天鈺",
-    "category": "其他",
-    "industry": ""
-  },
-  "4968": {
-    "name": "立積",
-    "category": "其他",
-    "industry": ""
-  },
-  "4976": {
-    "name": "佳凌",
-    "category": "其他",
-    "industry": ""
-  },
-  "5007": {
-    "name": "三星",
-    "category": "其他",
-    "industry": ""
-  },
-  "5203": {
-    "name": "訊連",
-    "category": "其他",
-    "industry": ""
-  },
-  "5222": {
-    "name": "全訊",
-    "category": "其他",
-    "industry": ""
-  },
-  "5225": {
-    "name": "東科-KY",
     "category": "其他",
     "industry": ""
   },
@@ -2579,103 +279,13 @@
     "category": "其他",
     "industry": ""
   },
-  "5258": {
-    "name": "虹堡",
-    "category": "其他",
-    "industry": ""
-  },
-  "5269": {
-    "name": "祥碩",
-    "category": "其他",
-    "industry": ""
-  },
-  "5283": {
-    "name": "禾聯碩",
-    "category": "其他",
-    "industry": ""
-  },
   "5284": {
     "name": "jpp-KY",
     "category": "其他",
     "industry": "20"
   },
-  "5285": {
-    "name": "界霖",
-    "category": "其他",
-    "industry": ""
-  },
-  "5288": {
-    "name": "豐祥-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "5292": {
-    "name": "華懋",
-    "category": "其他",
-    "industry": ""
-  },
-  "5306": {
-    "name": "桂盟",
-    "category": "其他",
-    "industry": ""
-  },
-  "5434": {
-    "name": "崇越",
-    "category": "其他",
-    "industry": ""
-  },
-  "5471": {
-    "name": "松翰",
-    "category": "其他",
-    "industry": ""
-  },
-  "5484": {
-    "name": "慧友",
-    "category": "其他",
-    "industry": ""
-  },
-  "5515": {
-    "name": "建國",
-    "category": "其他",
-    "industry": ""
-  },
-  "5519": {
-    "name": "隆大",
-    "category": "其他",
-    "industry": ""
-  },
-  "5522": {
-    "name": "遠雄",
-    "category": "其他",
-    "industry": ""
-  },
-  "5531": {
-    "name": "鄉林",
-    "category": "其他",
-    "industry": ""
-  },
-  "5533": {
-    "name": "皇鼎",
-    "category": "其他",
-    "industry": ""
-  },
   "5534": {
     "name": "長虹",
-    "category": "其他",
-    "industry": ""
-  },
-  "5607": {
-    "name": "遠雄港",
-    "category": "其他",
-    "industry": ""
-  },
-  "5608": {
-    "name": "四維航",
-    "category": "其他",
-    "industry": ""
-  },
-  "5706": {
-    "name": "鳳凰",
     "category": "其他",
     "industry": ""
   },
@@ -2684,93 +294,8 @@
     "category": "其他",
     "industry": "20"
   },
-  "5871A": {
-    "name": "中租-KY甲特",
-    "category": "其他",
-    "industry": ""
-  },
-  "5907": {
-    "name": "大洋-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6024": {
-    "name": "群益期",
-    "category": "其他",
-    "industry": ""
-  },
-  "6108": {
-    "name": "競國",
-    "category": "其他",
-    "industry": ""
-  },
-  "6112": {
-    "name": "邁達特",
-    "category": "其他",
-    "industry": ""
-  },
-  "6115": {
-    "name": "鎰勝",
-    "category": "其他",
-    "industry": ""
-  },
-  "6117": {
-    "name": "迎廣",
-    "category": "其他",
-    "industry": ""
-  },
-  "6128": {
-    "name": "上福",
-    "category": "其他",
-    "industry": ""
-  },
-  "6136": {
-    "name": "富爾特",
-    "category": "其他",
-    "industry": ""
-  },
   "6141": {
     "name": "柏承",
-    "category": "其他",
-    "industry": ""
-  },
-  "6142": {
-    "name": "友勁",
-    "category": "其他",
-    "industry": ""
-  },
-  "6155": {
-    "name": "鈞寶",
-    "category": "其他",
-    "industry": ""
-  },
-  "6164": {
-    "name": "華興",
-    "category": "其他",
-    "industry": ""
-  },
-  "6165": {
-    "name": "浪凡",
-    "category": "其他",
-    "industry": ""
-  },
-  "6166": {
-    "name": "凌華",
-    "category": "其他",
-    "industry": ""
-  },
-  "6177": {
-    "name": "達麗",
-    "category": "其他",
-    "industry": ""
-  },
-  "6189": {
-    "name": "豐藝",
-    "category": "其他",
-    "industry": ""
-  },
-  "6192": {
-    "name": "巨路",
     "category": "其他",
     "industry": ""
   },
@@ -2794,33 +319,8 @@
     "category": "其他",
     "industry": ""
   },
-  "6216": {
-    "name": "居易",
-    "category": "其他",
-    "industry": ""
-  },
   "6226": {
     "name": "光鼎",
-    "category": "其他",
-    "industry": ""
-  },
-  "6230": {
-    "name": "尼得科超眾",
-    "category": "其他",
-    "industry": ""
-  },
-  "6243": {
-    "name": "迅杰",
-    "category": "其他",
-    "industry": ""
-  },
-  "6272": {
-    "name": "驊陞",
-    "category": "其他",
-    "industry": ""
-  },
-  "6277": {
-    "name": "宏正",
     "category": "其他",
     "industry": ""
   },
@@ -2834,33 +334,8 @@
     "category": "其他",
     "industry": ""
   },
-  "6409": {
-    "name": "旭隼",
-    "category": "其他",
-    "industry": ""
-  },
-  "6414": {
-    "name": "樺漢",
-    "category": "其他",
-    "industry": ""
-  },
-  "6416": {
-    "name": "瑞祺電通",
-    "category": "其他",
-    "industry": ""
-  },
   "6426": {
     "name": "統新",
-    "category": "其他",
-    "industry": ""
-  },
-  "6431": {
-    "name": "光麗-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6449": {
-    "name": "鈺邦",
     "category": "其他",
     "industry": ""
   },
@@ -2869,103 +344,8 @@
     "category": "其他",
     "industry": ""
   },
-  "6477": {
-    "name": "安集",
-    "category": "其他",
-    "industry": ""
-  },
-  "6491": {
-    "name": "晶碩",
-    "category": "其他",
-    "industry": ""
-  },
-  "6515": {
-    "name": "穎崴",
-    "category": "其他",
-    "industry": ""
-  },
-  "6525": {
-    "name": "捷敏-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6526": {
-    "name": "達發",
-    "category": "其他",
-    "industry": ""
-  },
-  "6533": {
-    "name": "晶心科",
-    "category": "其他",
-    "industry": ""
-  },
   "6541": {
     "name": "泰福-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6550": {
-    "name": "北極星藥業-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6552": {
-    "name": "易華電",
-    "category": "其他",
-    "industry": ""
-  },
-  "6558": {
-    "name": "興能高",
-    "category": "其他",
-    "industry": ""
-  },
-  "6573": {
-    "name": "虹揚-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6579": {
-    "name": "研揚",
-    "category": "其他",
-    "industry": ""
-  },
-  "6582": {
-    "name": "申豐",
-    "category": "其他",
-    "industry": ""
-  },
-  "6585": {
-    "name": "鼎基",
-    "category": "其他",
-    "industry": ""
-  },
-  "6589": {
-    "name": "台康生技",
-    "category": "其他",
-    "industry": ""
-  },
-  "6591": {
-    "name": "動力-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6592": {
-    "name": "和潤企業",
-    "category": "其他",
-    "industry": ""
-  },
-  "6605": {
-    "name": "帝寶",
-    "category": "其他",
-    "industry": ""
-  },
-  "6625": {
-    "name": "必應",
-    "category": "其他",
-    "industry": ""
-  },
-  "6657": {
-    "name": "華安",
     "category": "其他",
     "industry": ""
   },
@@ -2974,63 +354,8 @@
     "category": "其他",
     "industry": ""
   },
-  "6668": {
-    "name": "中揚光",
-    "category": "其他",
-    "industry": ""
-  },
-  "6670": {
-    "name": "復盛應用",
-    "category": "其他",
-    "industry": ""
-  },
-  "6689": {
-    "name": "伊雲谷",
-    "category": "其他",
-    "industry": ""
-  },
-  "6691": {
-    "name": "洋基工程",
-    "category": "其他",
-    "industry": ""
-  },
-  "6695": {
-    "name": "芯鼎",
-    "category": "其他",
-    "industry": ""
-  },
-  "6698": {
-    "name": "旭暉應材",
-    "category": "其他",
-    "industry": ""
-  },
   "6715": {
     "name": "嘉基",
-    "category": "其他",
-    "industry": ""
-  },
-  "6719": {
-    "name": "力智",
-    "category": "其他",
-    "industry": ""
-  },
-  "6722": {
-    "name": "輝創",
-    "category": "其他",
-    "industry": ""
-  },
-  "6742": {
-    "name": "澤米",
-    "category": "其他",
-    "industry": ""
-  },
-  "6743": {
-    "name": "安普新",
-    "category": "其他",
-    "industry": ""
-  },
-  "6756": {
-    "name": "威鋒電子",
     "category": "其他",
     "industry": ""
   },
@@ -3039,73 +364,8 @@
     "category": "其他",
     "industry": ""
   },
-  "6771": {
-    "name": "平和環保-創",
-    "category": "其他",
-    "industry": ""
-  },
-  "6776": {
-    "name": "展碁國際",
-    "category": "其他",
-    "industry": ""
-  },
-  "6782": {
-    "name": "視陽",
-    "category": "其他",
-    "industry": ""
-  },
-  "6790": {
-    "name": "永豐實",
-    "category": "其他",
-    "industry": ""
-  },
   "6806": {
     "name": "森崴能源",
-    "category": "其他",
-    "industry": ""
-  },
-  "6834": {
-    "name": "天二科技",
-    "category": "其他",
-    "industry": ""
-  },
-  "6835": {
-    "name": "圓裕",
-    "category": "其他",
-    "industry": ""
-  },
-  "6838": {
-    "name": "台新藥",
-    "category": "其他",
-    "industry": ""
-  },
-  "6854": {
-    "name": "錼創科技-KY創",
-    "category": "其他",
-    "industry": ""
-  },
-  "6861": {
-    "name": "睿生光電",
-    "category": "其他",
-    "industry": ""
-  },
-  "6862": {
-    "name": "三集瑞-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "6869": {
-    "name": "雲豹能源",
-    "category": "其他",
-    "industry": ""
-  },
-  "6873": {
-    "name": "泓德能源",
-    "category": "其他",
-    "industry": ""
-  },
-  "6885": {
-    "name": "全福生技",
     "category": "其他",
     "industry": ""
   },
@@ -3114,28 +374,8 @@
     "category": "其他",
     "industry": ""
   },
-  "6901": {
-    "name": "鑽石投資",
-    "category": "其他",
-    "industry": ""
-  },
-  "6908": {
-    "name": "宏碁遊戲-創",
-    "category": "其他",
-    "industry": ""
-  },
   "6909": {
     "name": "創控",
-    "category": "其他",
-    "industry": ""
-  },
-  "6914": {
-    "name": "阜爾運通",
-    "category": "其他",
-    "industry": ""
-  },
-  "6923": {
-    "name": "中台",
     "category": "其他",
     "industry": ""
   },
@@ -3146,11 +386,6 @@
   },
   "6944": {
     "name": "兆聯實業",
-    "category": "其他",
-    "industry": ""
-  },
-  "6994": {
-    "name": "富威電力",
     "category": "其他",
     "industry": ""
   },
@@ -3169,68 +404,8 @@
     "category": "其他",
     "industry": ""
   },
-  "7722": {
-    "name": "LINEPAY",
-    "category": "其他",
-    "industry": ""
-  },
-  "7730": {
-    "name": "暉盛-創",
-    "category": "其他",
-    "industry": ""
-  },
-  "7740": {
-    "name": "熙特爾-創",
-    "category": "其他",
-    "industry": ""
-  },
-  "7749": {
-    "name": "意騰-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "7750": {
-    "name": "新代",
-    "category": "其他",
-    "industry": ""
-  },
-  "7765": {
-    "name": "中華資安",
-    "category": "其他",
-    "industry": ""
-  },
   "7769": {
     "name": "鴻勁",
-    "category": "其他",
-    "industry": ""
-  },
-  "7786": {
-    "name": "東方風能",
-    "category": "其他",
-    "industry": ""
-  },
-  "7788": {
-    "name": "松川精密",
-    "category": "其他",
-    "industry": ""
-  },
-  "7795": {
-    "name": "長廣",
-    "category": "其他",
-    "industry": ""
-  },
-  "7799": {
-    "name": "禾榮科",
-    "category": "其他",
-    "industry": ""
-  },
-  "7822": {
-    "name": "倍利科",
-    "category": "其他",
-    "industry": ""
-  },
-  "8016": {
-    "name": "矽創",
     "category": "其他",
     "industry": ""
   },
@@ -3239,18 +414,8 @@
     "category": "其他",
     "industry": "20"
   },
-  "8045": {
-    "name": "達運光電",
-    "category": "其他",
-    "industry": ""
-  },
   "8072": {
     "name": "陞泰",
-    "category": "其他",
-    "industry": ""
-  },
-  "8081": {
-    "name": "致新",
     "category": "其他",
     "industry": ""
   },
@@ -3259,28 +424,8 @@
     "category": "其他",
     "industry": ""
   },
-  "8104": {
-    "name": "錸寶",
-    "category": "其他",
-    "industry": ""
-  },
-  "8114": {
-    "name": "振樺電",
-    "category": "其他",
-    "industry": ""
-  },
-  "8162": {
-    "name": "微矽電子-創",
-    "category": "其他",
-    "industry": ""
-  },
   "8163": {
     "name": "達方",
-    "category": "其他",
-    "industry": ""
-  },
-  "8213": {
-    "name": "志超",
     "category": "其他",
     "industry": ""
   },
@@ -3289,78 +434,8 @@
     "category": "其他",
     "industry": ""
   },
-  "8222": {
-    "name": "寶一",
-    "category": "其他",
-    "industry": ""
-  },
-  "8249": {
-    "name": "菱光",
-    "category": "其他",
-    "industry": ""
-  },
   "8271": {
     "name": "宇瞻",
-    "category": "其他",
-    "industry": ""
-  },
-  "8341": {
-    "name": "日友",
-    "category": "其他",
-    "industry": ""
-  },
-  "8374": {
-    "name": "羅昇",
-    "category": "其他",
-    "industry": ""
-  },
-  "8404": {
-    "name": "百和興業-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "8411": {
-    "name": "福貞-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "8454": {
-    "name": "富邦媒",
-    "category": "其他",
-    "industry": ""
-  },
-  "8462": {
-    "name": "柏文",
-    "category": "其他",
-    "industry": ""
-  },
-  "8464": {
-    "name": "億豐",
-    "category": "其他",
-    "industry": ""
-  },
-  "8473": {
-    "name": "山林水",
-    "category": "其他",
-    "industry": ""
-  },
-  "8476": {
-    "name": "台境*",
-    "category": "其他",
-    "industry": ""
-  },
-  "8478": {
-    "name": "東哥遊艇",
-    "category": "其他",
-    "industry": ""
-  },
-  "8488": {
-    "name": "吉源-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "8499": {
-    "name": "鼎炫-KY",
     "category": "其他",
     "industry": ""
   },
@@ -3369,48 +444,13 @@
     "category": "其他",
     "industry": ""
   },
-  "9103": {
-    "name": "美德醫療-DR",
-    "category": "其他",
-    "industry": ""
-  },
   "9105": {
     "name": "泰金寶-DR",
     "category": "其他",
     "industry": "91"
   },
-  "910861": {
-    "name": "神州-DR",
-    "category": "其他",
-    "industry": ""
-  },
-  "912000": {
-    "name": "晨訊科-DR",
-    "category": "其他",
-    "industry": ""
-  },
   "9136": {
     "name": "巨騰-DR",
-    "category": "其他",
-    "industry": ""
-  },
-  "9802": {
-    "name": "鈺齊-KY",
-    "category": "其他",
-    "industry": ""
-  },
-  "9902": {
-    "name": "台火",
-    "category": "其他",
-    "industry": ""
-  },
-  "9905": {
-    "name": "大華",
-    "category": "其他",
-    "industry": ""
-  },
-  "9906": {
-    "name": "欣巴巴",
     "category": "其他",
     "industry": ""
   },
@@ -3419,75 +459,10 @@
     "category": "其他",
     "industry": "20"
   },
-  "9908": {
-    "name": "大台北",
-    "category": "其他",
-    "industry": ""
-  },
-  "9911": {
-    "name": "櫻花",
-    "category": "其他",
-    "industry": ""
-  },
-  "9917": {
-    "name": "中保科",
-    "category": "其他",
-    "industry": ""
-  },
-  "9918": {
-    "name": "欣天然",
-    "category": "其他",
-    "industry": ""
-  },
-  "9919": {
-    "name": "康那香",
-    "category": "其他",
-    "industry": ""
-  },
-  "9924": {
-    "name": "福興",
-    "category": "其他",
-    "industry": ""
-  },
-  "9925": {
-    "name": "新保",
-    "category": "其他",
-    "industry": ""
-  },
-  "9926": {
-    "name": "新海",
-    "category": "其他",
-    "industry": ""
-  },
-  "9927": {
-    "name": "泰銘",
-    "category": "其他",
-    "industry": ""
-  },
-  "9931": {
-    "name": "欣高",
-    "category": "其他",
-    "industry": ""
-  },
   "9933": {
     "name": "中鼎",
     "category": "其他",
     "industry": "20"
-  },
-  "9934": {
-    "name": "成霖",
-    "category": "其他",
-    "industry": ""
-  },
-  "9935": {
-    "name": "慶豐富",
-    "category": "其他",
-    "industry": ""
-  },
-  "9937": {
-    "name": "全國",
-    "category": "其他",
-    "industry": ""
   },
   "9938": {
     "name": "百和",
@@ -3496,11 +471,6 @@
   },
   "9939": {
     "name": "宏全",
-    "category": "其他",
-    "industry": ""
-  },
-  "9940": {
-    "name": "信義",
     "category": "其他",
     "industry": ""
   },
@@ -3514,19 +484,614 @@
     "category": "其他",
     "industry": "20"
   },
-  "9946": {
-    "name": "三發地產",
-    "category": "其他",
-    "industry": ""
-  },
-  "9955": {
-    "name": "佳龍",
-    "category": "其他",
-    "industry": ""
-  },
   "9958": {
     "name": "世紀鋼",
     "category": "其他",
+    "industry": ""
+  },
+  "0050": {
+    "name": "元大台灣50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "0052": {
+    "name": "富邦科技",
+    "category": "ETF",
+    "industry": ""
+  },
+  "0056": {
+    "name": "元大高股息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "006208": {
+    "name": "富邦台50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00631L": {
+    "name": "元大台灣50正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00632R": {
+    "name": "元大台灣50反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00633L": {
+    "name": "富邦上証正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00635U": {
+    "name": "期元大S&P黃金",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00637L": {
+    "name": "元大滬深300正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00641R": {
+    "name": "富邦日本反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00642U": {
+    "name": "期元大S&P石油",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00643": {
+    "name": "群益深証中小",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00646": {
+    "name": "元大S&P500",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00650L": {
+    "name": "復華香港正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00662": {
+    "name": "富邦NASDAQ",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00663L": {
+    "name": "國泰臺灣加權正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00664R": {
+    "name": "國泰臺灣加權反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00665L": {
+    "name": "富邦恒生國企正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00669R": {
+    "name": "國泰美國道瓊反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00670L": {
+    "name": "富邦NASDAQ正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00671R": {
+    "name": "富邦NASDAQ反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00673R": {
+    "name": "期元大S&P原油反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00674R": {
+    "name": "期元大S&P黃金反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00675L": {
+    "name": "富邦臺灣加權正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00676R": {
+    "name": "富邦臺灣加權反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00680L": {
+    "name": "元大美債20正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00685L": {
+    "name": "群益臺灣加權正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00686R": {
+    "name": "群益臺灣加權反1",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00688L": {
+    "name": "國泰20年美債正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00692": {
+    "name": "富邦公司治理",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00708L": {
+    "name": "期元大S&P黃金正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00712": {
+    "name": "復華富時不動產",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00713": {
+    "name": "元大台灣高息低波",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00715L": {
+    "name": "期街口布蘭特正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00733": {
+    "name": "富邦臺灣中小",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00735": {
+    "name": "國泰臺韓科技",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00738U": {
+    "name": "期元大道瓊白銀",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00753L": {
+    "name": "中信中國50正2",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00757": {
+    "name": "統一FANG+",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00830": {
+    "name": "國泰費城半導體",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00865B": {
+    "name": "國泰US短期公債",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00878": {
+    "name": "國泰永續高股息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00881": {
+    "name": "國泰台灣科技龍頭",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00882": {
+    "name": "中信中國高股息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00885": {
+    "name": "富邦越南",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00891": {
+    "name": "中信關鍵半導體",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00892": {
+    "name": "富邦台灣半導體",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00893": {
+    "name": "國泰智能電動車",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00894": {
+    "name": "中信小資高價30",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00896": {
+    "name": "中信綠能及電動車",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00900": {
+    "name": "富邦特選高股息30",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00902": {
+    "name": "中信電池及儲能",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00904": {
+    "name": "新光臺灣半導體30",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00905": {
+    "name": "FT臺灣Smart",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00909": {
+    "name": "國泰數位支付服務",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00910": {
+    "name": "第一金太空衛星",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00915": {
+    "name": "凱基優選高股息30",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00916": {
+    "name": "國泰全球品牌50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00917": {
+    "name": "中信特選金融",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00918": {
+    "name": "大華優利高填息30",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00919": {
+    "name": "群益台灣精選高息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00922": {
+    "name": "國泰台灣領袖50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00923": {
+    "name": "群益台ESG低碳50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00924": {
+    "name": "復華S&P500成長",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00926": {
+    "name": "凱基全球菁英55",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00927": {
+    "name": "群益半導體收益",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00929": {
+    "name": "復華台灣科技優息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00932": {
+    "name": "兆豐永續高息等權",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00934": {
+    "name": "中信成長高股息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00935": {
+    "name": "野村臺灣新科技50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00936": {
+    "name": "台新永續高息中小",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00938": {
+    "name": "凱基優選30",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00939": {
+    "name": "統一台灣高息動能",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00940": {
+    "name": "元大台灣價值高息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00941": {
+    "name": "中信上游半導體",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00943": {
+    "name": "兆豐電子高息等權",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00944": {
+    "name": "野村趨勢動能高息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00945B": {
+    "name": "凱基美國非投等債",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00946": {
+    "name": "群益科技高息成長",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00947": {
+    "name": "台新臺灣IC設計",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00951": {
+    "name": "台新日本半導體",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00952": {
+    "name": "凱基台灣AI50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00953B": {
+    "name": "群益優選非投等債",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00954": {
+    "name": "中信日本半導體",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00961": {
+    "name": "FT臺灣永續高息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00963": {
+    "name": "中信全球高股息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00964": {
+    "name": "中信亞太高股息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00965": {
+    "name": "元大航太防衛科技",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009800": {
+    "name": "中信NASDAQ",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009801": {
+    "name": "中信美國創新科技",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009802": {
+    "name": "富邦旗艦50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009803": {
+    "name": "保德信市值動能50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009804": {
+    "name": "聯邦台精彩50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009805": {
+    "name": "新光美國電力基建",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009809": {
+    "name": "富邦淨零ESG50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00980A": {
+    "name": "主動野村臺灣優選",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009811": {
+    "name": "統一美國50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009813": {
+    "name": "貝萊德標普卓越50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009816": {
+    "name": "凱基台灣TOP50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009817": {
+    "name": "國泰日本不動產",
+    "category": "ETF",
+    "industry": ""
+  },
+  "009818": {
+    "name": "華南永昌NASDAQxT",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00981A": {
+    "name": "主動統一台股增長",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00981T": {
+    "name": "平衡凱基雙核收息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00982A": {
+    "name": "主動群益台灣強棒",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00982D": {
+    "name": "主動富邦動態入息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00982T": {
+    "name": "平衡兆豐台美動能",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00983A": {
+    "name": "主動中信ARK創新",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00984A": {
+    "name": "主動安聯台灣高息",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00984D": {
+    "name": "主動聯博全球非投",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00985A": {
+    "name": "主動野村台灣50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00985B": {
+    "name": "群益ESG投等債0-5",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00987A": {
+    "name": "主動台新優勢成長",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00988A": {
+    "name": "主動統一全球創新",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00989A": {
+    "name": "主動摩根美國科技",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00990A": {
+    "name": "主動元大AI新經濟",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00991A": {
+    "name": "主動復華未來50",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00992A": {
+    "name": "主動群益科技創新",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00993A": {
+    "name": "主動安聯台灣",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00994A": {
+    "name": "主動第一金台股優",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00995A": {
+    "name": "主動中信台灣卓越",
+    "category": "ETF",
+    "industry": ""
+  },
+  "00996A": {
+    "name": "主動兆豐台灣豐收",
+    "category": "ETF",
     "industry": ""
   },
   "1101": {
@@ -3579,11 +1144,6 @@
     "category": "塑膠",
     "industry": "03"
   },
-  "1307": {
-    "name": "三芳",
-    "category": "塑膠",
-    "industry": "03"
-  },
   "1308": {
     "name": "亞聚",
     "category": "塑膠",
@@ -3626,11 +1186,6 @@
   },
   "2442": {
     "name": "新美齊",
-    "category": "營建",
-    "industry": "14"
-  },
-  "2501": {
-    "name": "國建",
     "category": "營建",
     "industry": "14"
   },
@@ -3684,11 +1239,6 @@
     "category": "汽車",
     "industry": "12"
   },
-  "1536": {
-    "name": "和大",
-    "category": "汽車",
-    "industry": "12"
-  },
   "2201": {
     "name": "裕隆",
     "category": "汽車",
@@ -3704,20 +1254,90 @@
     "category": "紡織",
     "industry": "04"
   },
-  "1434": {
-    "name": "福懋",
-    "category": "紡織",
-    "industry": "04"
-  },
   "1477": {
     "name": "聚陽",
     "category": "紡織",
     "industry": "04"
   },
-  "1471": {
-    "name": "首利",
-    "category": "電子零組件",
-    "industry": "28"
+  "1504": {
+    "name": "東元",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1513": {
+    "name": "中興電",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1514": {
+    "name": "亞力",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1519": {
+    "name": "華城",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1528": {
+    "name": "恩德",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1560": {
+    "name": "中砂",
+    "category": "電機",
+    "industry": "05"
+  },
+  "2049": {
+    "name": "上銀",
+    "category": "電機",
+    "industry": "05"
+  },
+  "2371": {
+    "name": "大同",
+    "category": "電機",
+    "industry": "05"
+  },
+  "3167": {
+    "name": "大量",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4526": {
+    "name": "東台",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4532": {
+    "name": "瑞智",
+    "category": "電機",
+    "industry": "05"
+  },
+  "4576": {
+    "name": "大銀微系統",
+    "category": "電機",
+    "industry": "05"
+  },
+  "1529": {
+    "name": "樂事綠能",
+    "category": "綠能環保",
+    "industry": ""
+  },
+  "2072": {
+    "name": "世紀風電",
+    "category": "綠能環保",
+    "industry": ""
+  },
+  "8422": {
+    "name": "可寧衛*",
+    "category": "綠能環保",
+    "industry": "35"
+  },
+  "8438": {
+    "name": "昶昕",
+    "category": "綠能環保",
+    "industry": "35"
   },
   "1582": {
     "name": "信錦",
@@ -3806,11 +1426,6 @@
   },
   "2472": {
     "name": "立隆電",
-    "category": "電子零組件",
-    "industry": "28"
-  },
-  "2478": {
-    "name": "大毅",
     "category": "電子零組件",
     "industry": "28"
   },
@@ -3939,11 +1554,6 @@
     "category": "電子零組件",
     "industry": "28"
   },
-  "6412": {
-    "name": "群電",
-    "category": "電子零組件",
-    "industry": "28"
-  },
   "6672": {
     "name": "騰輝電子-KY",
     "category": "電子零組件",
@@ -3968,71 +1578,6 @@
     "name": "南電",
     "category": "電子零組件",
     "industry": "28"
-  },
-  "1503": {
-    "name": "士電",
-    "category": "電機",
-    "industry": "05"
-  },
-  "1504": {
-    "name": "東元",
-    "category": "電機",
-    "industry": "05"
-  },
-  "1513": {
-    "name": "中興電",
-    "category": "電機",
-    "industry": "05"
-  },
-  "1514": {
-    "name": "亞力",
-    "category": "電機",
-    "industry": "05"
-  },
-  "1519": {
-    "name": "華城",
-    "category": "電機",
-    "industry": "05"
-  },
-  "1528": {
-    "name": "恩德",
-    "category": "電機",
-    "industry": "05"
-  },
-  "1560": {
-    "name": "中砂",
-    "category": "電機",
-    "industry": "05"
-  },
-  "2049": {
-    "name": "上銀",
-    "category": "電機",
-    "industry": "05"
-  },
-  "2371": {
-    "name": "大同",
-    "category": "電機",
-    "industry": "05"
-  },
-  "3167": {
-    "name": "大量",
-    "category": "電機",
-    "industry": "05"
-  },
-  "4526": {
-    "name": "東台",
-    "category": "電機",
-    "industry": "05"
-  },
-  "4532": {
-    "name": "瑞智",
-    "category": "電機",
-    "industry": "05"
-  },
-  "4576": {
-    "name": "大銀微系統",
-    "category": "電機",
-    "industry": "05"
   },
   "1605": {
     "name": "華新",
@@ -4174,11 +1719,6 @@
     "category": "造紙",
     "industry": "10"
   },
-  "2017": {
-    "name": "官田鋼",
-    "category": "造紙",
-    "industry": "10"
-  },
   "2023": {
     "name": "燁輝",
     "category": "造紙",
@@ -4211,11 +1751,6 @@
   },
   "2105": {
     "name": "正新",
-    "category": "橡膠",
-    "industry": "11"
-  },
-  "2106": {
-    "name": "建大",
     "category": "橡膠",
     "industry": "11"
   },
@@ -4259,11 +1794,6 @@
     "category": "航運",
     "industry": "15"
   },
-  "2630": {
-    "name": "亞航",
-    "category": "航運",
-    "industry": "15"
-  },
   "2633": {
     "name": "台灣高鐵",
     "category": "航運",
@@ -4279,23 +1809,8 @@
     "category": "航運",
     "industry": "15"
   },
-  "2645": {
-    "name": "長榮航太",
-    "category": "航運",
-    "industry": "15"
-  },
   "2646": {
     "name": "星宇航空",
-    "category": "航運",
-    "industry": "15"
-  },
-  "6753": {
-    "name": "龍德造船",
-    "category": "航運",
-    "industry": "15"
-  },
-  "6757": {
-    "name": "台灣虎航",
     "category": "航運",
     "industry": "15"
   },
@@ -4351,11 +1866,6 @@
   },
   "2382": {
     "name": "廣達",
-    "category": "電腦週邊",
-    "industry": "25"
-  },
-  "2387": {
-    "name": "精元",
     "category": "電腦週邊",
     "industry": "25"
   },
@@ -4421,11 +1931,6 @@
   },
   "4938": {
     "name": "和碩",
-    "category": "電腦週邊",
-    "industry": "25"
-  },
-  "6235": {
-    "name": "華孚",
     "category": "電腦週邊",
     "industry": "25"
   },
@@ -4554,11 +2059,6 @@
     "category": "半導體",
     "industry": "24"
   },
-  "3016": {
-    "name": "嘉晶",
-    "category": "半導體",
-    "industry": "24"
-  },
   "3034": {
     "name": "聯詠",
     "category": "半導體",
@@ -4566,11 +2066,6 @@
   },
   "3035": {
     "name": "智原",
-    "category": "半導體",
-    "industry": "24"
-  },
-  "3135": {
-    "name": "凌航",
     "category": "半導體",
     "industry": "24"
   },
@@ -4774,11 +2269,6 @@
     "category": "其他電子",
     "industry": "31"
   },
-  "6830": {
-    "name": "汎銓",
-    "category": "其他電子",
-    "industry": "31"
-  },
   "8021": {
     "name": "尖點",
     "category": "其他電子",
@@ -4879,11 +2369,6 @@
     "category": "光電",
     "industry": "26"
   },
-  "4934": {
-    "name": "太極",
-    "category": "光電",
-    "industry": "26"
-  },
   "4949": {
     "name": "有成精密",
     "category": "光電",
@@ -4943,6 +2428,11 @@
     "name": "惠特",
     "category": "光電",
     "industry": "26"
+  },
+  "6861": {
+    "name": "睿生光電",
+    "category": "光電",
+    "industry": ""
   },
   "8105": {
     "name": "凌巨",
@@ -5109,11 +2599,6 @@
     "category": "貿易百貨",
     "industry": "18"
   },
-  "2915": {
-    "name": "潤泰全",
-    "category": "貿易百貨",
-    "industry": "18"
-  },
   "2731": {
     "name": "雄獅",
     "category": "觀光",
@@ -5139,18 +2624,8 @@
     "category": "金融",
     "industry": "17"
   },
-  "2838": {
-    "name": "聯邦銀",
-    "category": "金融",
-    "industry": "17"
-  },
   "2845": {
     "name": "遠東銀",
-    "category": "金融",
-    "industry": "17"
-  },
-  "2851": {
-    "name": "中再保",
     "category": "金融",
     "industry": "17"
   },
@@ -5249,28 +2724,8 @@
     "category": "資訊服務",
     "industry": "30"
   },
-  "3708": {
-    "name": "上緯投控",
-    "category": "綠能環保",
-    "industry": "35"
-  },
-  "8422": {
-    "name": "可寧衛*",
-    "category": "綠能環保",
-    "industry": "35"
-  },
-  "8438": {
-    "name": "昶昕",
-    "category": "綠能環保",
-    "industry": "35"
-  },
   "6505": {
     "name": "台塑化",
-    "category": "油電燃氣",
-    "industry": "23"
-  },
-  "8926": {
-    "name": "台汽電",
     "category": "油電燃氣",
     "industry": "23"
   },
