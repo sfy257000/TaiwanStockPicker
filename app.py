@@ -44,7 +44,7 @@ st.set_page_config(
     initial_sidebar_state='expanded',
 )
 
-PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行']
+PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行', '分享卡片']
 
 CONFIG.setdefault('weights', {})
 CONFIG['weights'].setdefault('fundamental', 0.20)
@@ -505,11 +505,25 @@ def render_sidebar():
             random_n = st.slider('抽樣數量', 10, 200, 50, 10)
 
         custom_codes: list[str] = []
+        custom_validation_error = ''
         if mode == '自訂股票':
             custom_input = st.text_area('股票代碼（逗號/空白/換行分隔）', placeholder='2330, 2317\n2454')
             if custom_input:
-                custom_codes = [c.strip() for c in re.split(r'[,\n\s]+', custom_input) if c.strip()]
+                raw_codes = [c.strip() for c in re.split(r'[,\n\s]+', custom_input) if c.strip()]
+                # 驗證股票代碼格式（4-6位數字）
+                valid_codes = []
+                invalid_codes = []
+                for c in raw_codes:
+                    if re.match(r'^\d{4,6}$', c):
+                        valid_codes.append(c)
+                    else:
+                        invalid_codes.append(c)
+                custom_codes = valid_codes
+                if invalid_codes:
+                    custom_validation_error = f'格式不符已忽略：{", ".join(invalid_codes[:10])}'
             st.caption(f'已輸入 {len(custom_codes)} 檔')
+            if custom_validation_error:
+                st.warning(custom_validation_error)
 
         st.markdown('---')
         st.markdown('### 價格過濾')
@@ -518,6 +532,9 @@ def render_sidebar():
             price_min = st.number_input('最低價', min_value=0, max_value=99999, value=0, step=1)
         with col2:
             price_max = st.number_input('最高價', min_value=0, max_value=99999, value=0, step=1)
+        # 價格範圍驗證
+        if price_min > 0 and price_max > 0 and price_min > price_max:
+            st.error('最低價不可大於最高價')
 
         st.markdown('---')
         st.markdown('### 評分權重')
@@ -1916,8 +1933,8 @@ def main():
             render_strategy_workshop(results)
         elif page == '每日排行':
             render_daily_rankings(results)
-        # elif page == '分享卡片':
-        #     render_share_card(results)
+        elif page == '分享卡片':
+            render_share_card(results)
 
 
 if __name__ == '__main__':

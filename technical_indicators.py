@@ -199,10 +199,18 @@ class TechnicalIndicators:
         計算布林通道
         period: 均線週期（預設20日）
         std_dev: 標準差倍數（預設2倍）
-        返回: {'upper': 上軌, 'middle': 中軌, 'lower': 下軌, 'bandwidth': 頻寬, 'position': 位置%}
+        返回: {'upper': 上軌, 'middle': 中軌, 'lower': 下軌, 'bandwidth': 頻寬, 'position': 位置%, 'signal': 訊號}
         """
         if len(closes) < period:
-            return {'upper': 0, 'middle': 0, 'lower': 0, 'bandwidth': 0, 'position': 50, 'signal': 'neutral'}
+            return {
+                'upper': closes[-1] * (1 + std_dev * 0.02) if closes else 0,
+                'middle': closes[-1] if closes else 0,
+                'lower': closes[-1] * (1 - std_dev * 0.02) if closes else 0,
+                'bandwidth': std_dev * 0.04 * 100,  # 預估頻寬
+                'position': 50,
+                'signal': 'insufficient_data',
+                'data_note': f'數據不足（需要{period}筆，目前{len(closes)}筆），使用預估值'
+            }
         
         recent_closes = closes[-period:]
         middle = sum(recent_closes) / period
@@ -283,15 +291,25 @@ class TechnicalIndicators:
             score -= 5
             reasons.append(f"KD超買(K={k:.1f})")
         
+        # 處理布林通道數據不足的情況
         bb_data = indicators.get('bollinger', {})
         bb_signal = bb_data.get('signal', 'neutral')
         bb_position = bb_data.get('position', 50)
-        
+        data_note = bb_data.get('data_note', '')
+
         if bb_signal == 'oversold':
-            score += 10
-            reasons.append(f"布林下軌支撐(位置{bb_position:.1f}%)")
+            if bb_signal == 'insufficient_data':
+                reasons.append(f"布林通道: {data_note}")
+            else:
+                score += 10
+                reasons.append(f"布林下軌支撐(位置{bb_position:.1f}%)")
         elif bb_signal == 'overbought':
-            score -= 5
-            reasons.append(f"布林上軌壓力(位置{bb_position:.1f}%)")
+            if bb_signal == 'insufficient_data':
+                reasons.append(f"布林通道: {data_note}")
+            else:
+                score -= 5
+                reasons.append(f"布林上軌壓力(位置{bb_position:.1f}%)")
+        elif bb_signal == 'insufficient_data':
+            reasons.append(f"布林通道: {data_note}")
         
         return score, reasons
