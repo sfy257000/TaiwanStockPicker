@@ -2,3 +2,4 @@ streamlit>=1.32.0
 plotly>=5.18.0
 requests>=2.31.0
 urllib3>=2.0.0
+shioaji>=0.8.0  # 永豐券商 API

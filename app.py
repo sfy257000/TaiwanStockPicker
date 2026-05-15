@@ -1,4 +1,4 @@
-﻿# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 """台股選股分析系統 - Streamlit 介面"""
 
 import os
@@ -7,6 +7,7 @@ import re
 import sys
 import json
 from datetime import datetime
+from typing import Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import quote
 
@@ -36,6 +37,8 @@ from support_resistance import SupportResistance
 from strategy_workshop import StrategyWorkshop
 from technical_indicators import TechnicalIndicators
 from trade_journal import TradeJournal
+from sinopac_api import SinoPacTrader, SinoPacAPIError, get_trader
+from order_manager import OrderManager, get_order_manager
 
 st.set_page_config(
     page_title='台股選股分析系統',
@@ -44,7 +47,7 @@ st.set_page_config(
     initial_sidebar_state='expanded',
 )
 
-PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行', '分享卡片']
+PAGE_OPTIONS = ['分析總覽', '技術圖表', '警報中心', '產業熱度', '回測與模擬', '每日排行', '分享卡片', '交易下單']
 
 CONFIG.setdefault('weights', {})
 CONFIG['weights'].setdefault('fundamental', 0.20)
@@ -53,6 +56,25 @@ CONFIG['weights'].setdefault('fundamental', 0.20)
 @st.cache_resource
 def get_shared_fetcher() -> DataFetcher:
     return DataFetcher()
+
+
+# 不用 cache_resource，直接返回新實例（確保讀取最新資料）
+_trader_instance: Optional['SinoPacTrader'] = None
+
+def get_shared_order_manager() -> OrderManager:
+    """每次返回同一 trader 實例，確保資料一致性"""
+    global _trader_instance
+    if _trader_instance is None:
+        from sinopac_api import SinoPacTrader
+        mode = CONFIG['trading'].get('mode', 'simulate')
+        _trader_instance = SinoPacTrader(mode=mode)
+    return OrderManager(trader=_trader_instance)
+
+
+def clear_order_manager_cache() -> None:
+    """清除 OrderManager 快取（切換模式或重置時調用）"""
+    global _trader_instance
+    _trader_instance = None
 
 
 def score_badge(score: int) -> str:
@@ -560,10 +582,10 @@ def render_sidebar():
 
         st.markdown('---')
         min_vol = st.number_input('更新最低成交量（張）', min_value=100, max_value=50000, value=1000, step=100)
-        update_btn = st.button('更新股票清單', use_container_width=True)
+        update_btn = st.button('更新股票清單', width='stretch')
 
         st.markdown('---')
-        run_btn = st.button('開始分析', use_container_width=True, type='primary')
+        run_btn = st.button('開始分析', width='stretch', type='primary')
         st.caption(f'目前股票檔數：{get_stock_count()}')
 
     return (
@@ -791,7 +813,7 @@ def render_table(results: list[dict], min_score: int, top_n: int) -> list[dict]:
         st.info('沒有符合條件的股票。')
         return []
 
-    st.dataframe(rows, use_container_width=True, hide_index=True)
+    st.dataframe(rows, width='stretch', hide_index=True)
 
     filtered = [r for r in results if r['total_score'] >= min_score]
     filtered = sorted(filtered, key=lambda x: x['total_score'], reverse=True)[:top_n]
@@ -821,7 +843,7 @@ def render_data_quality_dashboard(results: list[dict]) -> None:
     bad_rows = summary.get('bad_rows', [])
     if bad_rows:
         with st.expander('查看資料異常明細'):
-            st.dataframe(bad_rows, use_container_width=True, hide_index=True)
+            st.dataframe(bad_rows, width='stretch', hide_index=True)
 
 
 def render_market_board(results: list[dict]) -> None:
@@ -934,7 +956,7 @@ def render_watchlist(results: list[dict]) -> None:
         st.info('自選清單目前沒有命中分析結果。')
         return
     picked_rows = build_rows(picked, min_score=-999, top_n=999)
-    st.dataframe(picked_rows, use_container_width=True, hide_index=True)
+    st.dataframe(picked_rows, width='stretch', hide_index=True)
 
 
 def render_kd_price_chart(results: list[dict]) -> None:
@@ -1002,7 +1024,7 @@ def render_kd_price_chart(results: list[dict]) -> None:
     fig.update_yaxes(title_text='價格', row=1, col=1)
     fig.update_yaxes(title_text='KD', range=[0, 100], row=2, col=1)
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
     st.caption(f"最新 KD：K={k_values[-1]:.2f} / D={d_values[-1]:.2f}")
 
 
@@ -1117,7 +1139,7 @@ def render_comparison_mode(results: list[dict]) -> None:
         height=430,
         margin=dict(l=20, r=20, t=45, b=20),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def render_anomaly_radar(results: list[dict]) -> None:
@@ -1156,7 +1178,7 @@ def render_anomaly_radar(results: list[dict]) -> None:
         st.success('目前未偵測到顯著異常。')
         return
 
-    st.dataframe(anomalies, use_container_width=True, hide_index=True)
+    st.dataframe(anomalies, width='stretch', hide_index=True)
 
 
 def render_custom_alert_center(results: list[dict]) -> None:
@@ -1200,7 +1222,7 @@ def render_custom_alert_center(results: list[dict]) -> None:
 
     rows = build_rows(matches, min_score=-999, top_n=999)
     st.success(f'命中 {len(rows)} 檔。')
-    st.dataframe(rows, use_container_width=True, hide_index=True)
+    st.dataframe(rows, width='stretch', hide_index=True)
 
 
 def render_event_calendar(results: list[dict]) -> None:
@@ -1244,12 +1266,12 @@ def render_event_calendar(results: list[dict]) -> None:
     st.caption(f'共辨識 {len(rows)} 筆事件。')
     if risk_rows:
         st.warning(f'事件前後視窗內共 {len(risk_rows)} 筆，建議降低槓桿與縮小單筆風險。')
-        st.dataframe(risk_rows[:200], use_container_width=True, hide_index=True)
+        st.dataframe(risk_rows[:200], width='stretch', hide_index=True)
     else:
         st.success('目前沒有落在事件前後提醒視窗內的事件。')
 
     with st.expander('查看完整事件清單'):
-        st.dataframe(rows[:400], use_container_width=True, hide_index=True)
+        st.dataframe(rows[:400], width='stretch', hide_index=True)
 
 
 def run_simple_backtest_for_stock(
@@ -1345,7 +1367,7 @@ def render_backtest(results: list[dict]) -> None:
     fig = go.Figure()
     fig.add_trace(go.Scatter(y=equity_curve, mode='lines', name='Equity', line=dict(width=2)))
     fig.update_layout(height=300, margin=dict(l=20, r=20, t=30, b=20), title='策略資金曲線')
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def render_portfolio_simulator(results: list[dict]) -> None:
@@ -1366,7 +1388,7 @@ def render_portfolio_simulator(results: list[dict]) -> None:
     with c2:
         shares = st.number_input('股數', min_value=1, value=1000, step=100, key='portfolio_shares')
     with c3:
-        if st.button('加入持倉', key='portfolio_add_btn', use_container_width=True):
+        if st.button('加入持倉', key='portfolio_add_btn', width='stretch'):
             if not selected:
                 st.warning('請先選擇股票。')
                 return
@@ -1411,7 +1433,7 @@ def render_portfolio_simulator(results: list[dict]) -> None:
             }
         )
 
-    st.dataframe(rows, use_container_width=True, hide_index=True)
+    st.dataframe(rows, width='stretch', hide_index=True)
     total_pnl = total_value - total_cost
     total_pnl_pct = (total_pnl / total_cost * 100) if total_cost > 0 else 0
     c1, c2, c3 = st.columns(3)
@@ -1533,10 +1555,10 @@ def render_trade_journal(results: list[dict]) -> None:
     c2.metric('勝率', f"{summary['win_rate']:.1f}%")
     c3.metric('平均報酬', f"{summary['avg_pnl_pct']:.2f}%")
 
-    st.dataframe(entries[-200:], use_container_width=True, hide_index=True)
+    st.dataframe(entries[-200:], width='stretch', hide_index=True)
     if summary['by_signal']:
         st.markdown('#### 訊號有效性')
-        st.dataframe(summary['by_signal'], use_container_width=True, hide_index=True)
+        st.dataframe(summary['by_signal'], width='stretch', hide_index=True)
 
 
 def render_strategy_workshop(results: list[dict]) -> None:
@@ -1566,13 +1588,13 @@ def render_strategy_workshop(results: list[dict]) -> None:
 
     if picks:
         st.success(f'規則命中 {len(picks)} 檔。')
-        st.dataframe(build_rows(picks, min_score=-999, top_n=999), use_container_width=True, hide_index=True)
+        st.dataframe(build_rows(picks, min_score=-999, top_n=999), width='stretch', hide_index=True)
     else:
         st.warning('目前規則沒有命中股票。')
 
     with st.expander('參數掃描（Grid Search）', expanded=False):
         grid_rows = StrategyWorkshop.grid_search_candidates(results)
-        st.dataframe(grid_rows[:20], use_container_width=True, hide_index=True)
+        st.dataframe(grid_rows[:20], width='stretch', hide_index=True)
 
 
 def render_industry_heatmap(results: list[dict]) -> None:
@@ -1606,7 +1628,7 @@ def render_industry_heatmap(results: list[dict]) -> None:
             }
         )
     agg = sorted(agg, key=lambda x: x['平均分數'], reverse=True)
-    st.dataframe(agg, use_container_width=True, hide_index=True)
+    st.dataframe(agg, width='stretch', hide_index=True)
 
     import plotly.graph_objects as go
 
@@ -1632,7 +1654,7 @@ def render_industry_heatmap(results: list[dict]) -> None:
         xaxis_title='平均漲跌%',
         yaxis_title='平均分數',
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
 def render_daily_rankings(results: list[dict]) -> None:
@@ -1650,13 +1672,13 @@ def render_daily_rankings(results: list[dict]) -> None:
 
     tab1, tab2, tab3, tab4 = st.tabs(['高分榜', '漲幅榜', '量能榜', '反轉觀察'])
     with tab1:
-        st.dataframe(build_rows(top_score, -999, 999), use_container_width=True, hide_index=True)
+        st.dataframe(build_rows(top_score, -999, 999), width='stretch', hide_index=True)
     with tab2:
-        st.dataframe(build_rows(top_up, -999, 999), use_container_width=True, hide_index=True)
+        st.dataframe(build_rows(top_up, -999, 999), width='stretch', hide_index=True)
     with tab3:
-        st.dataframe(build_rows(top_volume, -999, 999), use_container_width=True, hide_index=True)
+        st.dataframe(build_rows(top_volume, -999, 999), width='stretch', hide_index=True)
     with tab4:
-        st.dataframe(build_rows(reversal, -999, 999), use_container_width=True, hide_index=True)
+        st.dataframe(build_rows(reversal, -999, 999), width='stretch', hide_index=True)
 
 
 def render_share_card(results: list[dict]) -> None:
@@ -1731,11 +1753,11 @@ def render_share_card(results: list[dict]) -> None:
     line_url = f"https://social-plugins.line.me/lineit/share?url={quote(share_url)}"
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.link_button('分享到 X', x_url, use_container_width=True)
+        st.link_button('分享到 X', x_url, width='stretch')
     with c2:
-        st.link_button('分享到 Facebook', fb_url, use_container_width=True)
+        st.link_button('分享到 Facebook', fb_url, width='stretch')
     with c3:
-        st.link_button('分享到 LINE', line_url, use_container_width=True)
+        st.link_button('分享到 LINE', line_url, width='stretch')
     st.text_area('貼文文字（可複製）', value=share_text, height=120, key='share_text_box')
     st.download_button(
         label='下載 SVG 分享卡',
@@ -1768,6 +1790,774 @@ def render_export(rows: list[dict]) -> None:
         file_name=f"stock_analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
         mime='text/csv',
     )
+
+
+# ==================== 交易下單頁面 ====================
+
+
+def _fmt_money(v: float) -> str:
+    return f'{v:,.0f}'
+
+
+def _fmt_pnl(v: float) -> str:
+    sign = '+' if v >= 0 else ''
+    return f'{sign}{v:,.0f}'
+
+
+def _get_stock_info_for_trading(code: str) -> dict:
+    """取得股票的即時資訊用於下單"""
+    fetcher = get_shared_fetcher()
+
+    # 從股票清單取得名稱
+    name = ''
+    if STOCK_DATA_WITH_CATEGORIES:
+        name = STOCK_DATA_WITH_CATEGORIES.get(code, {}).get('name', code)
+
+    # 從 API 取得即時價格
+    price_data = fetcher.get_stock_price(code)
+    if price_data and price_data.get('price', 0) > 0:
+        return {
+            'code': code,
+            'name': name,
+            'price': price_data.get('price', 0),
+            'open': price_data.get('open', 0),
+            'high': price_data.get('high', 0),
+            'low': price_data.get('low', 0),
+            'prev_close': price_data.get('prev_close', 0),
+            'change_pct': ((price_data.get('price', 0) - price_data.get('prev_close', 0)) /
+                          price_data.get('prev_close', 1) * 100) if price_data.get('prev_close', 0) > 0 else 0,
+        }
+
+    # 回退：嘗試取歷史資料
+    hist = fetcher.get_historical_price(code, days=5)
+    if hist and len(hist) > 0:
+        last = hist[-1]
+        return {
+            'code': code,
+            'name': name,
+            'price': last.get('close', 0),
+            'prev_close': hist[-2].get('close', 0) if len(hist) > 1 else last.get('close', 0),
+        }
+
+    return {'code': code, 'name': name, 'price': 0}
+
+
+def render_trading_balance() -> None:
+    """帳戶餘額面板"""
+    om = get_shared_order_manager()
+    fetcher = get_shared_fetcher()
+    mode = CONFIG['trading'].get('mode', 'simulate')
+
+    # 實盤模式：直接從券商API取得資料
+    if mode == 'live':
+        st.markdown('### 📊 實盤帳戶資訊')
+
+        # 顯示帳號資訊
+        acc_info = om.get_account_info()
+        if acc_info:
+            st.info(f"""
+            **實盤帳戶連線資訊：**
+            - 帳號：{acc_info.get('account_id', 'N/A')}
+            - 分公司：{acc_info.get('branch_id', 'N/A')}
+            - 帳戶類型：{acc_info.get('account_type', '現股')}
+            """)
+        else:
+            st.warning('無法取得帳戶資訊，請檢查 API 連線')
+
+        # 從 API 取得餘額
+        balance = om.get_balance()
+
+        # 如果有原始回應，顯示出來
+        if 'raw_treasury' in balance:
+            with st.expander('📋 API 原始回應 (Treasury)'):
+                st.json(balance['raw_treasury'])
+
+        if 'error' in balance:
+            st.error(f"API 錯誤：{balance['error']}")
+
+        # 顯示餘額
+        cash = balance.get('cash', 0)
+        st.metric('可用餘額', f'${_fmt_money(cash)}')
+
+        # 實盤模式下不顯示模擬的市值計算，直接從API取得持股
+        positions = om.get_positions()
+        if positions:
+            st.success(f'持有 {len(positions)} 檔股票')
+        else:
+            st.caption('無持有部位')
+
+        # 實盤成交記錄
+        with st.expander('📜 實盤成交記錄'):
+            trades = om.get_live_trades()
+            if trades:
+                for t in trades[-5:]:  # 顯示最近5筆
+                    st.write(f"- {t.get('code', '')} {t.get('action', '')} {t.get('quantity', 0)}股 @{t.get('price', 0)}")
+            else:
+                st.caption('尚無成交記錄')
+
+        return  # 實盤模式到此結束
+
+    # ===== 以下是模擬模式 =====
+
+    # 取得當前股價用於計算市值
+    positions = om.get_positions()
+    current_prices = {}
+    for pos in positions:
+        code = pos.get('code', '')
+        if code:
+            price_data = fetcher.get_stock_price(code)
+            if price_data:
+                current_prices[code] = price_data.get('price', 0)
+
+    # 重新計算市值
+    if current_prices:
+        trader = om.trader
+        if hasattr(trader, '_recalculate_balance'):
+            trader._recalculate_balance(current_prices)
+
+    balance = om.get_balance()
+    initial = balance.get('initial_cash', 0)
+    cash = balance.get('cash', 0)
+    market_value = balance.get('market_value', 0)
+    unrealized_pnl = balance.get('unrealized_pnl', 0)
+
+    # 總資產 = 可用現金 + 持股市值
+    total = cash + market_value
+
+    unrealized_pct = (unrealized_pnl / initial * 100) if initial > 0 else 0
+
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric('初始資金', f'${_fmt_money(initial)}')
+    c2.metric('可用餘額', f'${_fmt_money(cash)}')
+    c3.metric('持股市值', f'${_fmt_money(market_value)}')
+    c4.metric(
+        '總資產',
+        f'${_fmt_money(total)}',
+        delta=_fmt_pnl(unrealized_pnl),
+        delta_color='normal' if unrealized_pnl >= 0 else 'inverse',
+    )
+    c5.metric('未實現損益', f'{unrealized_pct:+.2f}%')
+
+    # 顯示除錯資訊（可折疊）
+    with st.expander('🔧 帳戶狀態除錯資訊'):
+        st.write('**餘額物件：**')
+        st.json(balance)
+
+
+def render_trading_order_panel() -> None:
+    """下單面板 - 完全獨立，隨時可用"""
+    om = get_shared_order_manager()
+    mode = CONFIG['trading'].get('mode', 'simulate')
+
+    st.markdown('### 📝 下單')
+    if mode == 'live':
+        st.caption('🔴 **實盤交易模式** - 請確認下單內容無誤')
+
+    # 載入股票清單用於搜尋（盡量載入，但不影響下單）
+    if not STOCK_DATA_WITH_CATEGORIES:
+        load_cache()
+
+    stock_options = []
+    found_names = {}
+    # ===== 左欄：股票選擇 =====
+    col1, col2, col3 = st.columns([2, 1, 1])
+
+    with col1:
+        # 股票選擇：下拉選單
+        stock_options = ['請選擇股票...']
+        found_names = {}
+        if STOCK_DATA_WITH_CATEGORIES:
+            for code, data in STOCK_DATA_WITH_CATEGORIES.items():
+                if code.isdigit() and len(code) == 4:
+                    name = data.get('name', code)
+                    stock_options.append(f"{code} {name}")
+                    found_names[code] = name
+            stock_options.sort()
+
+        selected_option = st.selectbox(
+            '📌 選擇股票',
+            options=stock_options,
+            index=0,
+            key='trade_stock_select',
+            help='從下拉選單選擇股票'
+        )
+
+        # 解析選擇的股票代碼
+        raw_code = selected_option.split(' ')[0] if selected_option and selected_option != '請選擇股票...' else ''
+        selected_code = raw_code if (raw_code.isdigit() and len(raw_code) == 4) else None
+
+        # 自動帶出名稱
+        selected_name = found_names.get(selected_code, '') if selected_code else ''
+
+        # 即時查詢報價
+        current_price = 0.0
+        change_pct = 0.0
+        if selected_code:
+            with st.spinner('查詢報價中...'):
+                stock_info = _get_stock_info_for_trading(selected_code)
+                current_price = stock_info.get('price', 0)
+                change_pct = stock_info.get('change_pct', 0)
+                if not selected_name and stock_info.get('name'):
+                    selected_name = stock_info['name']
+
+        # 顯示股票資訊
+        if selected_code:
+            if current_price > 0:
+                arrow = '▲' if change_pct >= 0 else '▼'
+                color = 'green' if change_pct >= 0 else 'red'
+                st.markdown(
+                    f"<span style='font-size:18px; font-weight:bold'>"
+                    f"{selected_code} {selected_name or '???'}</span> "
+                    f"<span style='color:gray'>${current_price:.2f}</span> "
+                    f"<span style='color:{color}'>{arrow} {change_pct:+.2f}%</span>",
+                    unsafe_allow_html=True,
+                )
+            elif selected_name:
+                st.warning(f"{selected_code} {selected_name} — 無法取得報價，請改用限價單")
+            else:
+                st.warning(f"{selected_code} — 尚無此股票資料，改用限價單下單")
+
+        # 買賣方向
+        action = st.radio('買賣', ['買進', '賣出'], horizontal=True, key='trade_action')
+
+    # ===== 中欄：委託類型與價格 =====
+    with col2:
+        order_type = st.radio('委託', ['市價', '限價'], horizontal=True, key='trade_order_type')
+        price = 0.0
+
+        if order_type == '市價':
+            if current_price > 0:
+                st.info(f'市價參考：${current_price:.2f}')
+                st.caption('以目前報價立即成交')
+            else:
+                st.error('⚠️ 無法取得市價，請先取得報價或改用限價')
+        else:
+            st.caption('限價：低於此價才成交')
+            price = st.number_input(
+                '委託價格',
+                min_value=0.0,
+                value=float(current_price) if current_price > 0 else 0.0,
+                step=0.1,
+                key='trade_price',
+            )
+
+    # ===== 右欄：數量 =====
+    with col3:
+        st.write('**股數**')
+
+        # 零股/整張切換
+        lot_mode = st.radio(
+            '交易模式',
+            ['零股', '整張'],
+            index=0 if st.session_state.get('trade_lot_mode', '零股') == '零股' else 1,
+            horizontal=True,
+            key='trade_lot_mode',
+            help='零股：1-999股，整張：1000股或倍數',
+        )
+
+        # 根據模式設定快捷按鈕與預設值
+        if lot_mode == '零股':
+            preset_values = [1, 10, 100, 500]
+            default_qty = st.session_state.get('trade_qty_odd', 1)
+        else:
+            preset_values = [1000, 2000, 5000, 10000]
+            default_qty = st.session_state.get('trade_qty_full', 1000)
+
+        q1, q2, q3, q4 = st.columns(4)
+        for idx, val in enumerate(preset_values):
+            with [q1, q2, q3, q4][idx]:
+                if st.button(str(val), width='stretch', key=f'qty_preset_{val}'):
+                    if lot_mode == '零股':
+                        st.session_state['trade_qty_odd'] = val
+                    else:
+                        st.session_state['trade_qty_full'] = val
+                    st.session_state['trade_qty'] = val
+
+        # 數量輸入
+        if lot_mode == '零股':
+            quantity = st.number_input(
+                '輸入零股',
+                min_value=1,
+                max_value=999,
+                value=default_qty,
+                step=1,
+                key='trade_qty',
+                help='零股交易：1-999股',
+            )
+            st.caption(f'零股 {quantity} 股')
+        else:
+            quantity = st.number_input(
+                '輸入股數（整張）',
+                min_value=1000,
+                value=default_qty,
+                step=1000,
+                key='trade_qty',
+                help='整張交易：1000股起，須為1000倍數',
+            )
+            st.caption(f'{quantity // 1000} 張 = {quantity} 股')
+
+        # 金額估算
+        exec_price = current_price if order_type == '市價' and current_price > 0 else price
+        if exec_price > 0:
+            est = exec_price * quantity
+            lot_label = "張" if lot_mode == '整張' else '股'
+            st.caption(f'約 ${_fmt_money(est)}')
+
+    # ===== 下單按鈕 =====
+    st.markdown('---')
+
+    # 根據買賣方向顯示不同按鈕
+    if action == '買進':
+        # 買進 Logic
+        buy_disabled = not selected_code or quantity < 1 or (order_type == '市價' and current_price <= 0)
+
+        if st.button('🟢 買進', type='primary', width='stretch', disabled=buy_disabled):
+            if not selected_code:
+                st.error('❌ 請先選擇股票')
+            else:
+                # 實盤模式：直接下單，跳過餘額檢查（由券商端處理）
+                # 模擬模式：檢查餘額
+                if mode == 'simulate':
+                    bal = om.get_balance()
+                    exec_p = current_price if order_type == '市價' else price
+                    est_cost = exec_p * quantity if exec_p > 0 else price * quantity
+
+                    if est_cost > 0 and bal.get('cash', 0) < est_cost:
+                        st.error(f'❌ 餘額不足！需要 ${_fmt_money(est_cost)}，可用 ${_fmt_money(bal.get("cash", 0))}')
+                        return
+
+                with st.spinner('處理中...'):
+                    exec_p = current_price if order_type == '市價' else price
+                    result = om.buy(selected_code, quantity, exec_p,
+                                    selected_name or selected_code, current_price)
+
+                    # 實盤模式與模擬模式有不同的處理
+                    if mode == 'live':
+                        if result.get('status') == 'submitted' or result.get('status') == 'error':
+                            if result.get('status') == 'error':
+                                st.error(f"❌ 下單失敗：{result.get('message', result.get('error', '未知錯誤'))}")
+                            else:
+                                st.success(f"✅ **實盤委託已送出！**\n\n"
+                                          f"| 項目 | 內容 |\n"
+                                          f"|------|------|\n"
+                                          f"| 股票 | {selected_code} {selected_name} |\n"
+                                          f"| 數量 | {quantity:,} 股 |\n"
+                                          f"| 委託價 | ${result.get('price', 0):.2f} |\n"
+                                          f"| 委託類型 | {'市價' if order_type == '市價' else '限價'} |\n"
+                                          f"| 委託單號 | `{result.get('order_id', 'N/A')}` |\n\n"
+                                          f"⚠️ 實盤委託可能需要數秒至數分鐘完成，請至「委託」頁面查看狀態")
+                        else:
+                            st.balloons()
+                            st.success(
+                                f"✅ **實盤買進成功！**\n\n"
+                                f"| 項目 | 內容 |\n"
+                                f"|------|------|\n"
+                                f"| 股票 | {selected_code} {selected_name} |\n"
+                                f"| 數量 | {result.get('filled_quantity', quantity):,} 股 |\n"
+                                f"| 成交價 | ${result.get('avg_fill_price', 0):.2f} |\n"
+                                f"| 委託單號 | `{result.get('order_id', 'N/A')}` |"
+                            )
+                    else:
+                        # 模擬模式
+                        if result.get('status') == 'filled':
+                            st.balloons()
+                            st.success(
+                                f"✅ **買進成功！**\n\n"
+                                f"| 項目 | 內容 |\n"
+                                f"|------|------|\n"
+                                f"| 股票 | {selected_code} {selected_name} |\n"
+                                f"| 數量 | {quantity:,} 股 |\n"
+                                f"| 成交價 | ${result.get('avg_fill_price', 0):.2f} |\n"
+                                f"| 手續費 | ${result.get('commission', 0):.2f} |\n"
+                                f"| 委託單號 | `{result.get('order_id', 'N/A')}` |"
+                            )
+                            st.session_state['trade_success'] = f"買進 {selected_code} {quantity}股 @ ${result.get('avg_fill_price', 0):.2f}"
+                            st.rerun()
+                        else:
+                            st.warning(f"⚠️ 委託狀態：{result.get('status', 'pending')}\n\n委託單號：`{result.get('order_id', 'N/A')}`")
+    else:
+        # 賣出 Logic
+        has_position = False
+        current_position = None
+        if selected_code:
+            current_position = om.get_position(selected_code)
+            has_position = current_position and current_position.get('quantity', 0) >= quantity
+
+        sell_disabled = not selected_code or not has_position or quantity < 1
+
+        if st.button('🔴 賣出', type='primary', width='stretch', disabled=sell_disabled):
+            if not selected_code:
+                st.error('❌ 請先選擇股票')
+            elif not current_position:
+                st.error('❌ 沒有持有此股票')
+            elif current_position.get('quantity', 0) < quantity:
+                st.error(f'❌ 持有數量不足！持有 {current_position.get("quantity", 0)} 股，欲賣出 {quantity} 股')
+            else:
+                exec_p = current_price if order_type == '市價' else price
+                if exec_p <= 0:
+                    exec_p = current_position.get('avg_cost', 0)
+
+                with st.spinner('處理中...'):
+                    result = om.sell(selected_code, quantity, exec_p,
+                                    selected_name or selected_code, current_price)
+
+                    # 實盤模式處理
+                    if mode == 'live':
+                        if result.get('status') == 'submitted' or result.get('status') == 'error':
+                            if result.get('status') == 'error':
+                                st.error(f"❌ 下單失敗：{result.get('message', result.get('error', '未知錯誤'))}")
+                            else:
+                                st.success(f"✅ **實盤賣出委託已送出！**\n\n"
+                                          f"| 項目 | 內容 |\n"
+                                          f"|------|------|\n"
+                                          f"| 股票 | {selected_code} {selected_name} |\n"
+                                          f"| 數量 | {quantity:,} 股 |\n"
+                                          f"| 委託價 | ${result.get('price', 0):.2f} |\n"
+                                          f"| 委託類型 | {'市價' if order_type == '市價' else '限價'} |\n"
+                                          f"| 委託單號 | `{result.get('order_id', 'N/A')}` |\n\n"
+                                          f"⚠️ 實盤委託可能需要數秒至數分鐘完成，請至「委託」頁面查看狀態")
+                        else:
+                            st.balloons()
+                            st.success(
+                                f"✅ **實盤賣出成功！**\n\n"
+                                f"| 項目 | 內容 |\n"
+                                f"|------|------|\n"
+                                f"| 股票 | {selected_code} {selected_name} |\n"
+                                f"| 數量 | {result.get('filled_quantity', quantity):,} 股 |\n"
+                                f"| 成交價 | ${result.get('avg_fill_price', 0):.2f} |\n"
+                                f"| 證交稅 | ${result.get('tax', 0):.2f} |\n"
+                                f"| 委託單號 | `{result.get('order_id', 'N/A')}` |"
+                            )
+                    else:
+                        # 模擬模式
+                        if result.get('status') == 'filled':
+                            st.balloons()
+                            st.success(
+                                f"✅ **賣出成功！**\n\n"
+                                f"| 項目 | 內容 |\n"
+                                f"|------|------|\n"
+                                f"| 股票 | {selected_code} {selected_name} |\n"
+                                f"| 數量 | {result.get('filled_quantity', quantity):,} 股 |\n"
+                                f"| 成交價 | ${result.get('avg_fill_price', 0):.2f} |\n"
+                                f"| 證交稅 | ${result.get('tax', 0):.2f} |\n"
+                                f"| 委託單號 | `{result.get('order_id', 'N/A')}` |"
+                            )
+                            st.session_state['trade_success'] = f"賣出 {selected_code} {quantity}股 @ ${result.get('avg_fill_price', 0):.2f}"
+                            st.rerun()
+                        else:
+                            st.warning(f"⚠️ 委託狀態：{result.get('status', 'pending')}\n\n委託單號：`{result.get('order_id', 'N/A')}`")
+
+        # 顯示持有資訊
+        if selected_code and current_position:
+            qty = current_position.get('quantity', 0)
+            avg_cost = current_position.get('avg_cost', 0)
+            st.info(f"📦 持有：{qty} 股，均價 ${avg_cost:.2f}")
+
+    # 部位快速賣
+    st.markdown('---')
+    st.write('**📦 持有部位一鍵賣**')
+    positions = om.get_positions()
+    if positions:
+        cols = st.columns(min(len(positions), 5))
+        for idx, pos in enumerate(positions[:5]):
+            code = pos.get('code')
+            qty = pos.get('quantity', 0)
+            with cols[idx % 5]:
+                if st.button(f'{code} ({qty}股)', key=f'qpos_{code}', use_container_width=True):
+                    info = _get_stock_info_for_trading(code)
+                    cur = info.get('price', pos.get('avg_cost', 0))
+                    if cur <= 0:
+                        cur = pos.get('avg_cost', 0)
+                    result = om.sell(code, qty, cur, pos.get('name', code), cur)
+                    if result.get('status') == 'filled':
+                        st.success(f"✅ 已賣出 {code} {qty}股 @ ${result.get('avg_fill_price', 0):.2f}")
+                    else:
+                        st.warning(f"⚠️ 委託 {code} 狀態：{result.get('status', 'pending')}")
+                    st.rerun()
+    else:
+        st.caption('無持有部位')
+
+def render_trading_positions() -> None:
+    """部位面板"""
+    om = get_shared_order_manager()
+    mode = CONFIG['trading'].get('mode', 'simulate')
+
+    st.markdown('### 📦 持有部位')
+
+    # 實盤模式：直接從券商API取得
+    if mode == 'live':
+        positions = om.get_positions()
+
+        # 顯示API原始回應（用於除錯）
+        with st.expander('🔍 API 回應內容'):
+            st.json(positions)
+
+        if not positions:
+            st.info('目前沒有持有部位 (從券商API取得)')
+            return
+
+        st.success(f'從券商取得 {len(positions)} 檔持股')
+
+        rows = []
+        for pos in positions:
+            rows.append({
+                '代碼': pos.get('code', ''),
+                '名稱': pos.get('name', ''),
+                '持股數': pos.get('quantity', 0),
+                '均價': f'${pos.get("avg_cost", 0):.2f}',
+                '已實現損益': f'${pos.get("realized_pnl", 0):,.0f}',
+                '未實現損益': f'${pos.get("unrealized_pnl", 0):,.0f}',
+            })
+
+        st.dataframe(rows, width='stretch', hide_index=True)
+        return
+
+    # ===== 以下是模擬模式 =====
+
+    positions = om.get_positions()
+    fetcher = get_shared_fetcher()
+
+    if not positions:
+        st.info('目前沒有持有部位')
+        return
+
+    rows = []
+    total_cost = 0.0
+    total_mv = 0.0
+    total_pnl = 0.0
+
+    for pos in positions:
+        code = pos['code']
+        qty = pos.get('quantity', 0)
+        avg_cost = pos.get('avg_cost', 0)
+        price_data = fetcher.get_stock_price(code)
+        current_price = price_data.get('price', 0) if price_data else avg_cost
+        mv = current_price * qty
+        cost = avg_cost * qty
+        pnl = mv - cost
+        pnl_pct = (pnl / cost * 100) if cost > 0 else 0
+
+        rows.append({
+            '代碼': code,
+            '名稱': pos.get('name', code),
+            '持股數': qty,
+            '張數': qty // 1000,
+            '均價': f'${avg_cost:.2f}',
+            '現價': f'${current_price:.2f}',
+            '市值': _fmt_money(mv),
+            '成本': _fmt_money(cost),
+            '虧損': _fmt_mnl(pnl),
+            '報酬%': f'{pnl_pct:+.2f}%',
+        })
+        total_cost += cost
+        total_mv += mv
+        total_pnl += pnl
+
+    mc1, mc2, mc3 = st.columns(3)
+    mc1.metric('總成本', f'${_fmt_money(total_cost)}')
+    mc2.metric('總市值', f'${_fmt_money(total_mv)}')
+    mc3.metric(
+        '總損益',
+        _fmt_pnl(total_pnl),
+        f'{(total_pnl/total_cost*100):+.2f}%' if total_cost > 0 else '0%',
+        'normal' if total_pnl >= 0 else 'inverse',
+    )
+
+    st.dataframe(rows, width='stretch', hide_index=True)
+
+
+def render_trading_orders() -> None:
+    """委託查詢面板"""
+    om = get_order_manager()
+    mode = CONFIG['trading'].get('mode', 'simulate')
+
+    st.markdown('### 📋 當日委託')
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    # 實盤模式：顯示券商API的委託
+    if mode == 'live':
+        # 顯示即時成交（從shioaji）
+        trades = om.get_live_trades(today)
+        if trades:
+            st.success(f'從券商取得 {len(trades)} 筆成交')
+
+            # 顯示原始API回應
+            with st.expander('📋 成交原始資料'):
+                st.json(trades)
+
+            for t in trades:
+                action = '買進' if t.get('action') == 'buy' else '賣出'
+                st.write(f"**{t.get('code', '')} {t.get('name', '')}** -- {action} {t.get('quantity', 0)}股 @{t.get('price', 0)}")
+        else:
+            st.info('從券商API尚無成交記錄')
+
+        st.caption('（實盤模式：委託狀態由券商系統主動推送）')
+        return
+
+    # ===== 以下是模擬模式 =====
+
+    orders = om.get_orders(today)
+    if not orders:
+        st.info('今日尚無委託記錄')
+        return
+
+    pending = [o for o in orders if o.get('status') == 'pending']
+    filled = [o for o in orders if o.get('status') == 'filled']
+    cancelled = [o for o in orders if o.get('status') == 'cancelled']
+
+    tab1, tab2, tab3 = st.tabs([f'待成交 ({len(pending)})', f'已成交 ({len(filled)})', f'已取消 ({len(cancelled)})'])
+
+    def render_order_row(o: dict) -> dict:
+        return {
+            '委託時間': o.get('trade_time', ''),
+            '委託單號': o.get('order_id', ''),
+            '代碼': o.get('code', ''),
+            '名稱': o.get('name', ''),
+            '買賣': '買' if o.get('action') == 'buy' else '賣',
+            '委託類型': '市價' if o.get('order_type') == 'market' else '限價',
+            '委託價': f"${o.get('price', 0):.2f}" if o.get('price', 0) > 0 else '市價',
+            '委託量': o.get('quantity', 0),
+            '成交均價': f"${o.get('avg_fill_price', 0):.2f}" if o.get('avg_fill_price', 0) > 0 else '-',
+            '成交量': o.get('filled_quantity', 0),
+            '手續費': f'${o.get("commission", 0):.2f}',
+            '證交稅': f'${o.get("tax", 0):.2f}',
+            '狀態': o.get('status', ''),
+        }
+
+    with tab1:
+        if pending:
+            st.dataframe([render_order_row(o) for o in pending], width='stretch', hide_index=True)
+            for o in pending:
+                col_a, col_b = st.columns([1, 1])
+                with col_a:
+                    if st.button(f'取消 {o["order_id"]}', key=f'cancel_{o["order_id"]}', width='stretch'):
+                        result = om.cancel(o['order_id'])
+                        if result.get('success'):
+                            st.success('已取消')
+                        else:
+                            st.error(result.get('message', '取消失敗'))
+                        st.rerun()
+        else:
+            st.info('無待成交委託')
+
+    with tab2:
+        if filled:
+            st.dataframe([render_order_row(o) for o in filled], width='stretch', hide_index=True)
+
+    with tab3:
+        if cancelled:
+            st.dataframe([render_order_row(o) for o in cancelled], width='stretch', hide_index=True)
+
+
+def render_trading_day_summary() -> None:
+    """當日交易摘要"""
+    om = get_order_manager()
+
+    st.markdown('### 📊 當日交易摘要')
+    today = datetime.now().strftime('%Y-%m-%d')
+    summary = om.get_day_summary(today)
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric('成交筆數', summary.get('filled_count', 0))
+    c2.metric('買入筆數', summary.get('buy_count', 0))
+    c3.metric('賣出筆數', summary.get('sell_count', 0))
+    c4.metric('待成交', summary.get('pending_count', 0))
+
+    c5, c6 = st.columns(2)
+    c5.metric('買入金額', f"${_fmt_money(summary.get('buy_value', 0))}")
+    c6.metric('賣出金額', f"${_fmt_money(summary.get('sell_value', 0))}")
+
+    c7, c8 = st.columns(2)
+    c7.metric('手續費合計', f"${summary.get('commission', 0):.2f}")
+    c8.metric('證交稅合計', f"${summary.get('tax', 0):.2f}")
+
+
+def render_trading_page() -> None:
+    """交易下單主頁面 - 不依賴分析結果，獨立運作"""
+
+    mode = CONFIG['trading'].get('mode', 'simulate')
+    st.markdown(f'### 💹 交易下單  |  模式：**{"🔄 模擬交易" if mode == "simulate" else "🔴 實盤"}**')
+
+    # 模式切換 — 檢查實盤 API 設定
+    col_mode, col_reset, col_help = st.columns([2, 1, 1])
+    with col_mode:
+        mode_options = ['simulate', 'live']
+        if mode not in mode_options:
+            mode = 'simulate'
+        current_idx = mode_options.index(mode) if mode in mode_options else 0
+
+        # 檢查實盤模式是否已設定 API
+        api_key = CONFIG['trading'].get('api_key', '')
+        api_secret = CONFIG['trading'].get('api_secret', '')
+        live_available = bool(api_key and api_secret)
+
+        # 如果選擇實盤但未設定 API，顯示警告
+        preview_options = mode_options.copy()
+        if not live_available:
+            preview_options = ['simulate']  # 只能選擇模擬
+
+        new_mode = st.selectbox(
+            '切換模式',
+            preview_options,
+            index=min(current_idx, len(preview_options) - 1),
+            format_func=lambda x: '🔄 模擬交易' if x == 'simulate' else '🔴 實盤交易',
+            key='trading_mode_select',
+        )
+
+        # 未啟用實盤時顯示說明
+        if not live_available:
+            st.warning('⚠️ 實盤需填寫 API Key/Secret於 config.py')
+        elif mode == 'live':
+            st.success('🔴 實盤模式已啟用')
+
+        if new_mode != mode:
+            if new_mode == 'live':
+                # 驗證 API 設定
+                if not live_available:
+                    st.error('❌ 請先在 config.py 填寫 api_key 和 api_secret')
+                else:
+                    CONFIG['trading']['mode'] = new_mode
+                    mode = new_mode
+                    om = get_shared_order_manager()
+                    st.rerun()
+            else:
+                CONFIG['trading']['mode'] = new_mode
+                mode = new_mode
+                om = get_shared_order_manager()
+                st.rerun()
+
+    with col_reset:
+        if mode == 'simulate':
+            if st.button('🔁 重置帳戶', width='stretch'):
+                om = get_shared_order_manager()
+                result = om.reset_account()
+                if result.get('success'):
+                    st.success('帳戶已重置！初始資金 $1,000,000')
+                else:
+                    st.warning(result.get('message', '無法重置'))
+
+    with col_help:
+        st.caption('實盤需向永豐申請 API')
+
+    st.markdown('---')
+    render_trading_balance()
+    st.markdown('---')
+
+    tab1, tab2, tab3, tab4 = st.tabs(['📝 下單', '📦 部位', '📋 委託', '📊 摘要'])
+
+    with tab1:
+        render_trading_order_panel()
+    with tab2:
+        render_trading_positions()
+    with tab3:
+        render_trading_orders()
+    with tab4:
+        render_trading_day_summary()
+
+
+def _fmt_mnl(v: float) -> str:
+    sign = '+' if v >= 0 else ''
+    return f'{sign}{v:,.0f}'
 
 
 def main():
@@ -1935,6 +2725,14 @@ def main():
             render_daily_rankings(results)
         elif page == '分享卡片':
             render_share_card(results)
+        elif page == '交易下單':
+            render_trading_page()
+    else:
+        # 尚未執行分析，但仍可使用特定頁面
+        if page == '交易下單':
+            render_trading_page()
+        else:
+            st.warning('請先執行一次分析（點擊側邊欄「開始分析」），分析完成後即可使用所有頁面。')
 
 
 if __name__ == '__main__':

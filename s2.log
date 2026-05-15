@@ -1,0 +1,157 @@
+2026-05-11 11:02:27.643 Uvicorn server started on 0.0.0.0:8501
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://10.119.4.122:8501
+  External URL: http://118.163.113.187:8501
+
+[32m2026-05-11 11:08:22.556[0m | [33m[1mWARNING [0m | [36mimportlib._bootstrap[0m:[36m_call_with_frames_removed[0m:[36m241[0m - [33m[1mOptional: pip install shioaji[speed] or uv add shioaji --extra speed for better performance.[0m
+2026-05-11 11:08:27.730 `label` got an empty value. This is discouraged for accessibility reasons and may be disallowed in the future by raising an exception. Please provide a non-empty label and hide it with label_visibility if needed.
+Stack (most recent call last):
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 982, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 379, in _run_script_thread
+    self._run_script(request.rerun_data)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 705, in _run_script
+    ) = exec_func_with_error_handling(code_to_exec, ctx)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\exec_code.py", line 129, in exec_func_with_error_handling
+    result = func()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 689, in code_to_exec
+    exec(code, module.__dict__)  # noqa: S102
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2439, in <module>
+    main()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2433, in main
+    render_trading_page()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2249, in render_trading_page
+    render_trading_order_panel()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 1967, in render_trading_order_panel
+    quantity = st.number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\metrics_util.py", line 698, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 446, in number_input
+    return self._number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 497, in _number_input
+    maybe_raise_label_warnings(label, label_visibility)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\lib\policies.py", line 187, in maybe_raise_label_warnings
+    _LOGGER.warning(
+2026-05-11 11:08:28.316 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-05-11 11:10:45.814 `label` got an empty value. This is discouraged for accessibility reasons and may be disallowed in the future by raising an exception. Please provide a non-empty label and hide it with label_visibility if needed.
+Stack (most recent call last):
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 982, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 379, in _run_script_thread
+    self._run_script(request.rerun_data)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 705, in _run_script
+    ) = exec_func_with_error_handling(code_to_exec, ctx)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\exec_code.py", line 129, in exec_func_with_error_handling
+    result = func()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 689, in code_to_exec
+    exec(code, module.__dict__)  # noqa: S102
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2439, in <module>
+    main()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2433, in main
+    render_trading_page()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2249, in render_trading_page
+    render_trading_order_panel()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 1967, in render_trading_order_panel
+    quantity = st.number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\metrics_util.py", line 698, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 446, in number_input
+    return self._number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 497, in _number_input
+    maybe_raise_label_warnings(label, label_visibility)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\lib\policies.py", line 187, in maybe_raise_label_warnings
+    _LOGGER.warning(
+2026-05-11 11:10:45.897 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-05-11 11:13:38.334 `label` got an empty value. This is discouraged for accessibility reasons and may be disallowed in the future by raising an exception. Please provide a non-empty label and hide it with label_visibility if needed.
+Stack (most recent call last):
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 982, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 379, in _run_script_thread
+    self._run_script(request.rerun_data)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 705, in _run_script
+    ) = exec_func_with_error_handling(code_to_exec, ctx)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\exec_code.py", line 129, in exec_func_with_error_handling
+    result = func()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 689, in code_to_exec
+    exec(code, module.__dict__)  # noqa: S102
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2439, in <module>
+    main()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2433, in main
+    render_trading_page()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2249, in render_trading_page
+    render_trading_order_panel()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 1967, in render_trading_order_panel
+    quantity = st.number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\metrics_util.py", line 698, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 446, in number_input
+    return self._number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 497, in _number_input
+    maybe_raise_label_warnings(label, label_visibility)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\lib\policies.py", line 187, in maybe_raise_label_warnings
+    _LOGGER.warning(
+2026-05-11 11:13:38.461 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.
+2026-05-11 11:15:46.702 `label` got an empty value. This is discouraged for accessibility reasons and may be disallowed in the future by raising an exception. Please provide a non-empty label and hide it with label_visibility if needed.
+Stack (most recent call last):
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1002, in _bootstrap
+    self._bootstrap_inner()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 1045, in _bootstrap_inner
+    self.run()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\threading.py", line 982, in run
+    self._target(*self._args, **self._kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 379, in _run_script_thread
+    self._run_script(request.rerun_data)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 705, in _run_script
+    ) = exec_func_with_error_handling(code_to_exec, ctx)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\exec_code.py", line 129, in exec_func_with_error_handling
+    result = func()
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\scriptrunner\script_runner.py", line 689, in code_to_exec
+    exec(code, module.__dict__)  # noqa: S102
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2439, in <module>
+    main()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2433, in main
+    render_trading_page()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 2249, in render_trading_page
+    render_trading_order_panel()
+  File "C:\Users\alic_hsu\Documents\TaiwanStockPicker\app.py", line 1967, in render_trading_order_panel
+    quantity = st.number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\runtime\metrics_util.py", line 698, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 446, in number_input
+    return self._number_input(
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\widgets\number_input.py", line 497, in _number_input
+    maybe_raise_label_warnings(label, label_visibility)
+  File "C:\Users\alic_hsu\AppData\Local\Programs\Python\Python311\Lib\site-packages\streamlit\elements\lib\policies.py", line 187, in maybe_raise_label_warnings
+    _LOGGER.warning(
+2026-05-11 11:15:46.986 Please replace `use_container_width` with `width`.
+
+`use_container_width` will be removed after 2025-12-31.
+
+For `use_container_width=True`, use `width='stretch'`. For `use_container_width=False`, use `width='content'`.

@@ -104,4 +104,23 @@ CONFIG = {
         'enabled': True,        # 啟用多執行緒
         'max_workers': 5,       # 最大執行緒數
     },
+
+    # 交易下單設定
+    'trading': {
+        'mode': 'simulate',                   # 'simulate' 模擬 / 'live' 實盤
+        'account_id': '',                     # 永豐帳號（請填入）
+        'api_key': '',                        # 永豐 API Key（請填入）
+        'api_secret': '',                     # 永豐 API Secret（請填入）
+        'person_id': '',                       # 身份證字號（請填入）
+        'ca_path': '',                         # CA 憑證路徑（請填入）
+        'ca_password': '',                     # CA 憑證密碼（請填入）
+        'simulate_initial_cash': 1000000,     # 模擬帳戶初始資金
+        'commission_rate': 0.00142,           # 手續費率 0.142%
+        'min_commission': 20,                  # 最低手續費
+        'tax_rate': 0.003,                    # 證交稅 0.3%（賣出）
+        'default_order_quantity': 1000,        # 預設每筆股數（需為1000的倍數）
+        'order_storage_path': 'trading/orders',  # 委託單儲存路徑
+        'position_storage_path': 'trading/positions.json',  # 部位儲存路徑
+        'balance_storage_path': 'trading/balance.json',  # 餘額儲存路徑
+    },
 }

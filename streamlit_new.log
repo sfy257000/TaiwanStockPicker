@@ -1,0 +1,9 @@
+2026-05-11 10:45:40.544 Uvicorn server started on 0.0.0.0:8501
+
+  You can now view your Streamlit app in your browser.
+
+  Local URL: http://localhost:8501
+  Network URL: http://10.119.4.122:8501
+  External URL: http://118.163.113.187:8501
+
+[32m2026-05-11 10:48:33.027[0m | [33m[1mWARNING [0m | [36mimportlib._bootstrap[0m:[36m_call_with_frames_removed[0m:[36m241[0m - [33m[1mOptional: pip install shioaji[speed] or uv add shioaji --extra speed for better performance.[0m
