@@ -122,20 +122,12 @@ class SinoPacTrader:
 
         try:
             # 建立 Shioaji 實例
-            self._client = sj.Shioaji(
-                simulation=False,
-                # 增加 receive_window 避免時間同步問題
-                receive_window=60000,
-                # 跳過自動下載合約，避免超時
-                fetch_contract=False,
-            )
+            self._client = sj.Shioaji(simulation=False)
 
-            # 登入（按照文件範例）
+            # 登入
             accounts = self._client.login(
                 api_key=self.api_key,
                 secret_key=self.api_secret,
-                # 增加接收超時時間
-                receive_window=60000,
             )
 
             if not accounts:

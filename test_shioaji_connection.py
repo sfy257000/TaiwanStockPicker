@@ -72,12 +72,13 @@ def test_shioaji():
     # 4. 測試登入（模擬模式）
     print("\n[4] 測試登入（模擬模式）...")
     try:
-        api = sj.Shioaji(simulation=True)  # 先用模擬模式測試
+        api = sj.Shioaji(simulation=True)
         accounts = api.login(
             api_key=api_key,
             secret_key=api_secret,
+            receive_window=60000,
         )
-        print(f"    ✓ 登入成功！")
+        print(f"    [OK] 登入成功！")
         print(f"    可用帳號: {accounts}")
 
         # 列出所有帳號
@@ -86,32 +87,26 @@ def test_shioaji():
             print(f"      [{i+1}] {acc}")
 
         api.logout()
-        print("\n    模擬模式登入測試通過！")
-        print("    → 請將 mode 設為 'simulate' 測試交易功能")
+        print("\n    [OK] 模擬模式登入測試通過！")
 
     except Exception as e:
-        print(f"    ✗ 登入失敗: {e}")
+        print(f"    [FAIL] 登入失敗: {e}")
         print("\n    可能原因:")
-        print("    1. API Key/Secret 已過期")
-        print("    2. API Key/Secret 無效")
-        print("    3. 網頁交易密碼已過期")
+        print("    1. API Key/Secret 已過期或無效")
+        print("    2. 網頁交易密碼已過期")
+        print("    3. 電腦時間不同步")
         print("\n    解決方案:")
         print("    - 請聯繫永豐營業員重新申請 API 憑證")
         print("    - 或登入券商系統確認憑證狀態")
         return False
 
-    # 5. 測試實盤登入（可選）- 增加 receive_window
+    # 5. 測試實盤登入（可選）
     print("\n[5] 測試實盤登入（需要有效憑證）...")
     try:
-        api_live = sj.Shioaji(
-            simulation=False,
-            receive_window=60000,
-            fetch_contract=False,
-        )
+        api_live = sj.Shioaji(simulation=False)
         accounts = api_live.login(
             api_key=api_key,
             secret_key=api_secret,
-            receive_window=60000,
         )
         print(f"    ✓ 實盤登入成功！")
         print("    → 可以將 config.py 的 mode 改為 'live' 使用實盤交易")
